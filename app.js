@@ -107,6 +107,27 @@ app.get("/laporanKCM5", (req, res) => {
   });
 });
 
+app.get("/laporanRMFM5", (req, res) => {
+  res.render("laporanRMFM5", {
+    title: "Laporan Shift RM FM 5",
+    active: "laporanRMFM5"
+  });
+});
+
+app.get("/KCM5", (req, res) => {
+  res.render("KCM5", {
+    title: "Laporan Shift KCM 5",
+    active: "KCM5"
+  });
+});
+
+app.get("/RMFM5", (req, res) => {
+  res.render("RMFM5", {
+    title: "Laporan Shift RM FM 5",
+    active: "RMFM5"
+  });
+});
+
 app.get("/home", (req, res) => {
   res.render("home", { active: "home" });
 });

@@ -2,19 +2,19 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Laporan KCM 5</title>
+<title>Laporan RM FM 5</title>
 
 <link rel="stylesheet" href="/css/layout.css">
 <link rel="stylesheet" href="/css/sidebar.css">
 <link rel="stylesheet" href="/css/topbar.css">
-<link rel="stylesheet" href="/css/laporanKCM5.css">
+<link rel="stylesheet" href="/css/laporanRMFM5.css">
 </head>
 <body>
 
 <%- include('partials/sidebar') %>
 
 <div class="main">
-  <%- include('partials/topbar', { title: "Laporan Shift KCM 5" }) %>
+  <%- include('partials/topbar', { title: "Laporan Shift RM FM 5" }) %>
 
   <div class="content">
 
@@ -29,6 +29,10 @@
     Generate PDF
   </button>
 </div>
+
+
+
+
 
     <!-- ================= LAPORAN SHIFT ================= -->
     <h3>Laporan Shift</h3>
@@ -78,7 +82,7 @@
     <!-- ================= TROUBLESHOOTING ================= -->
     <div class="section-header">
       <h3>Troubleshooting</h3>
-      <button class="btn-add" data-target="tsKCM5">+ Add</button>
+      <button class="btn-add" data-target="tsRMFM5">+ Add</button>
     </div>
 
     <table class="table" id="tsTable">
@@ -120,7 +124,7 @@
     <!-- ================= BASIC MAINTENANCE ================= -->
     <div class="section-header">
       <h3>Basic Maintenance</h3>
-      <button class="btn-add" data-target="maintenanceKCM5">+ Add</button>
+      <button class="btn-add" data-target="maintenanceRMFM5">+ Add</button>
     </div>
 
     <table class="table">
@@ -152,37 +156,42 @@
     </table>
 
     <!-- ================= PRODUKSI CLINKER ================= -->
-    <div class="section-header">
-      <h3>Produksi Clinker</h3>
-      <button class="btn-add" data-target="pcKCM5">+ Add</button>
-    </div>
+    <!-- ================= PRODUKSI CLINKER ================= -->
+<div class="section-header">
+  <h3>Produksi Clinker</h3>
+  <button class="btn-add" data-target="pcRMFM5">+ Add</button>
+</div>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th>No.Ref</th>
-          <th>Kiln Feeding</th>
-          <th>Kiln Speed</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="noref-cell"></td>
-          <td>550</td>
-          <td>3.5 rpm</td>
-          <td>
-            <button class="edit">Edit</button>
-            <button class="delete">Hapus</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<table class="table">
+  <thead>
+    <tr>
+      <th>No.Ref</th>
+      <th>Raw Mill 1 Feeding</th>
+      <th>Raw Mill 2 Feeding</th>
+      <th>Cement Mill 1 Feeding</th>
+      <th>Cement Mill 2 Feeding</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="noref-cell"></td>
+      <td>550</td>
+      <td>3.5 rpm</td>
+      <td>420</td>
+      <td>410</td>
+      <td>
+        <button class="edit">Edit</button>
+        <button class="delete">Hapus</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
     <!-- ================= SERAH TERIMA TOOL ================= -->
     <div class="section-header">
       <h3>Serah Terima Tool</h3>
-      <button class="btn-add" data-target="sttKCM5">+ Add</button>
+      <button class="btn-add" data-target="sttRMFM5">+ Add</button>
     </div>
 
     <table class="table">
@@ -214,7 +223,7 @@
     </table>
 
 
-    <!-- ================= CATATAN ================= -->
+   <!-- ================= CATATAN ================= -->
 <div class="section-header">
   <h3>Catatan</h3>
   <button class="btn-add" data-target="catatanKCM5">+ Add</button>
@@ -255,7 +264,7 @@
   });
 </script>
 
-<script src="/js/laporanKCM5.js"></script>
+<script src="/js/laporanRMFM5.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 </body>
