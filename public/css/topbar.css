@@ -1,6 +1,6 @@
 /* ================= TOPBAR ================= */
 .topbar {
-  height: 52px;                 /* lebih kecil */
+  height: 52px;                 
   background: #8b0000;
   color: #fff;
   display: flex;
@@ -29,7 +29,7 @@
 }
 
 .topbar-title {
-  font-size: 16px;             /* 🔹 title dikecilkan */
+  font-size: 16px;             
   font-weight: 600;
   margin: 0;
   white-space: nowrap;

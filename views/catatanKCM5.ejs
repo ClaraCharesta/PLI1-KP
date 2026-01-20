@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Catatan KCM 5</title>
+
+<link rel="stylesheet" href="/css/layout.css">
+<link rel="stylesheet" href="/css/sidebar.css">
+<link rel="stylesheet" href="/css/topbar.css">
+<link rel="stylesheet" href="/css/catatanKCM5.css">
+</head>
+<body>
+
+<%- include('partials/sidebar') %>
+
+<div class="main">
+  <%- include('partials/topbar', { title: title }) %>
+
+  <div class="content">
+    <div class="form-card">
+
+      <div class="form-group">
+        <label>Catatan<span></span></label>
+        <textarea id="catatan" placeholder="Tulis catatan di sini..."></textarea>
+      </div>
+
+      <div class="btn-wrapper">
+        <div class="btn">
+          <button class="back" type="button">Back</button>
+          <button class="clear" type="button">Clear</button>
+          <button class="save" type="button">Save</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.querySelector('.sidebar');
+  const main = document.querySelector('.main');
+
+  menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('closed');
+    main.classList.toggle('expanded');
+  });
+</script>
+
+<script src="/js/sidebar.js"></script>
+<script src="/js/catatanKCM5.js"></script>
+</body>
+</html>

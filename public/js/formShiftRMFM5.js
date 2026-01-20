@@ -1,13 +1,18 @@
 /* ================= DATA ================= */
 const personilData = [
-  "[ISD] Irsyadunnas",
-  "[RKB] Rafki Budiman",
-  "[SLM] Salman",
-  "[RKS] Riki Sulaiman",
-  "[WIK] Wahyu Ikhsan",
-  "[MFS] Meri Fernandes",
-  "[MTR] Martu Rizal",
-  "[SEP] Sepriadi"
+  "[NFJ] Nofriza Juanda",
+  "[HRT] Harto",
+  "[HMN] Harmen",
+  "[EDW] Edward",
+  "[WAP] Wahyu Arisal Putra, ST",
+  "[DRO] Desrianto",
+  "[AFZ] Afrizal",
+  "[JMB] Jumaidi Bakri",
+  "[AOP] Astoria Prima",
+  "[WSD] Willy Surya Dinata",
+  "[AGW] Angga Wahyudi",
+  "[SFL] Syafril",
+  "[RDP] Randi Pratama"
 ];
 
 const shiftData = [
@@ -21,7 +26,7 @@ const shiftData = [
 
 /* ================= BACK ================= */
 document.querySelector(".back").onclick = () => {
-  window.location.href = "/laporanKCM5";
+  window.location.href = "/laporanRMFM5";
 };
 
 /* ================= NO REF ================= */
@@ -30,7 +35,7 @@ function generateNoRef() {
   const bulan = d.getMonth() + 1;
   const tahun = d.getFullYear();
   const urut = "0001"; // nanti dari DB
-  return `${urut}/SHIFT.PLI1-KCM5/${bulan}.${tahun}`;
+  return `${urut}/SHIFT.PLI1-RMFM5/${bulan}.${tahun}`;
 }
 
 document.getElementById("noref").value = generateNoRef();

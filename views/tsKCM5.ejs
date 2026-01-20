@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>TS KCM 5</title>
+
+<link rel="stylesheet" href="/css/layout.css">
+<link rel="stylesheet" href="/css/sidebar.css">
+<link rel="stylesheet" href="/css/topbar.css">
+<link rel="stylesheet" href="/css/tsKCM5.css">
+</head>
+<body>
+
+<%- include('partials/sidebar') %>
+
+<div class="main">
+  <%- include('partials/topbar', { title: 'Laporan Shift KCM 5' }) %>
+
+
+
+  <div class="content">
+    <div class="form-card">
+
+      <!-- FORM -->
+      <div class="form-group">
+        <label>Tanggal</label>
+        <input type="date" id="tanggal">
+      </div>
+
+      <div class="form-group">
+        <label>Week</label>
+        <input type="number" id="week" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>Area</label>
+        <select id="area">
+          <option value="">None</option>
+        </select>
+        <input type="text" id="areaLainnya" placeholder="Isi area lainnya" hidden>
+      </div>
+
+      <div class="form-group">
+        <label>Nomenclature</label>
+        <input type="text" id="nomenclature">
+      </div>
+
+      <div class="form-group">
+        <label>Mulai</label>
+        <input type="time" id="mulai" step="1">
+      </div>
+
+      <div class="form-group">
+        <label>Selesai</label>
+        <input type="time" id="selesai" step="1">
+      </div>
+
+      <div class="form-group">
+        <label>Durasi (jam)</label>
+        <input type="text" id="durasi" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>Alarm</label>
+        <input type="text" id="alarm">
+      </div>
+
+      <div class="form-group">
+        <label>Indikasi Masalah 1</label>
+        <input type="text">
+      </div>
+
+      <div class="form-group">
+        <label>Klasifikasi</label>
+        <select id="klasifikasi">
+          <option value="">None</option>
+        </select>
+        <input type="text" id="klasifikasiLainnya" placeholder="Isi klasifikasi lainnya" hidden>
+      </div>
+
+      <div class="form-group">
+        <label>Indikasi Masalah 2</label>
+        <select id="indikasi2">
+          <option value="">None</option>
+        </select>
+        <input type="text" id="indikasi2Lainnya" placeholder="Isi indikasi lainnya" hidden>
+      </div>
+
+      <div class="form-group">
+        <label>Keterangan</label>
+        <input type="text">
+      </div>
+
+      <label>PIC</label>
+      <div class="cuti-box" id="picBox"></div>
+      <input type="text" id="picLainnya" placeholder="Tambah PIC lainnya">
+
+      <div class="form-group">
+        <label>Status 1</label>
+        <select>
+          <option value="">None</option>
+          <option>OK</option>
+          <option>NOK</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Status 2</label>
+        <input type="text">
+      </div>
+
+      <div class="form-group">
+        <label>Keterangan 2</label>
+        <select>
+          <option value="">None</option>
+          <option>Menstop Alat Utama</option>
+          <option>Tidak Menstop Alat Utama</option>
+        </select>
+      </div>
+
+      <div class="btn">
+            <button class="back" type="button">Back</button>
+            <button class="clear" type="button">Clear</button>
+            <button class="save" type="submit">Save</button>
+    </div>
+
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.querySelector('.sidebar');
+  const main = document.querySelector('.main');
+
+  menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('closed');
+    main.classList.toggle('expanded');
+  });
+</script>
+
+
+<script src="/js/sidebar.js"></script>
+<script src="/js/tsKCM5.js"></script>
+
+
+</body>
+</html>

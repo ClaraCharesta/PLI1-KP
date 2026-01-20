@@ -1,0 +1,244 @@
+/* ================= FORM CARD ================= */
+.form-card {
+  max-width: 900px;           
+  margin: 48px auto;          
+  background: #fff;
+  padding: 32px 36px;         
+  border-radius: 16px;        
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  box-sizing: border-box;
+}
+
+
+/* ================= FORM GROUP ================= */
+.form-group,
+.form-card > label,
+.form-card > .cuti-box,
+#picLainnya {
+  width: 100%;                 
+  box-sizing: border-box;
+}
+
+/* ================= LABEL ================= */
+label {
+  display: block;
+  width: 100%;
+  margin-bottom: 5px;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  box-sizing: border-box;
+}
+
+/* ================= INPUT & SELECT ================= */
+input,
+select {
+  width: 100%;                 
+  height: 42px;
+  padding: 0 12px;
+  border-radius: 9px;
+  border: 1px solid #ccc;
+  font-size: 13.5px;
+  background: #fff;
+  box-sizing: border-box;      
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #8b0000;
+  box-shadow: 0 0 0 2px rgba(139,0,0,0,0.15);
+}
+
+/* TIME INPUT */
+input[type="time"] {
+  padding-right: 10px;
+}
+
+/* ================= PIC / CUTI ================= */
+.cuti-box {
+  margin-top: 6px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background: #fafafa;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 10px;
+
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cuti-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cuti-item:hover {
+  background: rgba(139,0,0,0,0.06);
+}
+
+.cuti-item input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: #8b0000;
+  cursor: pointer;
+}
+
+.cuti-item label {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+/* PIC LAINNYA */
+#picLainnya {
+  margin-top: 10px;
+  height: 42px;
+}
+
+/* ================= BUTTON ================= */
+.btn {
+  margin-top: 22px;
+  width: 100%;                 
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+/* tombol FORM saja */
+.form-card .btn button {
+  min-width: 90px;
+  height: 38px;
+  padding: 0 18px;
+  border-radius: 9px;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+
+
+.save {
+  background-color: #8b0000;
+  color: #fff;
+
+  border: none;
+  outline: none;
+
+  padding: 10px 22px;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow: 0 4px 10px rgba(139, 0, 0, 0.35);
+  transition: all 0.25s ease;
+}
+
+/* hover */
+.save:hover {
+  background-color: #a00000;
+  box-shadow: 0 6px 14px rgba(139, 0, 0, 0.45);
+  transform: translateY(-1px);
+}
+
+/* klik */
+.save:active {
+  transform: scale(0.97);
+}
+
+/* ilangin kotak/item aneh pas fokus */
+.save:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.3);
+}
+
+
+.clear, .back {
+  background-color: #fff;
+  color: #8b0000;
+
+  border: 1.5px solid #8b0000;
+  border-radius: 8px;
+
+  padding: 10px 22px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* hover: soft, beda dari save */
+
+.clear:hover, .back:hover {
+  background-color: rgba(139, 0, 0, 0.08);
+  box-shadow: 0 3px 8px rgba(139, 0, 0, 0.2);
+}
+
+/* klik */
+
+.clear:active, .back:active {
+  transform: scale(0.97);
+}
+
+/* fokus rapi */
+
+.clear:focus, .back:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.2);
+}
+
+/* ================= SIDEBAR ================= */
+.main {
+  margin-left: 260px;
+  transition: margin-left 0.35s ease;
+}
+
+.main.expanded {
+  margin-left: 0;
+}
+
+.sidebar {
+  transition: transform 0.35s ease;
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+  .form-card {
+    padding: 18px;
+  }
+
+  .cuti-box {
+    grid-template-columns: 1fr;
+  }
+
+  .btn {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
+}

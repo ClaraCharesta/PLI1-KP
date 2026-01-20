@@ -1,0 +1,133 @@
+/* ===== FORM CARD ===== */
+.form-card{
+  max-width: 900px;          /* dari 720 → 900 */
+  margin: auto;
+  background: #fff;
+  padding: 36px;             /* dari 26 → 36 */
+  border-radius: 16px;       /* sedikit lebih smooth */
+  box-shadow: 0 6px 20px rgba(0,0,0,.1);
+  animation: fadeIn .4s ease;
+}
+
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:none}
+}
+
+/* ===== FORM GROUP ===== */
+.form-group{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+label{
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+label span{
+  color: #8b0000;
+}
+
+/* ===== INPUT & SELECT ===== */
+/* ===== SAMAKAN UKURAN INPUT & SELECT ===== */
+.form-group input,
+.form-group select {
+  width: 100%;
+  height: 46px;              
+  padding: 0 14px;           
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+/* hilangkan style bawaan select (beda browser) */
+.form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 10px 6px;
+}
+
+/* focus konsisten */
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #8b0000;
+  box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.15);
+  outline: none;
+}
+
+
+/* ===== BUTTON ===== */
+.btn{
+  margin-top: 22px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.save{
+  background: #8b0000;
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(139,0,0,.35);
+}
+
+.save:hover{
+  background: #a00000;
+}
+
+.clear, .back{
+  background: #fff;
+  color: #8b0000;
+  border: 1.5px solid #8b0000;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.clear:hover, .back:hover{
+  background: rgba(139,0,0,.08);
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .btn{
+    flex-direction: column;
+  }
+  button{
+    width: 100%;
+  }
+}
+
+/* ================= SIDEBAR ================= */
+.main {
+  margin-left: 260px;
+  transition: margin-left 0.35s ease;
+}
+
+.main.expanded {
+  margin-left: 0;
+}
+
+.sidebar {
+  transition: transform 0.35s ease;
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
