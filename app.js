@@ -51,10 +51,24 @@ app.get("/maintenanceKCM5", (req, res) => {
   });
 });
 
+app.get("/maintenanceRMFM5", (req, res) => {
+  res.render("maintenanceRMFM5", {
+    title: "Laporan Shift RM FM 5",
+    active: "maintenance RM FM"
+  });
+});
+
 app.get("/pcKCM5", (req, res) => {
   res.render("pcKCM5", {
     title: "Laporan Shift KCM 5",
     active: "produksi clinker kcm 5"
+  });
+});
+
+app.get("/pcRMFM5", (req, res) => {
+  res.render("pcRMFM5", {
+    title: "Laporan Shift RM FM 5",
+    active: "produksi clinker RMFM 5"
   });
 });
 
@@ -65,10 +79,24 @@ app.get("/sttKCM5", (req, res) => {
   });
 });
 
+app.get("/sttRMFM5", (req, res) => {
+  res.render("sttRMFM5", {
+    title: "Laporan Shift RM FM 5",
+    active: "serah terima tool RM FM 5"
+  });
+});
+
 app.get("/catatanKCM5", (req, res) => {
   res.render("catatanKCM5", {
     title: "Laporan Shift KCM 5",
     active: "catatan kcm 5"
+  });
+});
+
+app.get("/catatanRMFM5", (req, res) => {
+  res.render("catatanRMFM5", {
+    title: "Laporan Shift RM FM 5",
+    active: "catatan RM FM 5"
   });
 });
 

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title><%= title %></title>
+<link rel="stylesheet" href="/css/layout.css">
+<link rel="stylesheet" href="/css/sidebar.css">
+<link rel="stylesheet" href="/css/topbar.css">
+<link rel="stylesheet" href="/css/pcRMFM5.css">
+</head>
+<body>
+
+<%- include('partials/sidebar') %>
+
+<div class="main">
+  <%- include('partials/topbar', { title: title }) %>
+
+  <div class="content">
+    <div class="form-card">
+
+      <div class="form-group">
+        <label>Raw Mill 1 Feeding</label>
+        <input type="text" id="RM1Feeding" placeholder="Masukkan Raw Mill 1 Feeding">
+      </div>
+
+      <div class="form-group">
+        <label>Raw Mill 2 Feeding</label>
+        <input type="text" id="RM2Feeding" placeholder="Masukkan Raw Mill 2 Feeding">
+      </div>
+
+        <div class="form-group">
+        <label>Cement Mill 1 Feeding</label>
+        <input type="text" id="CM1Feeding" placeholder="Masukkan Cement Mill 1 Feeding">
+      </div>
+
+      <div class="form-group">
+        <label>Cement Mill 2 Feeding</label>
+        <input type="text" id="CM2Feeding" placeholder="Masukkan Cement Mill 2 Feeding">
+      </div>
+
+      <div class="btn-wrapper">
+        <div class="btn">
+            <button class="back" type="button">Back</button>
+            <button class="clear" type="button">Clear</button>
+            <button class="save" type="submit">Save</button>
+        
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.querySelector('.sidebar');
+  const main = document.querySelector('.main');
+
+  menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('closed');
+    main.classList.toggle('expanded');
+  });
+</script>
+
+<script src="/js/sidebar.js"></script>
+<script src="/js/pcKCM5.js"></script>
+</body>
+</html>
