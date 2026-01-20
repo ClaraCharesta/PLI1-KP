@@ -242,3 +242,45 @@ input[type="time"] {
     width: 100%;
   }
 }
+
+/* ===== FIX TOPBAR BIAR NGGAK GOYANG ===== */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 260px;
+  right: 0;
+  z-index: 999;
+}
+
+/* jangan gede-gede jaraknya */
+.main {
+  padding-top: 50px;   /* sama persis tinggi topbar */
+}
+
+/* kalau sidebar nutup */
+.main.expanded .topbar {
+  left: 0;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  .topbar {
+    left: 0;
+  }
+
+  .main {
+    padding-top: 50px;
+  }
+}
+
+
+/* mobile */
+@media (max-width: 768px) {
+  .topbar {
+    left: 0;
+  }
+
+  .main {
+    padding-top: 70px;
+  }
+}

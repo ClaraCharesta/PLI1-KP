@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Laporan KCM 5</title>
+
+<link rel="stylesheet" href="/css/layout.css">
+<link rel="stylesheet" href="/css/sidebar.css">
+<link rel="stylesheet" href="/css/topbar.css">
+<link rel="stylesheet" href="/css/laporanKCM5.css">
+</head>
+<body>
+
+<%- include('partials/sidebar') %>
+
+<div class="main">
+  <%- include('partials/topbar', { title: "Laporan Shift KCM 5" }) %>
+
+  <div class="content">
+
+    <!-- NO REF -->
+    <div class="noref-box">
+      No.Ref :
+      <span id="noRefText"></span>
+    </div>
+
+    <!-- ================= LAPORAN SHIFT ================= -->
+    <h3>Laporan Shift</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Tanggal</th>
+          <th>Shift</th>
+          <th>No.Ref</th>
+          <th>Dibuat Oleh</th>
+          <th>Personil (841)</th>
+          <th>Shift (841)</th>
+          <th>Personil (842A)</th>
+          <th>Shift (842A)</th>
+          <th>Personil (842B)</th>
+          <th>Shift (842B)</th>
+          <th>Personil (843A)</th>
+          <th>Shift (843A)</th>
+          <th>Personil (843B)</th>
+          <th>Shift (843B)</th>
+          <th>Cuti</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>20-01-2026</td>
+          <td>01</td>
+          <td class="noref-cell"></td>
+          <td>zhanshielinsone@gmail.com</td>
+          <td>Irsyadunnas</td>
+          <td>01</td>
+          <td>Rafki</td>
+          <td>01</td>
+          <td>Salman</td>
+          <td>01</td>
+          <td>Riki</td>
+          <td>01</td>
+          <td>Wahyu</td>
+          <td>01</td>
+          <td>Meri</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ================= TROUBLESHOOTING ================= -->
+    <div class="section-header">
+      <h3>Troubleshooting</h3>
+      <button class="btn-add" data-target="tsKCM5">+ Add</button>
+    </div>
+
+    <table class="table" id="tsTable">
+      <thead>
+        <tr>
+          <th>Tanggal</th>
+          <th>Week</th>
+          <th>Area</th>
+          <th>Nomenclature</th>
+          <th>Mulai</th>
+          <th>Selesai</th>
+          <th>Durasi</th>
+          <th>Alarm</th>
+          <th>PIC</th>
+          <th>Status</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>20-01-2026</td>
+          <td>3</td>
+          <td>Raw Mill</td>
+          <td>RM-01</td>
+          <td>10:00</td>
+          <td>10:45</td>
+          <td>45 mnt</td>
+          <td>High Temp</td>
+          <td>Irsyad</td>
+          <td>Closed</td>
+          <td>
+            <button class="edit">Edit</button>
+            <button class="delete">Hapus</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ================= BASIC MAINTENANCE ================= -->
+    <div class="section-header">
+      <h3>Basic Maintenance</h3>
+      <button class="btn-add" data-target="maintenanceKCM5">+ Add</button>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Rute</th>
+          <th>Status</th>
+          <th>Tanggal</th>
+          <th>Mulai</th>
+          <th>Selesai</th>
+          <th>Kendala</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>RM-841</td>
+          <td>OK</td>
+          <td>20-01-2026</td>
+          <td>08:00</td>
+          <td>09:00</td>
+          <td>-</td>
+          <td>
+            <button class="edit">Edit</button>
+            <button class="delete">Hapus</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ================= PRODUKSI CLINKER ================= -->
+    <div class="section-header">
+      <h3>Produksi Clinker</h3>
+      <button class="btn-add" data-target="pcKCM5">+ Add</button>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>No.Ref</th>
+          <th>Kiln Feeding</th>
+          <th>Kiln Speed</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="noref-cell"></td>
+          <td>550</td>
+          <td>3.5 rpm</td>
+          <td>
+            <button class="edit">Edit</button>
+            <button class="delete">Hapus</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ================= SERAH TERIMA TOOL ================= -->
+    <div class="section-header">
+      <h3>Serah Terima Tool</h3>
+      <button class="btn-add" data-target="sttKCM5">+ Add</button>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>No.Ref</th>
+          <th>Radio</th>
+          <th>Kunci Mobil</th>
+          <th>Kunci Motor</th>
+          <th>Kunci Subst</th>
+          <th>Toolset</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="noref-cell"></td>
+          <td>✔</td>
+          <td>✔</td>
+          <td>✘</td>
+          <td>✔</td>
+          <td>✔</td>
+          <td>
+            <button class="edit">Edit</button>
+            <button class="delete">Hapus</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <!-- ================= CATATAN ================= -->
+<div class="section-header">
+  <h3>Catatan</h3>
+  <button class="btn-add" data-target="catatanKCM5">+ Add</button>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Catatan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        Kondisi Raw Mill stabil, dilakukan monitoring lanjutan pada shift berikutnya.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+</div>
+
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.querySelector('.sidebar');
+  const main = document.querySelector('.main');
+
+  menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('closed');
+    main.classList.toggle('expanded');
+  });
+</script>
+
+<script src="/js/laporanKCM5.js"></script>
+</body>
+</html>

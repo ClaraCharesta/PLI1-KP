@@ -177,3 +177,38 @@ label span{
 .sidebar.closed{
   transform: translateX(-100%);
 }
+
+/* ===== FIX TOPBAR TANPA UBAH TINGGI ASLI ===== */
+.topbar{
+  position: fixed;
+  top: 0;
+  left: 260px;   /* ikut sidebar */
+  right: 0;
+  z-index: 999;
+}
+
+/* kalau sidebar ditutup */
+.main.expanded .topbar{
+  left: 0;
+}
+
+/* biar konten nggak ketutup, tapi nggak kejauhan */
+.main{
+  margin-left: 260px;
+  padding-top: var(--topbar-height, 48px);
+}
+
+.main.expanded{
+  margin-left: 0;
+}
+
+/* mobile */
+@media(max-width:768px){
+  .topbar{
+    left: 0;
+  }
+  .main{
+    margin-left: 0;
+    padding-top: var(--topbar-height, 48px);
+  }
+}

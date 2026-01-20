@@ -100,6 +100,13 @@ app.get("/catatanRMFM5", (req, res) => {
   });
 });
 
+app.get("/laporanKCM5", (req, res) => {
+  res.render("laporanKCM5", {
+    title: "Laporan Shift KCM 5",
+    active: "laporanKCM5"
+  });
+});
+
 app.get("/home", (req, res) => {
   res.render("home", { active: "home" });
 });

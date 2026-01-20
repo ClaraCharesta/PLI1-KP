@@ -1,5 +1,4 @@
 /* ===== FORM CARD ===== */
-/* ===== FORM CARD ===== */
 .form-card{
   max-width: 880px;          
   min-width: 420px;          
@@ -11,9 +10,6 @@
   animation: fadeIn .4s ease;
   box-sizing: border-box;
 }
-
-
-
 
 /* animasi */
 @keyframes fadeIn{
@@ -36,13 +32,13 @@ label{
 
 /* ===== INPUT FIELD ===== */
 input{
-  width:100%;            /* full width sesuai form-card */
-  max-width:100%;        /* jangan melebihi card */
-  padding:12px 14px;     /* konsisten atas-bawah & kiri-kanan */
+  width:100%;
+  max-width:100%;
+  padding:12px 14px;
   border-radius:12px;
   border:1px solid #ccc;
   font-size:14px;
-  box-sizing:border-box; /* penting untuk padding + width */
+  box-sizing:border-box;
   transition:all 0.25s ease;
 }
 
@@ -55,14 +51,13 @@ input:focus{
 /* ================= BUTTON ================= */
 .btn {
   margin-top: 22px;
-  width: 100%;                 /* 🔥 */
+  width: 100%;
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   box-sizing: border-box;
 }
 
-/* tombol FORM saja */
 .form-card .btn button {
   min-width: 90px;
   height: 38px;
@@ -72,75 +67,55 @@ input:focus{
   cursor: pointer;
 }
 
-
 .save {
   background-color: #8b0000;
   color: #fff;
-
   border: none;
   outline: none;
-
   padding: 10px 22px;
   border-radius: 8px;
-
   font-size: 14px;
   font-weight: 600;
-
   cursor: pointer;
-
   box-shadow: 0 4px 10px rgba(139, 0, 0, 0.35);
   transition: all 0.25s ease;
 }
 
-/* hover */
 .save:hover {
   background-color: #a00000;
   box-shadow: 0 6px 14px rgba(139, 0, 0, 0.45);
   transform: translateY(-1px);
 }
 
-/* klik */
 .save:active {
   transform: scale(0.97);
 }
 
-/* ilangin kotak/item aneh pas fokus */
 .save:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.3);
 }
 
-
 .clear, .back {
   background-color: #fff;
   color: #8b0000;
-
   border: 1.5px solid #8b0000;
   border-radius: 8px;
-
   padding: 10px 22px;
-
   font-size: 14px;
   font-weight: 600;
-
   cursor: pointer;
   transition: all 0.25s ease;
 }
-
-/* hover: soft, beda dari save */
 
 .clear:hover, .back:hover {
   background-color: rgba(139, 0, 0, 0.08);
   box-shadow: 0 3px 8px rgba(139, 0, 0, 0.2);
 }
 
-/* klik */
-
 .clear:active, .back:active {
   transform: scale(0.97);
 }
-
-/* fokus rapi */
 
 .clear:focus, .back:focus {
   outline: none;
@@ -172,9 +147,44 @@ input:focus{
     margin:20px auto;
   }
   .btn{
-    flex-direction:column; /* tombol full-width di mobile */
+    flex-direction:column;
   }
   button{
     width:100%;
+  }
+}
+
+/* ===== FIX TOPBAR TANPA UBAH TINGGI ASLI ===== */
+.topbar{
+  position: fixed;
+  top: 0;
+  left: 260px;   /* ikut sidebar */
+  right: 0;
+  z-index: 999;
+}
+
+/* kalau sidebar ditutup */
+.main.expanded .topbar{
+  left: 0;
+}
+
+/* biar konten nggak ketutup, tapi nggak kejauhan */
+.main{
+  margin-left: 260px;
+  padding-top: var(--topbar-height, 48px);
+}
+
+.main.expanded{
+  margin-left: 0;
+}
+
+/* mobile */
+@media(max-width:768px){
+  .topbar{
+    left: 0;
+  }
+  .main{
+    margin-left: 0;
+    padding-top: var(--topbar-height, 48px);
   }
 }
