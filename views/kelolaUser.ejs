@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kelola User - PLI 1 Maintenance</title>
+
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/kelolaUser.css">
+</head>
+<body>
+
+  <%- include('partials/sidebar') %>
+
+  <div class="main">
+    <%- include('partials/topbar') %>
+
+    <div class="content">
+
+      <!-- HEADER -->
+      <div class="kelola-user-header">
+        <h1>Kelola User</h1>
+        <button class="btn-add" id="addUserBtn">Add</button>
+      </div>
+
+      <!-- TABLE SECTION -->
+      <div class="table-wrapper">
+        <table class="user-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Permissions</th>
+              <th>Created At</th>
+              <th>Update</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>itcad@gmail.com</td>
+              <td>
+                <span class="badge badge-admin">Admin</span>
+              </td>
+              <td>
+                <span class="badge badge-aktif">Aktif</span>
+              </td>
+              <td>Kelola User</td>
+              <td>10/10/2025</td>
+              <td>
+                <button class="btn-action btn-edit" title="Edit">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </button>
+                <button class="btn-action btn-delete" title="Delete">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>user2@gmail.com</td>
+              <td>
+                <span class="badge badge-user">User</span>
+              </td>
+              <td>
+                <span class="badge badge-aktif">Aktif</span>
+              </td>
+              <td>View Report</td>
+              <td>15/09/2025</td>
+              <td>
+                <button class="btn-action btn-edit" title="Edit">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </button>
+                <button class="btn-action btn-delete" title="Delete">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DELETE MODAL -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-icon">🗑️</div>
+      <h2>Delete User</h2>
+      <p>Apakah anda yakin ingin menghapus user ini?</p>
+      <div class="modal-buttons">
+        <button id="deleteBtn" class="btn-delete">Delete</button>
+        <button id="keepBtn" class="btn-keep">Keep</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/kelolaUser.js"></script>
+</body>
+</html>

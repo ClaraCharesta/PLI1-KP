@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Data Abnormalitas</title>
+
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/formDataAbnormalitas.css">
+</head>
+<body>
+
+  <%- include('partials/sidebar') %>
+
+  <div class="main">
+    <%- include('partials/topbar', { title: "Add Data Abnormalitas" }) %>
+
+    <div class="content">
+      <div class="form-card">
+        <h2>Add Data Abnormalitas</h2>
+
+        <form id="formDataAbnormalitas">
+
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="status" required>
+              <option value="">-- Pilih Status --</option>
+              <option value="Open">Open</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Close">Close</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="abnormalDate">Abnormal Date</label>
+            <input type="date" id="abnormalDate" name="abnormalDate" required>
+          </div>
+
+          <div class="form-group">
+            <label for="reportBy">Report By</label>
+            <input type="text" id="reportBy" name="reportBy" placeholder="Nama yang melaporkan" required>
+          </div>
+
+          <div class="form-group">
+            <label for="area">Area</label>
+            <select id="area" name="area" required>
+              <option value="">-- Pilih Area --</option>
+              <option value="RM5">RM5</option>
+              <option value="KCM5">KCM5</option>
+              <option value="AUTO5">AUTO5</option>
+              <option value="FM5">FM5</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="nomenclature">Nomenclature</label>
+            <input type="text" id="nomenclature" name="nomenclature" placeholder="Kode peralatan" required>
+          </div>
+
+          <div class="form-group">
+            <label for="activity">Activity</label>
+            <input type="text" id="activity" name="activity" placeholder="Jenis aktivitas/inspeksi" required>
+          </div>
+
+          <div class="form-group">
+            <label for="prioritas">Prioritas</label>
+            <select id="prioritas" name="prioritas" required>
+              <option value="">-- Pilih Prioritas --</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="condition">Condition</label>
+            <input type="text" id="condition" name="condition" placeholder="Kondisi abnormal" required>
+          </div>
+
+          <div class="form-group">
+            <label for="action">Action</label>
+            <input type="text" id="action" name="action" placeholder="Tindakan yang akan dilakukan" required>
+          </div>
+
+          <div class="form-group">
+            <label for="abnormal">Abnormal</label>
+            <input type="text" id="abnormal" name="abnormal" placeholder="Jenis abnormalitas" required>
+          </div>
+
+          <div class="form-group">
+            <label for="source">Source</label>
+            <select id="source" name="source" required>
+              <option value="">-- Pilih Sumber --</option>
+              <option value="Operator">Operator</option>
+              <option value="Visual Inspection">Visual Inspection</option>
+              <option value="Temperature Sensor">Temperature Sensor</option>
+              <option value="Vibration Analyzer">Vibration Analyzer</option>
+              <option value="Pressure Gauge">Pressure Gauge</option>
+              <option value="Alarm System">Alarm System</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="informasiDetail">Informasi Detail</label>
+            <textarea id="informasiDetail" name="informasiDetail" rows="3" placeholder="Penjelasan detail kondisi abnormal..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="rencanaPerbaikan">Rencana Perbaikan</label>
+            <textarea id="rencanaPerbaikan" name="rencanaPerbaikan" rows="3" placeholder="Rencana perbaikan atau tindak lanjut..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="notifikasiUnitLain">Notifikasi ke Unit Lain</label>
+            <input type="text" id="notifikasiUnitLain" name="notifikasiUnitLain" placeholder="Unit/Departemen yang perlu diberitahu">
+          </div>
+
+          <div class="form-group">
+            <label for="idMSO">ID MSO</label>
+            <input type="text" id="idMSO" name="idMSO" placeholder="Nomor MSO/Work Order">
+          </div>
+
+          <!-- ================= UPLOAD FILES ================= -->
+          <div class="upload-section">
+            <h3>Upload Foto</h3>
+            
+            <div class="upload-grid">
+              <div class="upload-box">
+                <input type="file" id="fotoSebelum" name="fotoSebelum" accept="image/*" style="display:none;">
+                <label for="fotoSebelum" class="upload-label">
+                  <span class="upload-icon">📸</span>
+                  <span class="upload-text">Upload Foto Sebelum</span>
+                </label>
+                <div id="previewSebelum" class="upload-preview"></div>
+              </div>
+
+              <div class="upload-box">
+                <input type="file" id="fotoSesudah" name="fotoSesudah" accept="image/*" style="display:none;">
+                <label for="fotoSesudah" class="upload-label">
+                  <span class="upload-icon">📸</span>
+                  <span class="upload-text">Upload Foto Sesudah</span>
+                </label>
+                <div id="previewSesudah" class="upload-preview"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= BUTTONS ================= -->
+          <div class="btn-wrapper">
+            <button type="button" class="btn-cancel">Cancel</button>
+            <button type="submit" class="btn-save">Save</button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const main = document.querySelector('.main');
+
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('closed');
+        main.classList.toggle('expanded');
+      });
+    }
+  </script>
+
+  <script src="/js/formDataAbnormalitas.js"></script>
+
+</body>
+</html>

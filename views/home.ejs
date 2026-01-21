@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - PLI 1 Maintenance</title>
+
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+
+  <%- include('partials/sidebar') %>
+
+  <div class="main">
+    <%- include('partials/topbar') %>
+
+    <div class="content">
+
+      <!-- SEARCH BAR -->
+      <div class="search-bar-wrapper">
+        <div class="search-bar">
+          <input type="text" id="searchInput" class="search-input" placeholder="Search menu...">
+          <button class="search-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- CARDS GRID -->
+      <div class="cards-grid">
+
+        <!-- Card 1: Data BM & CM -->
+        <div class="card" data-route="/dataBMCM">
+          <div class="card-icon">
+            <img src="/img/Menu_BMCM.png" alt="Data BM & CM">
+          </div>
+          <h3 class="card-title">Data BM & CM</h3>
+        </div>
+
+        <!-- Card 2: Data Abnormalitas -->
+        <div class="card" data-route="/dataAbnormalitas">
+          <div class="card-icon">
+            <img src="/img/Menu_Abnormalitas.png" alt="Data Abnormalitas">
+          </div>
+          <h3 class="card-title">Data Abnormalitas</h3>
+        </div>
+
+        <!-- Card 3: Laporan PLI RM & FM 5 -->
+        <div class="card" data-route="/laporanRMFM5">
+          <div class="card-icon">
+            <img src="/img/Menu_LaporanRM&FM.png" alt="Laporan PLI RM & FM 5">
+          </div>
+          <h3 class="card-title">Laporan PLI RM & FM 5</h3>
+        </div>
+
+        <!-- Card 4: Laporan Shift KCM -->
+        <div class="card" data-route="/KCM5">
+            <div class="card-icon">
+                <img src="/img/Menu_LaporanShiftKCM.png" alt="Laporan Shift KCM">
+            </div>
+            <h3 class="card-title">Laporan Shift KCM</h3>
+        </div>
+
+
+        <!-- Card 5: Spare Part Non Motor -->
+        <div class="card" data-route="/spare-part">
+          <div class="card-icon">
+            <img src="/img/Menu_SparePartNonMotor.png" alt="Spare Part Non Motor">
+          </div>
+          <h3 class="card-title">Spare Part Non Motor</h3>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/home.js"></script>
+</body>
+</html>

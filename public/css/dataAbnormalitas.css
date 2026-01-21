@@ -1,0 +1,370 @@
+/* ================= GLOBAL ================= */
+* {
+  box-sizing: border-box;
+}
+
+/* ================= CONTENT ================= */
+.content {
+  padding-top: 30px;
+  padding-left: 32px;
+  padding-right: 32px;
+  padding-bottom: 24px;
+  overflow-x: auto;
+}
+
+/* BIAR TABEL PANJANG TETAP AMAN */
+.content table {
+  min-width: 1600px;
+}
+
+/* ================= ADD BUTTON ================= */
+.btn-add {
+  background: #8b0000;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 8px rgba(139, 0, 0, 0.35);
+}
+
+.btn-add:hover {
+  background: #a00000;
+  transform: translateY(-1px);
+}
+
+.btn-add:active {
+  transform: scale(0.96);
+}
+
+/* ================= TABLE WRAPPER ================= */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 18px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+/* ================= TABLE ================= */
+.table {
+  width: 100%;
+  min-width: 1600px;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* header */
+.table thead th {
+  background: #8b0000;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 10px 6px;
+  text-align: center;
+  white-space: nowrap;
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* body */
+.table tbody td {
+  font-size: 11px;
+  padding: 8px 6px;
+  text-align: center;
+  border: 1px solid #e1e1e1;
+  white-space: nowrap;
+  word-break: break-word;
+}
+
+/* zebra pattern */
+.table tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
+/* hover */
+.table tbody tr:hover {
+  background: rgba(139, 0, 0, 0.06);
+}
+
+/* ================= ACTION BUTTON ================= */
+.edit,
+.delete {
+  padding: 5px 10px;
+  font-size: 11px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0 2px;
+}
+
+/* edit */
+.edit {
+  background: #ffb703;
+  color: #333;
+}
+
+.edit:hover {
+  background: #ffc933;
+}
+
+/* delete */
+.delete {
+  background: #d62828;
+  color: #fff;
+}
+
+.delete:hover {
+  background: #e63946;
+}
+
+/* ================= ICON STYLE ================= */
+.icon {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ================= STATUS BADGE ================= */
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.badge-close {
+  background: #264653;
+  color: #fff;
+}
+
+.badge-open {
+  background: #f4a261;
+  color: #fff;
+}
+
+.badge-in-progress {
+  background: #e76f51;
+  color: #fff;
+}
+
+/* ================= PRIORITY BADGE ================= */
+.priority {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.priority-high {
+  background: #d62828;
+  color: #fff;
+}
+
+.priority-medium {
+  background: #f77f00;
+  color: #fff;
+}
+
+.priority-low {
+  background: #06a77d;
+  color: #fff;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1024px) {
+  .table {
+    min-width: 1400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 12px;
+  }
+
+  .btn-add {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .table thead th,
+  .table tbody td {
+    font-size: 10px;
+    padding: 5px 4px;
+  }
+
+  .edit,
+  .delete {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}
+
+/* ================= SCROLLBAR ================= */
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(139, 0, 0, 0.4);
+  border-radius: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* ================= SIDEBAR ================= */
+.main {
+  margin-left: 260px;
+  transition: margin-left 0.35s ease;
+}
+
+.main.expanded {
+  margin-left: 0;
+}
+
+.sidebar {
+  transition: transform 0.35s ease;
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  .form-card {
+    padding: 18px;
+  }
+}
+
+/* ================= MODAL ================= */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 40px 32px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.modal-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.modal-content h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.modal-content p {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 24px 0;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn-delete,
+.btn-keep {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-delete {
+  background-color: #8b0000;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(139, 0, 0, 0.35);
+}
+
+.btn-delete:hover {
+  background-color: #a00000;
+  box-shadow: 0 6px 14px rgba(139, 0, 0, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-delete:active {
+  transform: scale(0.97);
+}
+
+.btn-keep {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.btn-keep:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-keep:active {
+  transform: scale(0.97);
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    max-width: 90%;
+    padding: 24px 20px;
+  }
+
+  .modal-icon {
+    font-size: 40px;
+  }
+
+  .modal-content h2 {
+    font-size: 18px;
+  }
+
+  .modal-content p {
+    font-size: 13px;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+  }
+
+  .btn-delete,
+  .btn-keep {
+    width: 100%;
+  }
+}

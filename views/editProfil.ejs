@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profil - PLI 1 Maintenance</title>
+
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/editProfil.css">
+</head>
+<body>
+
+  <%- include('partials/sidebar') %>
+
+  <div class="main">
+    <%- include('partials/topbar') %>
+
+    <div class="content">
+
+      <!-- HEADER -->
+      <div class="edit-profil-header">
+        <h1>Edit Profil</h1>
+      </div>
+
+      <div class="edit-profil-container">
+
+        <!-- PROFIL SECTION -->
+        <div class="profil-section">
+          <h2>Profil</h2>
+
+          <!-- Profile Picture -->
+          <div class="profile-picture-wrapper">
+            <img id="profileImg" class="profile-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='100' fill='%23FFD700'/%3E%3Ccircle cx='100' cy='80' r='40' fill='%23999'/%3E%3Cpath d='M 50 180 Q 50 140 100 140 Q 150 140 150 180' fill='%23999'/%3E%3C/svg%3E" alt="Profile Picture">
+          </div>
+
+          <div class="profile-name">Muhammad Afiq Jakhiel</div>
+
+          <!-- File Upload -->
+          <div class="file-upload-wrapper">
+            <div class="upload-label">Ubah Foto Profil</div>
+            <div class="upload-controls">
+              <label for="profilePictureInput" class="btn-upload">Pilih File</label>
+              <input type="file" id="profilePictureInput" accept="image/*" hidden>
+              <span id="fileStatus">Tidak ada file yang dipilih</span>
+            </div>
+          </div>
+
+          <!-- Form Fields -->
+          <form id="editProfilForm" class="edit-form">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" value="MUHAMMAD AFIQ JAKHIEL" placeholder="Masukkan username">
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" value="ofiqjahiel23@gmail.com" placeholder="Masukkan email">
+            </div>
+
+            <div class="form-group">
+              <label for="noHP">No. HP</label>
+              <input type="tel" id="noHP" name="noHP" value="08124567890" placeholder="Masukkan nomor HP">
+            </div>
+
+            <div class="form-group">
+              <label for="role">Role</label>
+              <input type="text" id="role" name="role" value="ADMIN" placeholder="Masukkan role" readonly>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="form-actions">
+              <button type="submit" class="btn-save">Simpan Perubahan</button>
+              <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/editProfil.js"></script>
+</body>
+</html>

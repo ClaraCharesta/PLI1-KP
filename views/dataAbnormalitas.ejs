@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Abnormalitas</title>
+
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/dataAbnormalitas.css">
+</head>
+<body>
+
+  <%- include('partials/sidebar') %>
+
+  <div class="main">
+    <%- include('partials/topbar', { title: "Data Abnormalitas" }) %>
+
+    <div class="content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h2 style="margin:0; font-size:18px; color:#333;">Data Abnormalitas</h2>
+        <button class="btn-add" data-target="formDataAbnormalitas">+ Add</button>
+      </div>
+
+      <!-- TABLE WRAPPER FOR HORIZONTAL SCROLL -->
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Status</th>
+              <th>Week Number</th>
+              <th>Abnormal Date</th>
+              <th>Report By</th>
+              <th>Area</th>
+              <th>Nomenclature</th>
+              <th>Activity</th>
+              <th>Prioritas</th>
+              <th>Condition</th>
+              <th>Action</th>
+              <th>Abnormal</th>
+              <th>Source</th>
+              <th>Informasi Detail</th>
+              <th>Rencana Perbaikan</th>
+              <th>Notifikasi ke Unit Lain</th>
+              <th>ID MSO</th>
+              <th>Foto Sebelum</th>
+              <th>Foto Sesudah</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><span class="badge badge-open">Open</span></td>
+              <td>35</td>
+              <td>26/08/2025</td>
+              <td>Fill Ardi</td>
+              <td>FM5</td>
+              <td>FM-841</td>
+              <td>Bearing Check</td>
+              <td><span class="priority priority-high">High</span></td>
+              <td>Bearing Panas</td>
+              <td>Penggantian Bearing</td>
+              <td>Suara Bising</td>
+              <td>Operator</td>
+              <td>Bearing temperature naik 45°C</td>
+              <td>Ganti bearing FM-841 minggu depan</td>
+              <td>Maintenance</td>
+              <td>MSO-001</td>
+              <td><i class="icon">📸</i></td>
+              <td><i class="icon">📸</i></td>
+              <td>
+                <button class="edit">Edit</button>
+                <button class="delete">Hapus</button>
+              </td>
+            </tr>
+
+            <tr>
+              <td>2</td>
+              <td><span class="badge badge-close">Close</span></td>
+              <td>36</td>
+              <td>02/09/2025</td>
+              <td>Rivaldi</td>
+              <td>KCM5</td>
+              <td>KCM-842A</td>
+              <td>Gearbox Inspection</td>
+              <td><span class="priority priority-medium">Medium</span></td>
+              <td>Kebocoran Oli</td>
+              <td>Perbaikan Seal</td>
+              <td>Tetesan Oli</td>
+              <td>Visual Inspection</td>
+              <td>Seal bocor di sisi depan gearbox</td>
+              <td>Perbaikan seal sudah dilakukan</td>
+              <td>-</td>
+              <td>MSO-002</td>
+              <td><i class="icon">📸</i></td>
+              <td><i class="icon">📸</i></td>
+              <td>
+                <button class="edit">Edit</button>
+                <button class="delete">Hapus</button>
+              </td>
+            </tr>
+
+            <tr>
+              <td>3</td>
+              <td><span class="badge badge-open">Open</span></td>
+              <td>36</td>
+              <td>03/09/2025</td>
+              <td>Lisofrizal</td>
+              <td>RM5</td>
+              <td>RM-843B</td>
+              <td>Motor Vibration</td>
+              <td><span class="priority priority-high">High</span></td>
+              <td>Getaran Tinggi</td>
+              <td>Realignment Motor</td>
+              <td>Getaran Abnormal</td>
+              <td>Vibration Analyzer</td>
+              <td>Getaran 15 mm/s, melebihi standar 10 mm/s</td>
+              <td>Realignment coupling motor minggu depan</td>
+              <td>Maintenance, Operations</td>
+              <td>MSO-003</td>
+              <td><i class="icon">📸</i></td>
+              <td><i class="icon">📸</i></td>
+              <td>
+                <button class="edit">Edit</button>
+                <button class="delete">Hapus</button>
+              </td>
+            </tr>
+
+            <tr>
+              <td>4</td>
+              <td><span class="badge badge-in-progress">In Progress</span></td>
+              <td>37</td>
+              <td>09/09/2025</td>
+              <td>Suryadi</td>
+              <td>AUTO5</td>
+              <td>AUTO-001</td>
+              <td>Temperature Monitoring</td>
+              <td><span class="priority priority-medium">Medium</span></td>
+              <td>Suhu Tinggi</td>
+              <td>Cleaning Filter</td>
+              <td>Suhu Output 85°C</td>
+              <td>Temperature Sensor</td>
+              <td>Suhu lebih tinggi dari setpoint 80°C</td>
+              <td>Pembersihan filter sedang dilakukan</td>
+              <td>Operations</td>
+              <td>MSO-004</td>
+              <td><i class="icon">📸</i></td>
+              <td><i class="icon">📸</i></td>
+              <td>
+                <button class="edit">Edit</button>
+                <button class="delete">Hapus</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= DELETE MODAL ================= -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-icon">🗑️</div>
+      <h2>Delete Data</h2>
+      <p>Apakah anda yakin ingin menghapus?</p>
+      <div class="modal-buttons">
+        <button id="deleteBtn" class="btn-delete">Delete</button>
+        <button id="keepBtn" class="btn-keep">Keep</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const main = document.querySelector('.main');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('closed');
+      main.classList.toggle('expanded');
+    });
+  </script>
+
+  <script src="/js/dataAbnormalitas.js"></script>
+
+</body>
+</html>

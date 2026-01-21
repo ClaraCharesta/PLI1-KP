@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Realisasi PK Harian</title>
+
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/formDataBMCM.css">
+</head>
+<body>
+
+  <%- include('partials/sidebar') %>
+
+  <div class="main">
+    <%- include('partials/topbar', { title: "Add Realisasi PK Harian" }) %>
+
+    <div class="content">
+      <div class="form-card">
+        <h2>Add Realisasi PK Harian</h2>
+
+        <form id="formDataBMCM">
+
+          <div class="form-group">
+            <label for="tanggal">Tanggal</label>
+            <input type="date" id="tanggal" name="tanggal" required>
+          </div>
+
+          <div class="form-group">
+            <label for="area">Area</label>
+            <select id="area" name="area" required>
+              <option value="">-- Pilih Area --</option>
+              <option value="RM5">RM5</option>
+              <option value="KCM5">KCM5</option>
+              <option value="AUTO5">AUTO5</option>
+              <option value="FM5">FM5</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="supervisor">Supervisor</label>
+            <input type="text" id="supervisor" name="supervisor" placeholder="Nama Supervisor" required>
+          </div>
+
+          <div class="form-group">
+            <label for="executor">Executor</label>
+            <select id="executor" name="executor" required>
+              <option value="">-- Pilih Executor --</option>
+              <option value="Fill Ardi">Fill Ardi</option>
+              <option value="Rivaldi">Rivaldi</option>
+              <option value="Lisofrizal">Lisofrizal</option>
+              <option value="Suryadi">Suryadi</option>
+              <option value="Boni Syaputra">Boni Syaputra</option>
+              <option value="Rizky Putra">Rizky Putra</option>
+              <option value="Ilham Maulana">Ilham Maulana</option>
+              <option value="Rully Chandra">Rully Chandra</option>
+              <option value="Darmansyah">Darmansyah</option>
+              <option value="Dede Andika Putra">Dede Andika Putra</option>
+              <option value="Haryudi">Haryudi</option>
+              <option value="Hendra">Hendra</option>
+              <option value="Jhoni Sadirman">Jhoni Sadirman</option>
+              <option value="Arif Kurnia Martin">Arif Kurnia Martin</option>
+              <option value="Muhammad Rusdiansyah Putra">Muhammad Rusdiansyah Putra</option>
+              <option value="Muhammad Khairul Warman">Muhammad Khairul Warman</option>
+              <option value="Sandi Putra">Sandi Putra</option>
+              <option value="Ilham Juhendra">Ilham Juhendra</option>
+              <option value="Harto">Harto</option>
+              <option value="Ego Geovani Yanitra">Ego Geovani Yanitra</option>
+              <option value="Rahmad Ardianto">Rahmad Ardianto</option>
+              <option value="Candra Purnomo">Candra Purnomo</option>
+              <option value="Wahyu Ikhsan">Wahyu Ikhsan</option>
+              <option value="Salman">Salman</option>
+              <option value="Meri Fernandes">Meri Fernandes</option>
+              <option value="Riki Sulaiman">Riki Sulaiman</option>
+              <option value="Astorio Prima">Astorio Prima</option>
+              <option value="Afrizal">Afrizal</option>
+              <option value="Jumaidi Bakri">Jumaidi Bakri</option>
+              <option value="Nofriza Juanda">Nofriza Juanda</option>
+              <option value="Angga Wahyudi">Angga Wahyudi</option>
+              <option value="Syafril">Syafril</option>
+              <option value="Randi Pratama">Randi Pratama</option>
+              <option value="Wily Surya Dinata">MERI HANDAYANI</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="activitiesCategory">Activities Category</label>
+            <select id="activitiesCategory" name="activitiesCategory" required>
+              <option value="">-- Pilih Kategori --</option>
+              <option value="BM (Basic Maintenance)">BM (Basic Maintenance)</option>
+              <option value="PM (Plannet Corective Maint)">PM (Plannet Corective Maint)</option>
+              <option value="Pekerjaan CAPEX">Pekerjaan CAPEX</option>
+              <option value="Persiapan Runnning">Persiapan Runnning</option>
+              <option value="PCM">PCM</option>
+              <option value="Lain-Lain">Lain-Lain</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="activities">Activities</label>
+            <select id="activities" name="activities" required>
+              <option value="">-- Pilih Aktivitas --</option>
+              <option value="Filter Dust Cleaning Task">Filter Dust Cleaning Task</option>
+              <option value="Gearbox Lubrication Check">Gearbox Lubrication Check</option>
+              <option value="Bearing Temperature Monitoring">Bearing Temperature Monitoring</option>
+              <option value="Brake Shoe Inspection">Brake Shoe Inspection</option>
+              <option value="Coupling Alignment Check">Coupling Alignment Check</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="detailActivities">Detail Activities</label>
+            <input type="text" id="detailActivities" name="detailActivities" placeholder="Deskripsi detail aktivitas">
+          </div>
+
+          <div class="form-group">
+            <label for="duration">Duration (Jam)</label>
+            <div class="input-counter">
+              <button type="button" class="btn-counter" data-action="minus">−</button>
+              <input type="number" id="duration" name="duration" value="0" min="0" readonly>
+              <button type="button" class="btn-counter" data-action="plus">+</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="jumlahPersonel">Jumlah Personel</label>
+            <div class="input-counter">
+              <button type="button" class="btn-counter" data-action="minus">−</button>
+              <input type="number" id="jumlahPersonel" name="jumlahPersonel" value="0" min="0" readonly>
+              <button type="button" class="btn-counter" data-action="plus">+</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="statusPersen">Status % (Realisasi)</label>
+            <div class="input-counter">
+              <button type="button" class="btn-counter" data-action="minus">−</button>
+              <input type="number" id="statusPersen" name="statusPersen" value="0" min="0" max="100" readonly>
+              <button type="button" class="btn-counter" data-action="plus">+</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="status" required>
+              <option value="">-- Pilih Status --</option>
+              <option value="Open">Open</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Close">Close</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="keterangan">Keterangan</label>
+            <textarea id="keterangan" name="keterangan" rows="3" placeholder="Catatan tambahan..."></textarea>
+          </div>
+
+          <!-- ================= UPLOAD FILES ================= -->
+          <div class="upload-section">
+            <h3>Upload Dokumentasi</h3>
+            
+            <div class="upload-grid">
+              <div class="upload-box">
+                <input type="file" id="fotoSafetyTalk" name="fotoSafetyTalk" accept="image/*" style="display:none;">
+                <label for="fotoSafetyTalk" class="upload-label">
+                  <span class="upload-icon">📎</span>
+                  <span class="upload-text">Upload Foto Safety Talk</span>
+                </label>
+                <div id="previewSafetyTalk" class="upload-preview"></div>
+              </div>
+
+              <div class="upload-box">
+                <input type="file" id="fotoCheckSheet" name="fotoCheckSheet" accept="image/*" style="display:none;">
+                <label for="fotoCheckSheet" class="upload-label">
+                  <span class="upload-icon">📎</span>
+                  <span class="upload-text">Upload Foto Check Sheet</span>
+                </label>
+                <div id="previewCheckSheet" class="upload-preview"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= BUTTONS ================= -->
+          <div class="btn-wrapper">
+            <button type="button" class="btn-cancel">Cancel</button>
+            <button type="submit" class="btn-save">Save</button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const main = document.querySelector('.main');
+
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('closed');
+        main.classList.toggle('expanded');
+      });
+    }
+  </script>
+
+  <script src="/js/formDataBMCM.js"></script>
+
+</body>
+</html>

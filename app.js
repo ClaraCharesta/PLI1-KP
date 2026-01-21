@@ -128,8 +128,57 @@ app.get("/RMFM5", (req, res) => {
   });
 });
 
+app.get("/dataBMCM", (req, res) => {
+  res.render("dataBMCM", {
+    title: "Realisasi PK Harian",
+    active: "dataBMCM"
+  });
+});
+
+app.get("/addDataBMCM", (req, res) => {
+  res.render("addDataBMCM", {
+    title: "Tambah Data BM & CM",
+    active: "dataBMCM"
+  });
+});
+
+app.get("/formDataBMCM", (req, res) => {
+  res.render("formDataBMCM", {
+    title: "Add Realisasi PK Harian",
+    active: "dataBMCM"
+  });
+});
+
+app.get("/updateDataBMCM", (req, res) => {
+  res.render("formUpdateDataBMCM", {
+    title: "Update Realisasi PK Harian",
+    active: "dataBMCM"
+  });
+});
+
+app.get("/dataAbnormalitas", (req, res) => {
+  res.render("dataAbnormalitas", {
+    title: "Data Abnormalitas",
+    active: "dataAbnormalitas"
+  });
+});
+
+app.get("/formDataAbnormalitas", (req, res) => {
+  res.render("formDataAbnormalitas", {
+    title: "Add Data Abnormalitas",
+    active: "dataAbnormalitas"
+  });
+});
+
+app.get("/updateDataAbnormalitas", (req, res) => {
+  res.render("formUpdateDataAbnormalitas", {
+    title: "Update Data Abnormalitas",
+    active: "dataAbnormalitas"
+  });
+});
+
 app.get("/home", (req, res) => {
-  res.render("home", { active: "home" });
+  res.render("home", { title: "Home", active: "home" });
 });
 
 app.get("/chart", (req, res) => {
@@ -137,11 +186,23 @@ app.get("/chart", (req, res) => {
 });
 
 app.get("/kelola-user", (req, res) => {
-  res.render("kelolaUser", { active: "user" });
+  res.render("kelolaUser", { title: "Kelola User", active: "user" });
 });
 
 app.get("/about", (req, res) => {
-  res.render("about", { active: "about" });
+  res.render("about", { title: "About", active: "about" });
+});
+
+app.get("/editProfil", (req, res) => {
+  res.render("editProfil", { title: "Edit Profil", active: "about" });
+});
+
+app.get("/ubahPassword", (req, res) => {
+  res.render("ubahPassword", { title: "Ganti Password", active: "about" });
+});
+
+app.get("/logout", (req, res) => {
+  res.render("logout", { title: "Logout", active: "logout" });
 });
 
 app.get("/feedback", (req, res) => {
