@@ -1,51 +1,97 @@
-/* ================= DELETE MODAL HANDLER ================= */
-const modal = document.getElementById("deleteModal");
-const deleteBtn = document.getElementById("deleteBtn");
-const keepBtn = document.getElementById("keepBtn");
-let rowToDelete = null;
+document.addEventListener("DOMContentLoaded", () => {
 
-// Show modal saat delete button diklik
-document.querySelectorAll(".btn-delete").forEach((btn, index) => {
-  btn.addEventListener("click", (e) => {
-    e.preventDefault();
-    rowToDelete = btn.closest("tr");
-    modal.classList.add("show");
+  /* ================= DELETE MODAL HANDLER ================= */
+
+  const modal = document.getElementById("deleteModal");
+  const deleteBtn = document.getElementById("deleteBtn");
+  const keepBtn = document.getElementById("keepBtn");
+  let rowToDelete = null;
+
+  document.querySelectorAll(".delete").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      rowToDelete = btn.closest("tr");
+      modal.classList.add("show");
+    });
   });
-});
 
-// Delete button di modal
-deleteBtn.addEventListener("click", () => {
-  if (rowToDelete) {
-    rowToDelete.remove();
+  deleteBtn?.addEventListener("click", () => {
+    if (rowToDelete) {
+      rowToDelete.remove();
+      modal.classList.remove("show");
+      rowToDelete = null;
+    }
+  });
+
+  keepBtn?.addEventListener("click", () => {
     modal.classList.remove("show");
     rowToDelete = null;
-  }
-});
-
-// Keep button di modal
-keepBtn.addEventListener("click", () => {
-  modal.classList.remove("show");
-  rowToDelete = null;
-});
-
-// Close modal saat click backdrop
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) {
-    modal.classList.remove("show");
-    rowToDelete = null;
-  }
-});
-
-/* ================= EDIT BUTTON HANDLER ================= */
-document.querySelectorAll(".btn-edit").forEach((btn, index) => {
-  btn.addEventListener("click", () => {
-    alert("Fitur edit user akan segera hadir");
-    // Nantinya bisa di-redirect ke halaman edit user atau buka modal form
   });
-});
 
-/* ================= ADD USER BUTTON HANDLER ================= */
-document.getElementById("addUserBtn").addEventListener("click", () => {
-  alert("Fitur tambah user akan segera hadir");
-  // Nantinya bisa di-redirect ke halaman add user atau buka modal form
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.classList.remove("show");
+      rowToDelete = null;
+    }
+  });
+
+  /* ================= EDIT BUTTON HANDLER ================= */
+
+  document.querySelectorAll(".edit").forEach(btn => {
+    btn.addEventListener("click", () => {
+      alert("Fitur edit akan segera hadir");
+    });
+  });
+
+  /* ================= ADD BUTTON HANDLER ================= */
+
+  const addBtn = document.getElementById("btnAdd");
+  if (addBtn) {
+    addBtn.addEventListener("click", () => {
+      window.location.href = "/formDataBMCM";
+    });
+  }
+
+  /* ================= SEARCH TABLE FUNCTIONALITY ================= */
+
+  const searchInput = document.getElementById("searchInput");
+  const btnSearch = document.getElementById("btnSearch");
+  const tableRows = document.querySelectorAll("tbody tr");
+
+  if (!searchInput) return;
+
+  function filterTable() {
+    const keyword = searchInput.value.toLowerCase().trim();
+
+    tableRows.forEach(row => {
+      const rowText = row.textContent.toLowerCase();
+
+      if (rowText.includes(keyword)) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
+  }
+
+  // Klik tombol search
+  btnSearch?.addEventListener("click", filterTable);
+
+  // Enter & ESC
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      filterTable();
+    }
+
+    if (e.key === "Escape") {
+      searchInput.value = "";
+      filterTable();
+      searchInput.blur();
+    }
+  });
+
+  // Realtime search (direkomendasikan)
+  searchInput.addEventListener("input", filterTable);
+
 });

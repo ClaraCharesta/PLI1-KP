@@ -18,9 +18,13 @@
     <%- include('partials/topbar', { title: "Data Abnormalitas" }) %>
 
     <div class="content">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h2 style="margin:0; font-size:18px; color:#333;">Data Abnormalitas</h2>
-        <button class="btn-add" data-target="formDataAbnormalitas">+ Add</button>
+      <!-- HEADER -->
+      <div class="header-box">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="">
+          <button id="btnSearch" type="button">Search</button>
+        </div>
+        <button id="btnAdd" class="btn-add" data-target="formDataAbnormalitas">+ Add</button>
       </div>
 
       <!-- TABLE WRAPPER FOR HORIZONTAL SCROLL -->

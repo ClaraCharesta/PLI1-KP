@@ -87,6 +87,10 @@
   transform: translateY(-4px);
 }
 
+.card.hidden {
+  display: none;
+}
+
 /* ================= CARD ICON ================= */
 .card-icon {
   width: 100px;
@@ -130,12 +134,7 @@
 
   .cards-grid {
     padding: 0 16px 16px 16px;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-  }
-
-  .card {
-    min-width: 140px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 }
 
@@ -146,9 +145,17 @@
 
   .cards-grid {
     padding: 0 12px 12px 12px;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
   }
 
-  .card {
-    min-width: 130px;
+  .search-box input {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+
+  #btnSearch {
+    padding: 4px 10px;
+    font-size: 11px;
   }
 }

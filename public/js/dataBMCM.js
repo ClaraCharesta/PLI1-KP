@@ -1,65 +1,71 @@
-/* ================= DELETE BUTTON & MODAL ================= */
-const modal = document.getElementById("deleteModal");
-const deleteBtn = document.getElementById("deleteBtn");
-const keepBtn = document.getElementById("keepBtn");
-let rowToDelete = null;
+document.addEventListener("DOMContentLoaded", () => {
 
-// Show modal saat delete button diklik
-document.querySelectorAll(".delete").forEach(btn => {
-  btn.addEventListener("click", (e) => {
-    e.preventDefault();
-    rowToDelete = btn.closest("tr");
-    modal.classList.add("show");
-  });
-});
-
-// Delete button di modal
-deleteBtn.addEventListener("click", () => {
-  if (rowToDelete) {
-    rowToDelete.remove();
-    modal.classList.remove("show");
-    rowToDelete = null;
+  const searchInput = document.getElementById("searchInput");
+  if (!searchInput) {
+    console.error("searchInput tidak ditemukan");
+    return;
   }
-});
 
-// Keep button di modal
-keepBtn.addEventListener("click", () => {
-  modal.classList.remove("show");
-  rowToDelete = null;
-});
+  /* =====================================================
+     DETECT MODE : CARD atau TABLE
+  ===================================================== */
 
-// Close modal saat click backdrop
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) {
-    modal.classList.remove("show");
-    rowToDelete = null;
-  }
-});
+  const cards = document.querySelectorAll(".card");
+  const tableRows = document.querySelectorAll("table tbody tr");
 
-/* ================= EDIT BUTTON ================= */
-document.querySelectorAll(".edit").forEach((btn, index) => {
-  btn.addEventListener("click", () => {
-    const rowId = index + 1; // Simulasi ID dari row
-    window.location.href = `/updateDataBMCM?id=${rowId}`;
-  });
-});
+  /* =====================================================
+     SEARCH FUNCTION
+  ===================================================== */
 
-/* ================= ADD BUTTON ================= */
-document.querySelectorAll(".btn-add").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const target = btn.dataset.target;
-    if (target) {
-      window.location.href = `/${target}`;
+  const doSearch = () => {
+    const keyword = searchInput.value.toLowerCase().trim();
+
+    /* ================= CARD MODE ================= */
+    if (cards.length > 0) {
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+
+        if (text.includes(keyword)) {
+          card.style.display = "flex";
+          card.classList.add("fade-in");
+        } else {
+          card.style.display = "none";
+          card.classList.remove("fade-in");
+        }
+      });
+      return;
+    }
+
+    /* ================= TABLE MODE ================= */
+    if (tableRows.length > 0) {
+      tableRows.forEach(row => {
+        const rowText = row.innerText.toLowerCase();
+
+        if (rowText.includes(keyword)) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+      return;
+    }
+
+    console.warn("Tidak ada card atau table row untuk di-search");
+  };
+
+  /* =====================================================
+     EVENT
+  ===================================================== */
+
+  searchInput.addEventListener("input", doSearch);
+
+  // ESC reset
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      searchInput.value = "";
+      doSearch();
+      searchInput.blur();
     }
   });
-});
 
-/* ================= TOGGLE ROW DETAIL (OPTIONAL) ================= */
-document.querySelectorAll(".table tbody tr").forEach(row => {
-  row.addEventListener("click", (e) => {
-    // Jangan toggle kalau yang di-click adalah button
-    if (e.target.tagName !== "BUTTON" && e.target.tagName !== "I") {
-      row.style.background = "rgba(139, 0, 0, 0.1)";
-    }
-  });
 });

@@ -1,7 +1,19 @@
+/* ================= CONTENT WRAPPER ================= */
+/* INI KUNCI UTAMANYA */
+.content{
+  padding: 40px 24px 60px;   /* jarak dari topbar */
+  min-height: calc(100vh - var(--topbar-height, 48px));
+  display: flex;
+  justify-content: center;   /* horizontal center */
+  align-items: flex-start;   /* tidak nempel ke atas */
+  box-sizing: border-box;
+}
+
 /* ================= FORM CARD ================= */
 .form-card{
+  width: 100%;
   max-width: 900px;
-  margin: auto;
+  margin-top: 32px;          /* jarak tambahan dari atas */
   background: #fff;
   padding: 36px;
   border-radius: 16px;
@@ -34,7 +46,6 @@ label span{
 }
 
 /* ================= INPUT & SELECT ================= */
-/* Samakan ukuran input & select (tidak ganggu textarea) */
 .form-group input,
 .form-group select{
   width: 100%;
@@ -47,19 +58,16 @@ label span{
   background-color: #fff;
 }
 
-/* hilangkan style bawaan select */
 .form-group select{
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-
   background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;
   background-size: 10px 6px;
 }
 
-/* focus input & select */
 .form-group input:focus,
 .form-group select:focus{
   border-color: #8b0000;
@@ -67,8 +75,7 @@ label span{
   outline: none;
 }
 
-/* ================= TEXTAREA (CATATAN) ================= */
-/* KHUSUS textarea, tidak mempengaruhi input/select lain */
+/* ================= TEXTAREA ================= */
 .form-group textarea{
   width: 100%;
   min-height: 240px;
@@ -81,30 +88,13 @@ label span{
   resize: vertical;
   box-sizing: border-box;
   background: #fff;
-
-  transition:
-    border-color .25s ease,
-    box-shadow .25s ease,
-    transform .15s ease;
+  transition: border-color .25s ease, box-shadow .25s ease;
 }
 
-/* hover textarea */
-.form-group textarea:hover{
-  border-color: #b00000;
-}
-
-/* focus textarea */
 .form-group textarea:focus{
   border-color: #8b0000;
   box-shadow: 0 0 0 3px rgba(139,0,0,.18);
   outline: none;
-  transform: translateY(-1px);
-}
-
-/* placeholder textarea */
-.form-group textarea::placeholder{
-  color: #999;
-  font-style: italic;
 }
 
 /* ================= BUTTON ================= */
@@ -124,12 +114,10 @@ label span{
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(139,0,0,.35);
-  transition: all .25s ease;
 }
 
 .save:hover{
   background: #a00000;
-  box-shadow: 0 6px 14px rgba(139,0,0,.45);
 }
 
 .clear,
@@ -141,28 +129,17 @@ label span{
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: all .25s ease;
 }
 
 .clear:hover,
 .back:hover{
   background: rgba(139,0,0,.08);
-  box-shadow: 0 3px 8px rgba(139,0,0,.2);
-}
-
-/* ================= RESPONSIVE ================= */
-@media(max-width:768px){
-  .btn{
-    flex-direction: column;
-  }
-  button{
-    width: 100%;
-  }
 }
 
 /* ================= SIDEBAR ================= */
 .main{
   margin-left: 260px;
+  padding-top: var(--topbar-height, 48px);
   transition: margin-left .35s ease;
 }
 
@@ -178,37 +155,43 @@ label span{
   transform: translateX(-100%);
 }
 
-/* ===== FIX TOPBAR TANPA UBAH TINGGI ASLI ===== */
+/* ================= TOPBAR ================= */
 .topbar{
   position: fixed;
   top: 0;
-  left: 260px;   /* ikut sidebar */
+  left: 260px;
   right: 0;
   z-index: 999;
 }
 
-/* kalau sidebar ditutup */
 .main.expanded .topbar{
   left: 0;
 }
 
-/* biar konten nggak ketutup, tapi nggak kejauhan */
-.main{
-  margin-left: 260px;
-  padding-top: var(--topbar-height, 48px);
-}
-
-.main.expanded{
-  margin-left: 0;
-}
-
-/* mobile */
+/* ================= RESPONSIVE ================= */
 @media(max-width:768px){
+  .content{
+    padding: 24px 16px;
+  }
+
+  .form-card{
+    margin-top: 16px;
+    padding: 24px;
+  }
+
+  .btn{
+    flex-direction: column;
+  }
+
+  button{
+    width: 100%;
+  }
+
   .topbar{
     left: 0;
   }
+
   .main{
     margin-left: 0;
-    padding-top: var(--topbar-height, 48px);
   }
 }

@@ -5,10 +5,7 @@
 
 /* ================= CONTENT ================= */
 .content {
-  padding-top: 30px;
-  padding-left: 32px;
-  padding-right: 32px;
-  padding-bottom: 24px;
+  padding: 32px 40px;
   overflow-x: auto;
 }
 
@@ -17,36 +14,44 @@
   min-width: 1600px;
 }
 
+/* ================= HEADER ================= */
+.header-box {
+  background: #8b0000;
+  color: white;
+  padding: 16px 20px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.header-box h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
 /* ================= ADD BUTTON ================= */
 .btn-add {
-  background: #8b0000;
-  color: #fff;
+  background: white;
+  color: #8b0000;
   border: none;
-  padding: 8px 16px;
-  font-size: 13px;
+  padding: 6px 18px;
+  border-radius: 20px;
   font-weight: 600;
-  border-radius: 7px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 3px 8px rgba(139, 0, 0, 0.35);
 }
 
 .btn-add:hover {
-  background: #a00000;
-  transform: translateY(-1px);
-}
-
-.btn-add:active {
-  transform: scale(0.96);
+  background: #f0f0f0;
 }
 
 /* ================= TABLE WRAPPER ================= */
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
-  margin-bottom: 18px;
   border-radius: 10px;
-  border: 1px solid #ddd;
 }
 
 /* ================= TABLE ================= */
@@ -54,29 +59,24 @@
   width: 100%;
   min-width: 1600px;
   border-collapse: collapse;
-  background: #fff;
-  border-radius: 10px;
-  overflow: hidden;
+  background: white;
 }
 
-/* header */
 .table thead th {
-  background: #8b0000;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 10px 6px;
+  background: #f5f5f5;
+  font-size: 12px;
+  padding: 12px 10px;
   text-align: center;
+  border-bottom: 2px solid #ddd;
   white-space: nowrap;
-  border-right: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 /* body */
 .table tbody td {
-  font-size: 11px;
-  padding: 8px 6px;
+  font-size: 12px;
+  padding: 12px 10px;
   text-align: center;
-  border: 1px solid #e1e1e1;
+  border-bottom: 1px solid #eee;
   white-space: nowrap;
   word-break: break-word;
 }
@@ -88,19 +88,17 @@
 
 /* hover */
 .table tbody tr:hover {
-  background: rgba(139, 0, 0, 0.06);
+  background: rgba(139, 0, 0, 0.08);
 }
 
 /* ================= ACTION BUTTON ================= */
 .edit,
 .delete {
-  padding: 5px 10px;
+  border: none;
+  padding: 4px 10px;
   font-size: 11px;
   border-radius: 6px;
-  border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin: 0 2px;
 }
 
 /* edit */
@@ -179,6 +177,41 @@
   color: #fff;
 }
 
+/* ================= SEARCH BOX ================= */
+.search-box {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.search-box input {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  width: 220px;
+}
+
+#btnSearch {
+  background: white;
+  color: #8b0000;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#btnSearch:hover {
+  background: #f0f0f0;
+}
+
+.header-box, .search-box, .btn-add, #btnSearch, #searchInput {
+  pointer-events: auto;
+  z-index: 5;
+}
+
 /* ================= RESPONSIVE ================= */
 @media (max-width: 1024px) {
   .table {
@@ -186,26 +219,11 @@
   }
 }
 
-@media (max-width: 768px) {
-  .content {
-    padding: 12px;
-  }
-
-  .btn-add {
-    font-size: 12px;
-    padding: 6px 12px;
-  }
-
-  .table thead th,
-  .table tbody td {
-    font-size: 10px;
-    padding: 5px 4px;
-  }
-
-  .edit,
-  .delete {
-    padding: 4px 8px;
-    font-size: 10px;
+@media(max-width:768px){
+  .content { padding: 12px; }
+  .table thead th, .table tbody td {
+    font-size: 11px;
+    padding: 5px;
   }
 }
 

@@ -1,7 +1,7 @@
 /* ================= FORM CARD ================= */
 .form-card{
   max-width: 900px;
-  margin: auto;
+  margin: 40px auto;              /* ⬅️ JARAK ATAS & TENGAH */
   background: #fff;
   padding: 36px;
   border-radius: 16px;
@@ -12,7 +12,7 @@
 
 /* ================= ANIMATION ================= */
 @keyframes fadeIn{
-  from{opacity:0;transform:translateY(10px)}
+  from{opacity:0;transform:translateY(12px)}
   to{opacity:1;transform:none}
 }
 
@@ -34,7 +34,6 @@ label span{
 }
 
 /* ================= INPUT & SELECT ================= */
-/* Samakan ukuran input & select (tidak ganggu textarea) */
 .form-group input,
 .form-group select{
   width: 100%;
@@ -47,19 +46,16 @@ label span{
   background-color: #fff;
 }
 
-/* hilangkan style bawaan select */
 .form-group select{
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-
   background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;
   background-size: 10px 6px;
 }
 
-/* focus input & select */
 .form-group input:focus,
 .form-group select:focus{
   border-color: #8b0000;
@@ -67,8 +63,7 @@ label span{
   outline: none;
 }
 
-/* ================= TEXTAREA (CATATAN) ================= */
-/* KHUSUS textarea, tidak mempengaruhi input/select lain */
+/* ================= TEXTAREA ================= */
 .form-group textarea{
   width: 100%;
   min-height: 240px;
@@ -81,30 +76,12 @@ label span{
   resize: vertical;
   box-sizing: border-box;
   background: #fff;
-
-  transition:
-    border-color .25s ease,
-    box-shadow .25s ease,
-    transform .15s ease;
 }
 
-/* hover textarea */
-.form-group textarea:hover{
-  border-color: #b00000;
-}
-
-/* focus textarea */
 .form-group textarea:focus{
   border-color: #8b0000;
   box-shadow: 0 0 0 3px rgba(139,0,0,.18);
   outline: none;
-  transform: translateY(-1px);
-}
-
-/* placeholder textarea */
-.form-group textarea::placeholder{
-  color: #999;
-  font-style: italic;
 }
 
 /* ================= BUTTON ================= */
@@ -115,6 +92,7 @@ label span{
   gap: 12px;
 }
 
+/* === BUTTON UTAMA (SAVE) === */
 .save{
   background: #8b0000;
   color: #fff;
@@ -124,7 +102,7 @@ label span{
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(139,0,0,.35);
-  transition: all .25s ease;
+  transition: background .2s ease, box-shadow .2s ease;
 }
 
 .save:hover{
@@ -132,6 +110,7 @@ label span{
   box-shadow: 0 6px 14px rgba(139,0,0,.45);
 }
 
+/* === BUTTON SEKUNDER (CLEAR & BACK) === */
 .clear,
 .back{
   background: #fff;
@@ -141,7 +120,7 @@ label span{
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: all .25s ease;
+  transition: background .2s ease, box-shadow .2s ease;
 }
 
 .clear:hover,
@@ -150,20 +129,13 @@ label span{
   box-shadow: 0 3px 8px rgba(139,0,0,.2);
 }
 
-/* ================= RESPONSIVE ================= */
-@media(max-width:768px){
-  .btn{
-    flex-direction: column;
-  }
-  button{
-    width: 100%;
-  }
-}
-
-/* ================= SIDEBAR ================= */
+/* ================= SIDEBAR & MAIN ================= */
 .main{
   margin-left: 260px;
+  padding-top: calc(var(--topbar-height, 48px) + 40px); /* ⬅️ JARAK AMAN */
+  padding-bottom: 60px;
   transition: margin-left .35s ease;
+  min-height: 100vh;
 }
 
 .main.expanded{
@@ -178,37 +150,39 @@ label span{
   transform: translateX(-100%);
 }
 
-/* ===== FIX TOPBAR TANPA UBAH TINGGI ASLI ===== */
+/* ================= TOPBAR ================= */
 .topbar{
   position: fixed;
   top: 0;
-  left: 260px;   /* ikut sidebar */
+  left: 260px;
   right: 0;
   z-index: 999;
 }
 
-/* kalau sidebar ditutup */
 .main.expanded .topbar{
   left: 0;
 }
 
-/* biar konten nggak ketutup, tapi nggak kejauhan */
-.main{
-  margin-left: 260px;
-  padding-top: var(--topbar-height, 48px);
-}
-
-.main.expanded{
-  margin-left: 0;
-}
-
-/* mobile */
+/* ================= RESPONSIVE ================= */
 @media(max-width:768px){
   .topbar{
     left: 0;
   }
+
   .main{
     margin-left: 0;
-    padding-top: var(--topbar-height, 48px);
+    padding-top: calc(var(--topbar-height, 48px) + 20px);
+  }
+
+  .form-card{
+    margin: 20px 14px;  /* ⬅️ mobile tetap lega */
+  }
+
+  .btn{
+    flex-direction: column;
+  }
+
+  button{
+    width: 100%;
   }
 }

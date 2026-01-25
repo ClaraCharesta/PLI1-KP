@@ -1,46 +1,63 @@
-/* ================= SEARCH FUNCTIONALITY ================= */
-const searchInput = document.getElementById("searchInput");
-const cards = document.querySelectorAll(".card");
+document.addEventListener("DOMContentLoaded", () => {
 
-searchInput.addEventListener("input", (e) => {
-  const searchTerm = e.target.value.toLowerCase().trim();
+  /* ================= SEARCH FUNCTIONALITY ================= */
+
+  const searchInput = document.getElementById("searchInput");
+  const cards = document.querySelectorAll(".card");
+
+  if (!searchInput || cards.length === 0) {
+    console.error("SearchInput atau Card tidak ditemukan");
+    return;
+  }
+
+  searchInput.addEventListener("input", function () {
+    const keyword = this.value.toLowerCase().trim();
+
+    cards.forEach(card => {
+      const titleEl = card.querySelector(".card-title");
+      if (!titleEl) return;
+
+      const titleText = titleEl.textContent.toLowerCase();
+
+      if (titleText.includes(keyword)) {
+        card.style.display = "flex";   // ⬅️ PENTING
+        card.classList.add("fade-in");
+      } else {
+        card.style.display = "none";
+        card.classList.remove("fade-in");
+      }
+    });
+  });
+
+  // ESC untuk reset
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      searchInput.value = "";
+      searchInput.dispatchEvent(new Event("input"));
+      searchInput.blur();
+    }
+  });
+
+  /* ================= CARD NAVIGATION ================= */
 
   cards.forEach(card => {
-    const cardTitle = card.querySelector(".card-title").textContent.toLowerCase();
 
-    if (cardTitle.includes(searchTerm)) {
-      card.style.display = "";
-      card.classList.add("fade-in");
-    } else {
-      card.style.display = "none";
-      card.classList.remove("fade-in");
-    }
-  });
-});
+    card.addEventListener("click", () => {
+      const route = card.dataset.route;
+      if (route) {
+        window.location.href = route;
+      }
+    });
 
-// Clear search on ESC key
-searchInput.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
-    searchInput.value = "";
-    searchInput.dispatchEvent(new Event("input"));
-    searchInput.blur();
-  }
-});
+    // Akses keyboard
+    card.setAttribute("tabindex", "0");
 
-/* ================= CARD NAVIGATION ================= */
-cards.forEach(card => {
-  card.addEventListener("click", () => {
-    const route = card.dataset.route;
-    if (route) {
-      window.location.href = route;
-    }
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        card.click();
+      }
+    });
   });
 
-  // Keyboard accessibility
-  card.addEventListener("keypress", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      card.click();
-    }
-  });
 });

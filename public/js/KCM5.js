@@ -48,13 +48,37 @@ if (btnSearch && searchInput) {
   });
 
   // ===== BUTTON HAPUS =====
+  const modal = document.getElementById("deleteModal");
+  const deleteBtn = document.getElementById("deleteBtn");
+  const keepBtn = document.getElementById("keepBtn");
+  let rowToDelete = null;
+
   document.querySelectorAll(".btn-del").forEach(btn => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation(); // biar ga ikut klik row
-      if (confirm("Yakin hapus data ini?")) {
-        btn.closest("tr").remove();
-      }
+      rowToDelete = btn.closest("tr");
+      modal.classList.add("show");
     });
+  });
+
+  deleteBtn.addEventListener("click", () => {
+    if (rowToDelete) {
+      rowToDelete.remove();
+      modal.classList.remove("show");
+      rowToDelete = null;
+    }
+  });
+
+  keepBtn.addEventListener("click", () => {
+    modal.classList.remove("show");
+    rowToDelete = null;
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.classList.remove("show");
+      rowToDelete = null;
+    }
   });
 
 });

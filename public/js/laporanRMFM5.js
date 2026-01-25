@@ -19,12 +19,36 @@ document.querySelectorAll(".btn-add").forEach(btn => {
 });
 
 /* tombol HAPUS (dummy) */
+const modal = document.getElementById("deleteModal");
+const deleteBtn = document.getElementById("deleteBtn");
+const keepBtn = document.getElementById("keepBtn");
+let rowToDelete = null;
+
 document.querySelectorAll(".delete").forEach(btn => {
   btn.addEventListener("click", () => {
-    if (confirm("Yakin hapus data ini?")) {
-      btn.closest("tr").remove();
-    }
+    rowToDelete = btn.closest("tr");
+    modal.classList.add("show");
   });
+});
+
+deleteBtn.addEventListener("click", () => {
+  if (rowToDelete) {
+    rowToDelete.remove();
+    modal.classList.remove("show");
+    rowToDelete = null;
+  }
+});
+
+keepBtn.addEventListener("click", () => {
+  modal.classList.remove("show");
+  rowToDelete = null;
+});
+
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    modal.classList.remove("show");
+    rowToDelete = null;
+  }
 });
 
 /* tombol EDIT (dummy) */

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chart - PLI 1 Maintenance</title>
+
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/chart.css">
+</head>
+<body>
+
+  <%- include('partials/sidebar') %>
+
+  <div class="main">
+    <%- include('partials/topbar', { title: "Chart" }) %>
+
+    <div class="content">
+
+      <!-- HEADER -->
+      <div class="header-box">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search chart...">
+          <button id="btnSearch" type="button">Search</button>
+        </div>
+      </div>
+
+      <!-- CARDS GRID -->
+      <div class="cards-grid">
+
+        <!-- Card 1: Chart Data BM & CM -->
+        <div class="card" data-route="/dataBMCM" data-search="chart data bm cm">
+          <div class="card-icon">
+            <img src="/img/Menu_BMCM.png" alt="Chart Data BM & CM">
+          </div>
+          <h3 class="card-title">Chart Data BM & CM</h3>
+        </div>
+
+        <!-- Card 2: Chart Data Abnormalitas -->
+        <div class="card" data-route="/dataAbnormalitas" data-search="chart data abnormalitas">
+          <div class="card-icon">
+            <img src="/img/Menu_Abnormalitas.png" alt="Chart Data Abnormalitas">
+          </div>
+          <h3 class="card-title">Chart Data Abnormalitas</h3>
+        </div>
+
+        <!-- Card 3: Chart Laporan PLI RM & FM 5 -->
+        <div class="card" data-route="/laporanRMFM5" data-search="chart laporan pli rm fm">
+          <div class="card-icon">
+            <img src="/img/Menu_LaporanRM&FM.png" alt="Chart Laporan PLI RM & FM 5">
+          </div>
+          <h3 class="card-title">Chart Laporan PLI RM & FM 5</h3>
+        </div>
+
+        <!-- Card 4: Chart Laporan Shift KCM -->
+        <div class="card" data-route="/KCM5" data-search="chart laporan shift kcm">
+          <div class="card-icon">
+            <img src="/img/Menu_LaporanShiftKCM.png" alt="Chart Laporan Shift KCM">
+          </div>
+          <h3 class="card-title">Chart Laporan Shift KCM</h3>
+        </div>
+
+        <!-- Card 5: Chart Spare Part Non Motor -->
+        <div class="card" data-route="/spare-part" data-search="chart spare part non motor">
+          <div class="card-icon">
+            <img src="/img/Menu_SparePartNonMotor.png" alt="Chart Spare Part Non Motor">
+          </div>
+          <h3 class="card-title">Chart Spare Part Non Motor</h3>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const main = document.querySelector('.main');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('closed');
+      main.classList.toggle('expanded');
+    });
+  </script>
+
+  <script src="/js/chart.js"></script>
+</body>
+</html>

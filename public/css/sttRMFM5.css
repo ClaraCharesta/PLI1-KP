@@ -1,21 +1,30 @@
-/* ===== FORM CARD ===== */
+/* ================= FORM CARD ================= */
 .form-card{
-  max-width: 900px;          /* dari 720 → 900 */
-  margin: auto;
+  max-width: 900px;
+  width: 100%;
+  margin: 40px auto;                 /* ⬅ jarak atas & bawah */
   background: #fff;
-  padding: 36px;             /* dari 26 → 36 */
-  border-radius: 16px;       /* sedikit lebih smooth */
+  padding: 36px;
+  border-radius: 16px;
   box-shadow: 0 6px 20px rgba(0,0,0,.1);
   animation: fadeIn .4s ease;
 }
-
 
 @keyframes fadeIn{
   from{opacity:0;transform:translateY(10px)}
   to{opacity:1;transform:none}
 }
 
-/* ===== FORM GROUP ===== */
+/* ================= CONTENT WRAPPER ================= */
+.content{
+  padding: 32px 24px 48px;
+  min-height: calc(100vh - var(--topbar-height, 48px));
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;            /* ⬅ tidak nempel ke atas */
+}
+
+/* ================= FORM GROUP ================= */
 .form-group{
   display: flex;
   flex-direction: column;
@@ -32,13 +41,12 @@ label span{
   color: #8b0000;
 }
 
-/* ===== INPUT & SELECT ===== */
-/* ===== SAMAKAN UKURAN INPUT & SELECT ===== */
+/* ================= INPUT & SELECT ================= */
 .form-group input,
 .form-group select {
   width: 100%;
-  height: 46px;              
-  padding: 0 14px;           
+  height: 46px;
+  padding: 0 14px;
   border-radius: 12px;
   border: 1px solid #ccc;
   font-size: 14px;
@@ -46,12 +54,11 @@ label span{
   background-color: #fff;
 }
 
-/* hilangkan style bawaan select (beda browser) */
+/* hilangkan style bawaan select */
 .form-group select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-
   background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;
@@ -66,8 +73,7 @@ label span{
   outline: none;
 }
 
-
-/* ===== BUTTON ===== */
+/* ================= BUTTON ================= */
 .btn{
   margin-top: 22px;
   display: flex;
@@ -90,7 +96,8 @@ label span{
   background: #a00000;
 }
 
-.clear, .back{
+.clear, 
+.back{
   background: #fff;
   color: #8b0000;
   border: 1.5px solid #8b0000;
@@ -100,23 +107,15 @@ label span{
   cursor: pointer;
 }
 
-.clear:hover, .back:hover{
+.clear:hover, 
+.back:hover{
   background: rgba(139,0,0,.08);
 }
 
-/* ===== RESPONSIVE ===== */
-@media(max-width:768px){
-  .btn{
-    flex-direction: column;
-  }
-  button{
-    width: 100%;
-  }
-}
-
-/* ================= SIDEBAR ================= */
+/* ================= SIDEBAR & MAIN ================= */
 .main {
   margin-left: 260px;
+  padding-top: var(--topbar-height, 48px);
   transition: margin-left 0.35s ease;
 }
 
@@ -132,35 +131,42 @@ label span{
   transform: translateX(-100%);
 }
 
-/* ===== FIX TOPBAR TANPA UBAH TINGGI ASLI ===== */
+/* ================= TOPBAR FIX ================= */
 .topbar{
   position: fixed;
   top: 0;
-  left: 260px;   /* ikut sidebar */
+  left: 260px;
   right: 0;
   z-index: 999;
 }
 
-/* kalau sidebar ditutup */
 .main.expanded .topbar{
   left: 0;
 }
 
-/* biar konten nggak ketutup, tapi nggak kejauhan */
-.main{
-  margin-left: 260px;
-  padding-top: var(--topbar-height, 48px);
-}
-
-.main.expanded{
-  margin-left: 0;
-}
-
-/* mobile */
+/* ================= RESPONSIVE ================= */
 @media(max-width:768px){
+  .content{
+    padding: 20px 16px;
+  }
+
+  .form-card{
+    margin-top: 24px;
+    padding: 24px;
+  }
+
+  .btn{
+    flex-direction: column;
+  }
+
+  button{
+    width: 100%;
+  }
+
   .topbar{
     left: 0;
   }
+
   .main{
     margin-left: 0;
     padding-top: var(--topbar-height, 48px);

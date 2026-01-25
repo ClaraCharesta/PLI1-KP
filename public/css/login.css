@@ -1,20 +1,31 @@
+/* ================= RESET & GLOBAL ================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ================= CONTAINER ================= */
 .container {
   display: flex;
   height: 100vh;
 }
-/* BAGIAN KIRI */
+
+/* ================= BAGIAN KIRI ================= */
 .left {
   flex: 1;
   background: white;
   display: flex;
   flex-direction: column;
-  justify-content: center;   /* tengah vertikal */
-  align-items: center;       /* tengah horizontal */
+  justify-content: center;
+  align-items: center;
   text-align: center;
 }
 
 .left h2 {
   font-weight: normal;
+  margin-bottom: 10px;
 }
 
 .left img {
@@ -27,14 +38,14 @@
   font-size: 24px;
 }
 
-/* BAGIAN KANAN */
+/* ================= BAGIAN KANAN ================= */
 .right {
   flex: 1;
   background: #8b0000;
   color: white;
   display: flex;
   flex-direction: column;
-  justify-content: center;   /* tengah vertikal */
+  justify-content: center;
   padding: 0 80px;
 }
 
@@ -43,61 +54,81 @@
   text-align: center;
 }
 
+/* ================= FORM ================= */
 .right label {
   display: block;
   margin-bottom: 8px;
+  font-size: 14px;
 }
 
+/* INPUT EMAIL & PASSWORD (SAMA PANJANG & TINGGI) */
 .right input {
   width: 100%;
-  padding: 14px;
+  height: 50px;
+  padding: 14px 16px;
   border-radius: 12px;
   border: none;
-  margin-bottom: 20px;
+  font-size: 14px;
 }
 
-.forgot {
-  display: block;
-  text-align: right;
-  color: white;
-  text-decoration: none;
-  margin-bottom: 30px;
+/* FOCUS EFFECT */
+.right input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
 }
 
-.right button {
-  display: block;
-  margin: 0 auto;   /* ini yang bikin ke tengah */
-  padding: 12px 40px;
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-
+/* ================= PASSWORD ================= */
 .password-wrapper {
   position: relative;
   margin-bottom: 20px;
 }
 
 .password-wrapper input {
-  width: 100%;
-  padding: 14px;
-  padding-right: 40px;
-  border-radius: 12px;
-  border: none;
-  margin-bottom: 0;   /* hapus margin di input */
+  padding-right: 45px; /* ruang icon mata */
 }
 
-
+/* ICON MATA */
 .eye {
   position: absolute;
-  right: 12px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
   font-size: 18px;
   color: maroon;
-  line-height: 1;
 }
 
+/* ================= EMAIL SPACING ================= */
+.email-input {
+  margin-bottom: 20px;
+}
+
+/* ================= FORGOT PASSWORD ================= */
+.forgot {
+  display: block;
+  text-align: right;
+  color: white;
+  text-decoration: none;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.forgot:hover {
+  text-decoration: underline;
+}
+
+/* ================= BUTTON ================= */
+.right button {
+  display: block;
+  margin: 0 auto;
+  padding: 12px 40px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.right button:hover {
+  opacity: 0.9;
+}

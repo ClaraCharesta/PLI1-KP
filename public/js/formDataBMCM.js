@@ -124,3 +124,5 @@ if (activitiesCategory && activities) {
     });
   });
 }
+
+

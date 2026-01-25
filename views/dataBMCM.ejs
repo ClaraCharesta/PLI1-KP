@@ -18,10 +18,15 @@
     <%- include('partials/topbar', { title: "Realisasi PK Harian" }) %>
 
     <div class="content">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h2 style="margin:0; font-size:18px; color:#333;">Realisasi PK Harian</h2>
-        <button class="btn-add" data-target="addDataBMCM">+ Add</button>
+      <!-- HEADER -->
+      <div class="header-box">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="">
+          <button id="btnSearch" type="button">Search</button>
+        </div>
+        <button id="btnAdd" class="btn-add" data-target="formDataBMCM">+ Add</button>
       </div>
+
 
       <!-- TABLE WRAPPER FOR HORIZONTAL SCROLL -->
       <div class="table-wrapper">
