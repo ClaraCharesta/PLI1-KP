@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>History Nomenclature - PLI 1 Maintenance</title>
+
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/historyNomenclature.css">
+</head>
+<body>
+
+  <%- include('partials/sidebar') %>
+
+  <div class="main">
+    <%- include('partials/topbar', { title: "History Nomenclature" }) %>
+
+    <div class="content">
+
+      <!-- HEADER -->
+      <div class="header-box">
+        <h2>History Nomenclature</h2>
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search">
+          <button id="btnSearch" type="button">Search</button>
+        </div>
+      </div>
+
+      <!-- ================= HISTORY BM & CM ================= -->
+      <div class="section">
+        <div class="section-title">
+          <span class="badge-section">History BM & CM</span>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tanggal</th>
+                <th>Activities Category</th>
+                <th>Activities</th>
+                <th>Detail Activities</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>grr32</td>
+                <td>10/20/2025</td>
+                <td>BM (Basic Maintenance)</td>
+                <td>Lubrication</td>
+                <td>Lubrification</td>
+                <td>
+                  <span class="badge badge-open">Open</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ================= HISTORY TROUBLESHOOTING ================= -->
+      <div class="section">
+        <div class="section-title">
+          <span class="badge-section">History Troubleshooting</span>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>No. Ref</th>
+                <th>Tanggal</th>
+                <th>Nomenclature</th>
+                <th>Alarm</th>
+                <th>Indikasi Masalah & Keterangan</th>
+                <th>is Critical</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>grr32</td>
+                <td>10/10/2025</td>
+                <td>BM (Basic Maintenance)</td>
+                <td>InventoryHide</td>
+                <td>lubrificationHide</td>
+                <td>
+                  <span class="badge badge-open">Open</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const main = document.querySelector('.main');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('closed');
+      main.classList.toggle('expanded');
+    });
+  </script>
+
+  <script src="/js/historyNomenclature.js"></script>
+</body>
+</html>

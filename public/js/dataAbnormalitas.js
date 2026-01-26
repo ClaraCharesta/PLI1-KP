@@ -1,65 +1,104 @@
-/* ================= DELETE BUTTON & MODAL ================= */
-const modal = document.getElementById("deleteModal");
-const deleteBtn = document.getElementById("deleteBtn");
-const keepBtn = document.getElementById("keepBtn");
-let rowToDelete = null;
+document.addEventListener("DOMContentLoaded", () => {
 
-// Show modal saat delete button diklik
-document.querySelectorAll(".delete").forEach(btn => {
-  btn.addEventListener("click", (e) => {
-    e.preventDefault();
-    rowToDelete = btn.closest("tr");
-    modal.classList.add("show");
-  });
-});
+  /* ================= ELEMENT ================= */
+  const searchInput = document.getElementById("searchInput");
+  const btnSearch = document.getElementById("btnSearch");
+  const tableRows = document.querySelectorAll(".table tbody tr");
 
-// Delete button di modal
-deleteBtn.addEventListener("click", () => {
-  if (rowToDelete) {
-    rowToDelete.remove();
-    modal.classList.remove("show");
-    rowToDelete = null;
+  if (!searchInput || tableRows.length === 0) {
+    console.error("Search input atau table row tidak ditemukan");
+    return;
   }
-});
 
-// Keep button di modal
-keepBtn.addEventListener("click", () => {
-  modal.classList.remove("show");
-  rowToDelete = null;
-});
+  /* ================= SEARCH FUNCTION ================= */
+  const doSearch = () => {
+    const keyword = searchInput.value.toLowerCase().trim();
 
-// Close modal saat click backdrop
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) {
-    modal.classList.remove("show");
-    rowToDelete = null;
-  }
-});
+    tableRows.forEach(row => {
+      const rowText = row.innerText.toLowerCase();
 
-/* ================= EDIT BUTTON ================= */
-document.querySelectorAll(".edit").forEach((btn, index) => {
-  btn.addEventListener("click", () => {
-    const rowId = index + 1; // Simulasi ID dari row
-    window.location.href = `/updateDataAbnormalitas?id=${rowId}`;
-  });
-});
+      if (rowText.includes(keyword)) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
+  };
 
-/* ================= ADD BUTTON ================= */
-document.querySelectorAll(".btn-add").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const target = btn.dataset.target;
-    if (target) {
-      window.location.href = `/${target}`;
+  /* ================= EVENT ================= */
+
+  // Ketik langsung search
+  searchInput.addEventListener("input", doSearch);
+
+  // Klik tombol Search
+  btnSearch.addEventListener("click", doSearch);
+
+  // Tekan ENTER di input
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      doSearch();
+    }
+
+    // ESC untuk reset
+    if (e.key === "Escape") {
+      searchInput.value = "";
+      doSearch();
+      searchInput.blur();
     }
   });
-});
 
-/* ================= TOGGLE ROW DETAIL (OPTIONAL) ================= */
-document.querySelectorAll(".table tbody tr").forEach(row => {
-  row.addEventListener("click", (e) => {
-    // Jangan toggle kalau yang di-click adalah button
-    if (e.target.tagName !== "BUTTON" && e.target.tagName !== "I") {
-      row.style.background = "rgba(139, 0, 0, 0.1)";
+  /* ================= DELETE BUTTON & MODAL ================= */
+  const modal = document.getElementById("deleteModal");
+  const deleteBtn = document.getElementById("deleteBtn");
+  const keepBtn = document.getElementById("keepBtn");
+  let rowToDelete = null;
+
+  document.querySelectorAll(".delete").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      rowToDelete = btn.closest("tr");
+      modal.classList.add("show");
+    });
+  });
+
+  deleteBtn.addEventListener("click", () => {
+    if (rowToDelete) {
+      rowToDelete.remove();
+      modal.classList.remove("show");
+      rowToDelete = null;
     }
   });
+
+  keepBtn.addEventListener("click", () => {
+    modal.classList.remove("show");
+    rowToDelete = null;
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.classList.remove("show");
+      rowToDelete = null;
+    }
+  });
+
+  /* ================= EDIT BUTTON ================= */
+  document.querySelectorAll(".edit").forEach((btn, index) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const rowId = index + 1;
+      window.location.href = `/updateDataAbnormalitas?id=${rowId}`;
+    });
+  });
+
+  /* ================= ADD BUTTON ================= */
+  document.querySelectorAll(".btn-add").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.target;
+      if (target) {
+        window.location.href = `/${target}`;
+      }
+    });
+  });
+
 });

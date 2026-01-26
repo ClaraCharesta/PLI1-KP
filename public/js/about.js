@@ -40,6 +40,3 @@ document.querySelector(".btn-password").addEventListener("click", () => {
   window.location.href = "/ubahPassword";
 });
 
-document.getElementById("editProfileBtn").addEventListener("click", () => {
-  window.location.href = "/editProfil";
-});

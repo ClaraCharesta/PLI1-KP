@@ -37,18 +37,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ================= EDIT BUTTON HANDLER ================= */
 
-  document.querySelectorAll(".edit").forEach(btn => {
+  document.querySelectorAll(".edit").forEach((btn, index) => {
     btn.addEventListener("click", () => {
-      alert("Fitur edit akan segera hadir");
+      const userId = index + 1; // Simulasi ID dari row
+      window.location.href = `/formUpdateKelolaUser?id=${userId}`;
     });
   });
 
   /* ================= ADD BUTTON HANDLER ================= */
 
-  const addBtn = document.getElementById("btnAdd");
+  const addBtn = document.getElementById("addUserBtn");
   if (addBtn) {
     addBtn.addEventListener("click", () => {
-      window.location.href = "/formDataBMCM";
+      window.location.href = "/formKelolaUser";
     });
   }
 

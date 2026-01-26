@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add User - PLI 1 Maintenance</title>
+
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/formKelolaUser.css">
+</head>
+<body>
+
+  <%- include('partials/sidebar') %>
+
+  <div class="main">
+    <%- include('partials/topbar', { title: "Kelola User" }) %>
+
+    <div class="content">
+
+      <!-- HEADER -->
+      <div class="form-header">
+        <h2>Add User</h2>
+      </div>
+
+      <!-- FORM CONTAINER -->
+      <div class="form-container">
+        <form id="formAddUser">
+          
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+          </div>
+
+          <!-- Nama Field -->
+          <div class="form-group">
+            <label for="nama">Nama</label>
+            <input type="text" id="nama" name="nama" placeholder="Nama" required>
+          </div>
+
+          <!-- NIP Field -->
+          <div class="form-group">
+            <label for="nip">NIP</label>
+            <input type="text" id="nip" name="nip" placeholder="NIP" required>
+          </div>
+
+          <!-- Role Field -->
+          <div class="form-group">
+            <label for="role">Role</label>
+            <select id="role" name="role" required>
+              <option value="">Pilih Role</option>
+              <option value="Admin">Admin</option>
+              <option value="User">User</option>
+              <option value="Pimpinan">Pimpinan</option>
+            </select>
+          </div>
+
+          <!-- Create At Field -->
+          <div class="form-group">
+            <label for="createAt">Create At</label>
+            <div class="date-input-wrapper">
+              <input type="date" id="createAt" name="createAt" required>
+              <span class="calendar-icon">📅</span>
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <button type="submit" class="btn-submit">Tambah</button>
+            <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const main = document.querySelector('.main');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('closed');
+      main.classList.toggle('expanded');
+    });
+  </script>
+
+  <script src="/js/formKelolaUser.js"></script>
+</body>
+</html>

@@ -189,12 +189,20 @@ app.get("/kelola-user", (req, res) => {
   res.render("kelolaUser", { title: "Kelola User", active: "user" });
 });
 
-app.get("/about", (req, res) => {
-  res.render("about", { title: "About", active: "about" });
+app.get("/history-nomenclature", (req, res) => {
+  res.render("historyNomenclature", { title: "History Nomenclature", active: "history" });
 });
 
-app.get("/editProfil", (req, res) => {
-  res.render("editProfil", { title: "Edit Profil", active: "about" });
+app.get("/formKelolaUser", (req, res) => {
+  res.render("formKelolaUser", { title: "Add User", active: "user" });
+});
+
+app.get("/formUpdateKelolaUser", (req, res) => {
+  res.render("formUpdateKelolaUser", { title: "Update User", active: "user" });
+});
+
+app.get("/about", (req, res) => {
+  res.render("about", { title: "About", active: "about" });
 });
 
 app.get("/ubahPassword", (req, res) => {
@@ -202,7 +210,7 @@ app.get("/ubahPassword", (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-  res.render("logout", { title: "Logout", active: "logout" });
+  res.redirect("/home");
 });
 
 app.get("/feedback", (req, res) => {
