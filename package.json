@@ -1,7 +1,7 @@
 {
   "name": "pli1-kp",
   "version": "1.0.0",
-  "description": "",
+  "description": "\"# PLI1-KP\"",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,7 +11,19 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "ejs": "^4.0.1",
-    "express": "^5.2.1"
-  }
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "mysql2": "^3.16.2",
+    "sequelize": "^6.37.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ClaraCharesta/PLI1-KP.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ClaraCharesta/PLI1-KP/issues"
+  },
+  "homepage": "https://github.com/ClaraCharesta/PLI1-KP#readme"
 }

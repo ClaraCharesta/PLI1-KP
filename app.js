@@ -1,242 +1,170 @@
+// app.js
 const express = require("express");
+const session = require("express-session");
+const bcrypt = require("bcrypt");
+const db = require("./models"); // sequelize + semua model
+const laporanRoutes = require("./routes/laporanShiftRoutes");
+
 const app = express();
 
-
+// ===============================
+// VIEW ENGINE
+// ===============================
 app.set("view engine", "ejs");
 app.set("views", "views");
-
-
 app.use(express.static("public"));
 
+// ===============================
+// BODY PARSER
+// ===============================
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
+// ===============================
+// SESSION
+// ===============================
+app.use(session({
+  secret: "pli1-secret",
+  resave: false,
+  saveUninitialized: false
+}));
+
+// ===============================
+// AUTH MIDDLEWARE
+// ===============================
+const auth = (req, res, next) => {
+  if (!req.session.user) return res.redirect("/");
+  next();
+};
+
+// ===============================
+// LOGIN PAGE
+// ===============================
 app.get("/", (req, res) => {
+  if (req.session.user) return res.redirect("/home");
   res.render("login");
 });
 
+// ===============================
+// POST LOGIN
+// ===============================
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const { User, Role, RolePermission } = db;
 
-app.get("/laporanShiftKCM5", (req, res) => {
-  res.render("laporanShiftKCM5", {
-    title: "Laporan Shift KCM 5",
-    active: "laporan"
-  });
+    const user = await User.findOne({
+      where: { email, is_active: true },
+      include: { model: Role, include: RolePermission }
+    });
+
+    if (!user) return res.render("login", { error: "Email tidak terdaftar" });
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.render("login", { error: "Password salah" });
+
+    req.session.user = { id: user.user_id, nama: user.nama, role: user.Role.role_name };
+    req.session.permissions = user.Role.RolePermissions;
+
+    res.redirect("/home");
+  } catch (err) {
+    console.error(err);
+    res.render("login", { error: "Terjadi kesalahan sistem" });
+  }
 });
 
-app.get("/laporanShiftRMFM5", (req, res) => {
-  res.render("laporanShiftRMFM5", {
-    title: "Laporan Shift RM FM 5",
-    active: "laporan"
-  });
-});
-
-
-app.get("/tsKCM5", (req, res) => {
-  res.render("tsKCM5", {
-    title: "Laporan Shift KCM 5",
-    active: "trouble shooting"
-  });
-});
-
-app.get("/tsRMFM5", (req, res) => {
-  res.render("tsRMFM5", {
-    title: "Laporan Shift RM FM 5",
-    active: "trouble shooting RM FM"
-  });
-});
-
-
-app.get("/maintenanceKCM5", (req, res) => {
-  res.render("maintenanceKCM5", {
-    title: "Laporan Shift KCM 5",
-    active: "maintenance"
-  });
-});
-
-app.get("/maintenanceRMFM5", (req, res) => {
-  res.render("maintenanceRMFM5", {
-    title: "Laporan Shift RM FM 5",
-    active: "maintenance RM FM"
-  });
-});
-
-app.get("/pcKCM5", (req, res) => {
-  res.render("pcKCM5", {
-    title: "Laporan Shift KCM 5",
-    active: "produksi clinker kcm 5"
-  });
-});
-
-app.get("/pcRMFM5", (req, res) => {
-  res.render("pcRMFM5", {
-    title: "Laporan Shift RM FM 5",
-    active: "produksi clinker RMFM 5"
-  });
-});
-
-app.get("/sttKCM5", (req, res) => {
-  res.render("sttKCM5", {
-    title: "Laporan Shift KCM 5",
-    active: "serah terima tool kcm 5"
-  });
-});
-
-app.get("/sttRMFM5", (req, res) => {
-  res.render("sttRMFM5", {
-    title: "Laporan Shift RM FM 5",
-    active: "serah terima tool RM FM 5"
-  });
-});
-
-app.get("/catatanKCM5", (req, res) => {
-  res.render("catatanKCM5", {
-    title: "Laporan Shift KCM 5",
-    active: "catatan kcm 5"
-  });
-});
-
-app.get("/catatanRMFM5", (req, res) => {
-  res.render("catatanRMFM5", {
-    title: "Laporan Shift RM FM 5",
-    active: "catatan RM FM 5"
-  });
-});
-
-app.get("/laporanKCM5", (req, res) => {
-  res.render("laporanKCM5", {
-    title: "Laporan Shift KCM 5",
-    active: "laporanKCM5"
-  });
-});
-
-app.get("/laporanRMFM5", (req, res) => {
-  res.render("laporanRMFM5", {
-    title: "Laporan Shift RM FM 5",
-    active: "laporanRMFM5"
-  });
-});
-
-app.get("/KCM5", (req, res) => {
-  res.render("KCM5", {
-    title: "Laporan Shift KCM 5",
-    active: "KCM5"
-  });
-});
-
-app.get("/RMFM5", (req, res) => {
-  res.render("RMFM5", {
-    title: "Laporan Shift RM FM 5",
-    active: "RMFM5"
-  });
-});
-
-app.get("/dataBMCM", (req, res) => {
-  res.render("dataBMCM", {
-    title: "Realisasi PK Harian",
-    active: "dataBMCM"
-  });
-});
-
-app.get("/addDataBMCM", (req, res) => {
-  res.render("addDataBMCM", {
-    title: "Tambah Data BM & CM",
-    active: "dataBMCM"
-  });
-});
-
-app.get("/formDataBMCM", (req, res) => {
-  res.render("formDataBMCM", {
-    title: "Add Realisasi PK Harian",
-    active: "dataBMCM"
-  });
-});
-
-app.get("/updateDataBMCM", (req, res) => {
-  res.render("formUpdateDataBMCM", {
-    title: "Update Realisasi PK Harian",
-    active: "dataBMCM"
-  });
-});
-
-app.get("/dataAbnormalitas", (req, res) => {
-  res.render("dataAbnormalitas", {
-    title: "Data Abnormalitas",
-    active: "dataAbnormalitas"
-  });
-});
-
-app.get("/formDataAbnormalitas", (req, res) => {
-  res.render("formDataAbnormalitas", {
-    title: "Add Data Abnormalitas",
-    active: "dataAbnormalitas"
-  });
-});
-
-app.get("/updateDataAbnormalitas", (req, res) => {
-  res.render("formUpdateDataAbnormalitas", {
-    title: "Update Data Abnormalitas",
-    active: "dataAbnormalitas"
-  });
-});
-
-app.get("/home", (req, res) => {
-  res.render("home", { title: "Home", active: "home" });
-});
-
-app.get("/chart", (req, res) => {
-  res.render("chart", { active: "chart" });
-});
-
-app.get("/kelola-user", (req, res) => {
-  res.render("kelolaUser", { title: "Kelola User", active: "user" });
-});
-
-app.get("/history-nomenclature", (req, res) => {
-  res.render("historyNomenclature", { title: "History Nomenclature", active: "history" });
-});
-
-app.get("/formKelolaUser", (req, res) => {
-  res.render("formKelolaUser", { title: "Add User", active: "user" });
-});
-
-app.get("/formUpdateKelolaUser", (req, res) => {
-  res.render("formUpdateKelolaUser", { title: "Update User", active: "user" });
-});
-
-app.get("/about", (req, res) => {
-  res.render("about", { title: "About", active: "about" });
-});
-
-app.get("/ubahPassword", (req, res) => {
-  res.render("ubahPassword", { title: "Ganti Password", active: "about" });
-});
-
+// ===============================
+// LOGOUT
+// ===============================
 app.get("/logout", (req, res) => {
-  res.redirect("/home");
+  req.session.destroy(() => res.redirect("/"));
 });
 
-app.get("/feedback", (req, res) => {
-  res.render("feedback", { active: "feedback" });
+// ===============================
+// LAPORAN SHIFT ROUTES (KCM5, RMFM5, CRUD, APPROVE)
+// ===============================
+app.use("/laporan-shift", auth, laporanRoutes);
+
+// ===============================
+// ROUTE NON-LAPORAN (HOME, CHART, USER, ABOUT, DLL)
+// ===============================
+app.get("/home", auth, (req, res) => res.render("home", { title: "Home", active: "home" }));
+app.get("/chart", auth, (req, res) => res.render("chart", { active: "chart" }));
+app.get("/kelola-user", auth, (req, res) => res.render("kelolaUser", { title: "Kelola User", active: "user" }));
+app.get("/ubahPassword", auth, (req, res) => res.render("ubahPassword", { title: "Ganti Password", active: "about" }));
+app.get("/about", auth, (req, res) => res.render("about", { title: "About", active: "about" }));
+app.get("/feedback", auth, (req, res) => res.render("feedback", { active: "feedback" }));
+app.get("/KCM5", auth, (req, res) => res.redirect("/laporan-shift/kcm5"));
+app.get("/RMFM5", auth, (req, res) => res.redirect("/laporan-shift/rmfm5"));
+
+
+// ===============================
+// ROUTE LAPORAN LAIN (EJS PAGE VIEW)
+// ===============================
+const laporanPages = [
+  { path: "/laporanShiftKCM5", file: "laporanShiftKCM5", title: "Laporan Shift KCM 5", active: "laporan" },
+  { path: "/laporanShiftRMFM5", file: "laporanShiftRMFM5", title: "Laporan Shift RM FM 5", active: "laporan" },
+  { path: "/tsKCM5", file: "tsKCM5", title: "Laporan Shift KCM 5", active: "trouble shooting" },
+  { path: "/tsRMFM5", file: "tsRMFM5", title: "Laporan Shift RM FM 5", active: "trouble shooting RM FM" },
+  { path: "/maintenanceKCM5", file: "maintenanceKCM5", title: "Laporan Shift KCM 5", active: "maintenance" },
+  { path: "/maintenanceRMFM5", file: "maintenanceRMFM5", title: "Laporan Shift RM FM 5", active: "maintenance RM FM" },
+  { path: "/pcKCM5", file: "pcKCM5", title: "Laporan Shift KCM 5", active: "produksi clinker kcm 5" },
+  { path: "/pcRMFM5", file: "pcRMFM5", title: "Laporan Shift RM FM 5", active: "produksi clinker RMFM 5" },
+  { path: "/sttKCM5", file: "sttKCM5", title: "Laporan Shift KCM 5", active: "serah terima tool kcm 5" },
+  { path: "/sttRMFM5", file: "sttRMFM5", title: "Laporan Shift RM FM 5", active: "serah terima tool RM FM 5" },
+  { path: "/catatanKCM5", file: "catatanKCM5", title: "Laporan Shift KCM 5", active: "catatan kcm 5" },
+  { path: "/catatanRMFM5", file: "catatanRMFM5", title: "Laporan Shift RM FM 5", active: "catatan RM FM 5" },
+  { path: "/laporanKCM5", file: "laporanKCM5", title: "Laporan Shift KCM 5", active: "laporanKCM5" },
+  { path: "/laporanRMFM5", file: "laporanRMFM5", title: "Laporan Shift RM FM 5", active: "laporanRMFM5" },
+  { path: "/RMFM5", file: "RMFM5", title: "Laporan Shift RM FM 5", active: "RMFM5" },
+  { path: "/dataBMCM", file: "dataBMCM", title: "Realisasi PK Harian", active: "dataBMCM" },
+  { path: "/addDataBMCM", file: "addDataBMCM", title: "Tambah Data BM & CM", active: "dataBMCM" },
+  { path: "/formDataBMCM", file: "formDataBMCM", title: "Add Realisasi PK Harian", active: "dataBMCM" },
+  { path: "/updateDataBMCM", file: "formUpdateDataBMCM", title: "Update Realisasi PK Harian", active: "dataBMCM" },
+  { path: "/dataAbnormalitas", file: "dataAbnormalitas", title: "Data Abnormalitas", active: "dataAbnormalitas" },
+  { path: "/formDataAbnormalitas", file: "formDataAbnormalitas", title: "Add Data Abnormalitas", active: "dataAbnormalitas" },
+  { path: "/updateDataAbnormalitas", file: "formUpdateDataAbnormalitas", title: "Update Data Abnormalitas", active: "dataAbnormalitas" },
+];
+
+laporanPages.forEach(page => {
+  app.get(page.path, auth, (req, res) => {
+    res.render(page.file, { title: page.title, active: page.active });
+  });
 });
 
+// ===============================
+// SYNC DATABASE & CREATE ADMIN DEFAULT
+// ===============================
+(async () => {
+  try {
+    await db.sequelize.sync({ alter: true });
+    console.log("✅ Semua tabel tersinkronisasi");
 
+    const { Role, User } = db;
+    const [adminRole] = await Role.findOrCreate({ where: { role_name: "Admin" } });
+    const hash = await bcrypt.hash("admin123", 10);
+
+    await User.findOrCreate({
+      where: { email: "admin@gmail.com" },
+      defaults: { nama: "Admin PLI 1", password: hash, role_id: adminRole.role_id, is_active: true }
+    });
+
+    console.log("✅ Role & User admin siap login");
+  } catch (err) {
+    console.error("❌ Gagal sync database / create admin:", err);
+  }
+})();
+
+// ===============================
+// SERVER
+// ===============================
 const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`✅ Server jalan di http://localhost:${PORT}`))
+   .on("error", (err) => console.error("❌ SERVER ERROR:", err.message));
 
-app.listen(PORT, () => {
-  console.log(`✅ Server jalan di http://localhost:${PORT}`);
-})
-.on("error", (err) => {
-  console.error("❌ SERVER ERROR:", err.message);
-});
-
-
-setInterval(() => {
-  console.log("🟢 SERVER MASIH HIDUP");
-}, 5000);
-
-
-process.on("uncaughtException", (err) => {
-  console.error("❌ UNCAUGHT EXCEPTION:", err);
-});
-
-process.on("unhandledRejection", (reason) => {
-  console.error("❌ UNHANDLED REJECTION:", reason);
-});
+// ===============================
+// KEEP ALIVE LOG
+// ===============================
+setInterval(() => console.log("🟢 SERVER MASIH HIDUP"), 5000);
+process.on("uncaughtException", (err) => console.error("❌ UNCAUGHT EXCEPTION:", err));
+process.on("unhandledRejection", (reason) => console.error("❌ UNHANDLED REJECTION:", reason));
