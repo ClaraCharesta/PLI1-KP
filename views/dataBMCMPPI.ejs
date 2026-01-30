@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data BM & CM PPI</title>
+
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/dataBMCMPPI.css">
+</head>
+<body>
+
+  <%- include('partials/sidebar') %>
+
+  <div class="main">
+    <%- include('partials/topbar', { title: "Data BM & CM PPI" }) %>
+
+    <div class="content">
+      <!-- HEADER -->
+      <div class="header-box">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="">
+          <button id="btnSearch" type="button">Search</button>
+        </div>
+        <button id="btnAdd" type="button" class="btn-add" data-target="formDataBMCMPPI">+ Add</button>
+      </div>
+
+
+      <!-- TABLE WRAPPER FOR HORIZONTAL SCROLL -->
+      <div class="table-wrapper">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Week</th>
+        <th>Tanggal</th>
+        <th>Area</th>
+        <th>Supervisor</th>
+        <th>Executor</th>
+        <th>Activities Category</th>
+        <th>Activities</th>
+        <th>Detail Activities</th>
+        <th>Duration</th>
+        <th>Jumlah Personill</th>
+        <th>Main Hour</th>
+        <th>Status%</th>
+        <th>Status</th>
+        <th>Foto Safety Talk</th>
+        <th>Foto Check Sheet</th>
+        <th>Keterangan</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Week 35</td>
+        <td>26/08/2025</td>
+        <td>PPI</td>
+        <td>HENGKI SURYADI</td>
+        <td>Jhoni Sadirman, Haryudi, Hendra</td>
+        <td>BM (Basic Maintenance)</td>
+        <td>BM-PPI : MAIN DRIVE MILL</td>
+        <td>Pembersihan dan inspeksi peralatan</td>
+        <td>3</td>
+        <td>3</td>
+        <td>9</td>
+        <td>100%</td>
+        <td>
+          <span class="badge badge-close">Close</span>
+        </td>
+        <td><i class="icon">⚠️</i></td>
+        <td><i class="icon">⚠️</i></td>
+        <td>-</td>
+        <td>
+          <button class="edit">Edit</button>
+          <button class="delete">Hapus</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+    </div>
+  </div>
+
+  <!-- ================= DELETE MODAL ================= -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-icon">🗑️</div>
+      <h2>Delete Data</h2>
+      <p>Apakah anda yakin ingin menghapus?</p>
+      <div class="modal-buttons">
+        <button id="deleteBtn" class="btn-delete">Delete</button>
+        <button id="keepBtn" class="btn-keep">Keep</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const main = document.querySelector('.main');
+
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('closed');
+        main.classList.toggle('expanded');
+      });
+    }
+  </script>
+
+  <script src="/js/dataBMCMPPI.js"></script>
+
+</body>
+</html>

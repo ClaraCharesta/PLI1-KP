@@ -169,7 +169,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const stayBtn = modal.querySelector("#stayBtn");
       
       logoutBtn.addEventListener("click", () => {
-        window.location.href = "/";
+        // Navigate to /logout route so server destroys session and redirects to login
+        window.location.href = "/logout";
       });
       
       stayBtn.addEventListener("click", () => {

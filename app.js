@@ -4,6 +4,7 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 const db = require("./models"); // sequelize + semua model
 const laporanRoutes = require("./routes/laporanShiftRoutes");
+const dataBMCMRoutes = require("./routes/dataBMCMRoutes");
 
 const app = express();
 
@@ -85,6 +86,17 @@ app.get("/logout", (req, res) => {
 // ===============================
 app.use("/laporan-shift", auth, laporanRoutes);
 
+// Temporary DEBUG route (NO auth) to test POST from client and session cookie
+app.post('/debug/data-bmcm', (req, res) => {
+  console.log('▶ DEBUG POST /debug/data-bmcm - session user:', req.session?.user ?? null, 'body:', req.body);
+  res.json({ ok: true, session: req.session?.user ?? null, body: req.body });
+});
+// Log requests to /data-bmcm to help debug frontend submit issues
+app.use("/data-bmcm", (req, res, next) => {
+  console.log('▶ /data-bmcm', req.method, req.originalUrl, 'session:', !!req.session.user);
+  next();
+}, auth, dataBMCMRoutes);
+
 // ===============================
 // ROUTE NON-LAPORAN (HOME, CHART, USER, ABOUT, DLL)
 // ===============================
@@ -121,6 +133,10 @@ const laporanPages = [
   { path: "/addDataBMCM", file: "addDataBMCM", title: "Tambah Data BM & CM", active: "dataBMCM" },
   { path: "/formDataBMCM", file: "formDataBMCM", title: "Add Realisasi PK Harian", active: "dataBMCM" },
   { path: "/updateDataBMCM", file: "formUpdateDataBMCM", title: "Update Realisasi PK Harian", active: "dataBMCM" },
+  { path: "/dataBMCMPPI", file: "dataBMCMPPI", title: "Data BM & CM PPI", active: "dataBMCMPPI" },
+  { path: "/formDataBMCMPPI", file: "formDataBMCMPPI", title: "Add Realisasi PK Harian PPI", active: "dataBMCMPPI" },
+  { path: "/formUpdateDataBMCMPPI", file: "formUpdateDataBMCMPPI", title: "Update Realisasi PK Harian PPI", active: "dataBMCMPPI" },
+  { path: "/updateDataBMCMPPI", file: "formUpdateDataBMCMPPI", title: "Update Realisasi PK Harian PPI", active: "dataBMCMPPI" },
   { path: "/dataAbnormalitas", file: "dataAbnormalitas", title: "Data Abnormalitas", active: "dataAbnormalitas" },
   { path: "/formDataAbnormalitas", file: "formDataAbnormalitas", title: "Add Data Abnormalitas", active: "dataAbnormalitas" },
   { path: "/updateDataAbnormalitas", file: "formUpdateDataAbnormalitas", title: "Update Data Abnormalitas", active: "dataAbnormalitas" },
@@ -165,6 +181,6 @@ app.listen(PORT, () => console.log(`✅ Server jalan di http://localhost:${PORT}
 // ===============================
 // KEEP ALIVE LOG
 // ===============================
-setInterval(() => console.log("🟢 SERVER MASIH HIDUP"), 5000);
+// setInterval(() => console.log("🟢 SERVER MASIH HIDUP"), 5000);
 process.on("uncaughtException", (err) => console.error("❌ UNCAUGHT EXCEPTION:", err));
 process.on("unhandledRejection", (reason) => console.error("❌ UNHANDLED REJECTION:", reason));

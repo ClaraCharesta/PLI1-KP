@@ -1,8 +1,10 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 const LaporanShift = require("./LaporanShift");
+const DataBMCM = require("./DataBMCM");
 
 const db = {};
+db.DataBMCM = DataBMCM;
 
 db.Role = require("./Role")(sequelize, DataTypes);
 db.User = require("./User")(sequelize, DataTypes);
