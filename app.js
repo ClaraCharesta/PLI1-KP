@@ -97,6 +97,15 @@ app.use("/data-bmcm", (req, res, next) => {
   next();
 }, auth, dataBMCMRoutes);
 
+
+const formLaporanShiftRoutes = require("./routes/formLaporanShiftRoutes");
+app.use("/laporan-shift", formLaporanShiftRoutes);
+app.use("/form-laporan-shift", require("./routes/formLaporanShiftRoutes"));
+
+
+
+
+
 // ===============================
 // ROUTE NON-LAPORAN (HOME, CHART, USER, ABOUT, DLL)
 // ===============================

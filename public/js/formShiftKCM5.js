@@ -24,16 +24,6 @@ document.querySelector(".back").onclick = () => {
   window.location.href = "/laporanKCM5";
 };
 
-/* ================= NO REF ================= */
-function generateNoRef() {
-  const d = new Date();
-  const bulan = d.getMonth() + 1;
-  const tahun = d.getFullYear();
-  const urut = "0001"; // nanti dari DB
-  return `${urut}/SHIFT.PLI1-KCM5/${bulan}.${tahun}`;
-}
-
-document.getElementById("noref").value = generateNoRef();
 
 document.getElementById("tanggal").addEventListener("change", () => {
   document.getElementById("noref").value = generateNoRef();
@@ -165,3 +155,43 @@ function updateCutiResult() {
 
   cutiResult.value = selected.join(", ");
 }
+
+/* ================= SAVE ================= */
+document.querySelector(".save").onclick = async () => {
+  const body = {
+    tanggal: document.getElementById("tanggal").value,
+    shiftUtama: document.getElementById("shiftUtama").value,
+    no_ref: document.getElementById("noref").value,
+    cuti: document.getElementById("cutiResult").value,
+
+    personil_841: document.querySelectorAll(".personil")[0].value,
+    shift_841: document.querySelectorAll(".shift")[0].value,
+
+    personil_842a: document.querySelectorAll(".personil")[1].value,
+    shift_842a: document.querySelectorAll(".shift")[1].value,
+
+    personil_842b: document.querySelectorAll(".personil")[2].value,
+    shift_842b: document.querySelectorAll(".shift")[2].value
+  };
+
+  try {
+    const res = await fetch("/form-laporan-shift/kcm5", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+
+    const result = await res.json();
+
+    if (!result.success) throw new Error(result.message);
+
+    alert("Data berhasil disimpan");
+    window.location.href = "/laporan-shift/KCM5";
+
+  } catch (err) {
+    console.error(err);
+    alert("Gagal menyimpan data");
+  }
+};
+
+alert("Berhasil disimpan\nNo.Ref: " + result.data.no_ref);

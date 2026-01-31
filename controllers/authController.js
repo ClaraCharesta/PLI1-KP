@@ -34,8 +34,10 @@ exports.login = async (req, res) => {
     req.session.user = {
       id: user.user_id,
       nama: user.nama,
+      email: user.email,   // ⬅️ TAMBAH INI
       role: user.Role.role_name
     };
+
 
     req.session.permissions = user.Role.RolePermissions;
 
