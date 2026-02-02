@@ -1,28 +1,25 @@
-// routes/laporanShiftRoutes.js
 const express = require("express");
 const router = express.Router();
-const controller = require("../controllers/laporanShiftController");
-
-// GET all atau search
-router.get("/", controller.list);
-
-router.get("/KCM5", controller.listKCM5);
-router.get("/RMFM5", controller.listRMFM5);
+const laporanShiftController = require("../controllers/laporanShiftController");
+const formController = require("../controllers/formLaporanShiftController");
 
 
-// GET detail
-router.get("/:id", controller.detail);
+// LIST KCM5
+router.get("/kcm5", laporanShiftController.listKCM5);
 
-// CREATE
-router.post("/", controller.create);
 
-// UPDATE
-router.put("/:id", controller.update);
+
+router.get("/laporan-shift/kcm5/add", formController.formKCM5);         // add
+router.get("/laporan-shift/kcm5/edit/:id", formController.formKCM5); 
+router.post("/laporan-shift/kcm5/save", formController.storeKCM5);
+
+// JSON SEARCH
+router.get("/kcm5/json", laporanShiftController.listKCM5JSON);
 
 // DELETE
-router.delete("/:id", controller.delete);
+router.delete("/kcm5/:id", laporanShiftController.delete);
 
 // APPROVE
-router.post("/approve/:id", controller.approve);
+router.post("/kcm5/approve/:id", laporanShiftController.approve);
 
 module.exports = router;

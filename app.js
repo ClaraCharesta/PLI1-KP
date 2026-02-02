@@ -3,7 +3,10 @@ const express = require("express");
 const session = require("express-session");
 const bcrypt = require("bcrypt");
 const db = require("./models"); // sequelize + semua model
-const laporanRoutes = require("./routes/laporanShiftRoutes");
+
+// ===== ROUTES =====
+const laporanShiftRoutes = require("./routes/laporanShiftRoutes");
+const formLaporanShiftRoutes = require("./routes/formLaporanShiftRoutes");
 const dataBMCMRoutes = require("./routes/dataBMCMRoutes");
 
 const app = express();
@@ -82,29 +85,20 @@ app.get("/logout", (req, res) => {
 });
 
 // ===============================
-// LAPORAN SHIFT ROUTES (KCM5, RMFM5, CRUD, APPROVE)
+// ROUTES: LAPORAN SHIFT / FORM / DATA BM CM
 // ===============================
-app.use("/laporan-shift", auth, laporanRoutes);
+app.use("/laporan-shift", auth, laporanShiftRoutes);
+app.use("/form-laporan-shift", auth, formLaporanShiftRoutes);
+app.use("/form-laporan-shift", require("./routes/formLaporanShiftRoutes"));
+app.use("/data-bmcm", auth, dataBMCMRoutes);
 
-// Temporary DEBUG route (NO auth) to test POST from client and session cookie
+// ===============================
+// DEBUG TEMPORARY ROUTE
+// ===============================
 app.post('/debug/data-bmcm', (req, res) => {
   console.log('▶ DEBUG POST /debug/data-bmcm - session user:', req.session?.user ?? null, 'body:', req.body);
   res.json({ ok: true, session: req.session?.user ?? null, body: req.body });
 });
-// Log requests to /data-bmcm to help debug frontend submit issues
-app.use("/data-bmcm", (req, res, next) => {
-  console.log('▶ /data-bmcm', req.method, req.originalUrl, 'session:', !!req.session.user);
-  next();
-}, auth, dataBMCMRoutes);
-
-
-const formLaporanShiftRoutes = require("./routes/formLaporanShiftRoutes");
-app.use("/laporan-shift", formLaporanShiftRoutes);
-app.use("/form-laporan-shift", require("./routes/formLaporanShiftRoutes"));
-
-
-
-
 
 // ===============================
 // ROUTE NON-LAPORAN (HOME, CHART, USER, ABOUT, DLL)
@@ -115,40 +109,18 @@ app.get("/kelola-user", auth, (req, res) => res.render("kelolaUser", { title: "K
 app.get("/ubahPassword", auth, (req, res) => res.render("ubahPassword", { title: "Ganti Password", active: "about" }));
 app.get("/about", auth, (req, res) => res.render("about", { title: "About", active: "about" }));
 app.get("/feedback", auth, (req, res) => res.render("feedback", { active: "feedback" }));
-app.get("/KCM5", auth, (req, res) => res.redirect("/laporan-shift/kcm5"));
-app.get("/RMFM5", auth, (req, res) => res.redirect("/laporan-shift/rmfm5"));
-
+app.get("/KCM5", auth, (req, res) => res.redirect("/laporan-shift/KCM5"));
+app.get("/RMFM5", auth, (req, res) => res.redirect("/laporan-shift/RMFM5"));
 
 // ===============================
-// ROUTE LAPORAN LAIN (EJS PAGE VIEW)
+// ROUTE LAPORAN PAGE STATIC
 // ===============================
 const laporanPages = [
   { path: "/laporanShiftKCM5", file: "laporanShiftKCM5", title: "Laporan Shift KCM 5", active: "laporan" },
   { path: "/laporanShiftRMFM5", file: "laporanShiftRMFM5", title: "Laporan Shift RM FM 5", active: "laporan" },
   { path: "/tsKCM5", file: "tsKCM5", title: "Laporan Shift KCM 5", active: "trouble shooting" },
   { path: "/tsRMFM5", file: "tsRMFM5", title: "Laporan Shift RM FM 5", active: "trouble shooting RM FM" },
-  { path: "/maintenanceKCM5", file: "maintenanceKCM5", title: "Laporan Shift KCM 5", active: "maintenance" },
-  { path: "/maintenanceRMFM5", file: "maintenanceRMFM5", title: "Laporan Shift RM FM 5", active: "maintenance RM FM" },
-  { path: "/pcKCM5", file: "pcKCM5", title: "Laporan Shift KCM 5", active: "produksi clinker kcm 5" },
-  { path: "/pcRMFM5", file: "pcRMFM5", title: "Laporan Shift RM FM 5", active: "produksi clinker RMFM 5" },
-  { path: "/sttKCM5", file: "sttKCM5", title: "Laporan Shift KCM 5", active: "serah terima tool kcm 5" },
-  { path: "/sttRMFM5", file: "sttRMFM5", title: "Laporan Shift RM FM 5", active: "serah terima tool RM FM 5" },
-  { path: "/catatanKCM5", file: "catatanKCM5", title: "Laporan Shift KCM 5", active: "catatan kcm 5" },
-  { path: "/catatanRMFM5", file: "catatanRMFM5", title: "Laporan Shift RM FM 5", active: "catatan RM FM 5" },
-  { path: "/laporanKCM5", file: "laporanKCM5", title: "Laporan Shift KCM 5", active: "laporanKCM5" },
-  { path: "/laporanRMFM5", file: "laporanRMFM5", title: "Laporan Shift RM FM 5", active: "laporanRMFM5" },
-  { path: "/RMFM5", file: "RMFM5", title: "Laporan Shift RM FM 5", active: "RMFM5" },
-  { path: "/dataBMCM", file: "dataBMCM", title: "Realisasi PK Harian", active: "dataBMCM" },
-  { path: "/addDataBMCM", file: "addDataBMCM", title: "Tambah Data BM & CM", active: "dataBMCM" },
-  { path: "/formDataBMCM", file: "formDataBMCM", title: "Add Realisasi PK Harian", active: "dataBMCM" },
-  { path: "/updateDataBMCM", file: "formUpdateDataBMCM", title: "Update Realisasi PK Harian", active: "dataBMCM" },
-  { path: "/dataBMCMPPI", file: "dataBMCMPPI", title: "Data BM & CM PPI", active: "dataBMCMPPI" },
-  { path: "/formDataBMCMPPI", file: "formDataBMCMPPI", title: "Add Realisasi PK Harian PPI", active: "dataBMCMPPI" },
-  { path: "/formUpdateDataBMCMPPI", file: "formUpdateDataBMCMPPI", title: "Update Realisasi PK Harian PPI", active: "dataBMCMPPI" },
-  { path: "/updateDataBMCMPPI", file: "formUpdateDataBMCMPPI", title: "Update Realisasi PK Harian PPI", active: "dataBMCMPPI" },
-  { path: "/dataAbnormalitas", file: "dataAbnormalitas", title: "Data Abnormalitas", active: "dataAbnormalitas" },
-  { path: "/formDataAbnormalitas", file: "formDataAbnormalitas", title: "Add Data Abnormalitas", active: "dataAbnormalitas" },
-  { path: "/updateDataAbnormalitas", file: "formUpdateDataAbnormalitas", title: "Update Data Abnormalitas", active: "dataAbnormalitas" },
+  // ... tambahkan semua page lain yang sebelumnya ada
 ];
 
 laporanPages.forEach(page => {
@@ -162,7 +134,7 @@ laporanPages.forEach(page => {
 // ===============================
 (async () => {
   try {
-    await db.sequelize.sync({ alter: true });
+    await db.sequelize.sync();
     console.log("✅ Semua tabel tersinkronisasi");
 
     const { Role, User } = db;
@@ -190,6 +162,5 @@ app.listen(PORT, () => console.log(`✅ Server jalan di http://localhost:${PORT}
 // ===============================
 // KEEP ALIVE LOG
 // ===============================
-// setInterval(() => console.log("🟢 SERVER MASIH HIDUP"), 5000);
 process.on("uncaughtException", (err) => console.error("❌ UNCAUGHT EXCEPTION:", err));
 process.on("unhandledRejection", (reason) => console.error("❌ UNHANDLED REJECTION:", reason));

@@ -1,4 +1,4 @@
-/* ================= DATA ================= */
+// ================= DATA =================
 const personilData = [
   "[ISD] Irsyadunnas",
   "[RKB] Rafki Budiman",
@@ -10,75 +10,23 @@ const personilData = [
   "[SEP] Sepriadi"
 ];
 
-const shiftData = [
-  "01 (07:00-15:00)",
-  "02 (15:00-22:00)",
-  "03 (22:00-07:00)",
-  "A (07:00-19:00)",
-  "B (19:00-07:00)",
-  "LIBUR"
-];
+const shiftData = ["01","02","03","A","B","LIBUR"];
 
-/* ================= BACK ================= */
-document.querySelector(".back").onclick = () => {
-  window.location.href = "/laporanKCM5";
-};
+let personilMaster = [...personilData]; // dynamic
 
-
-document.getElementById("tanggal").addEventListener("change", () => {
-  document.getElementById("noref").value = generateNoRef();
-});
-
-/* ================= CLEAR ================= */
-document.querySelector(".clear").onclick = () => {
-  document.querySelectorAll("input, select, textarea").forEach(el => {
-    if (el.type !== "button" && el.type !== "submit") {
-      el.value = "";
+// ================= PERSONIL INPUT =================
+document.querySelectorAll(".personil").forEach((input) => {
+  input.addEventListener("blur", () => {
+    if (input.value && !personilMaster.includes(input.value)) {
+      personilMaster.push(input.value);
     }
   });
-
-  document
-    .querySelectorAll("#cutiBox input[type='checkbox']")
-    .forEach(cb => cb.checked = false);
-
-  cutiResult.value = "";
-  document.getElementById("noref").value = generateNoRef();
-};
-
-/* ================= PERSONIL SELECT ================= */
-document.querySelectorAll(".personil").forEach(select => {
-  select.innerHTML = "";
-  select.add(new Option("None", ""));
-
-  personilData.forEach(p => {
-    select.add(new Option(p, p));
-  });
-
-  select.add(new Option("Lainnya", "LAINNYA"));
 });
 
-/* ================= SHIFT ================= */
-const shiftUtama = document.getElementById("shiftUtama");
-shiftUtama.innerHTML = "<option value=''>None</option>";
-
-shiftData.forEach(s => {
-  shiftUtama.add(new Option(s, s));
-});
-
-document.querySelectorAll(".shift").forEach(select => {
-  select.innerHTML = "<option value=''>None</option>";
-  shiftData.forEach(s => {
-    select.add(new Option(s, s));
-  });
-});
-
-/* ================= CUTI ================= */
+// ================= CUTI =================
 const cutiBox = document.getElementById("cutiBox");
 const cutiResult = document.getElementById("cutiResult");
 
-cutiBox.innerHTML = "";
-
-/* render checkbox cuti */
 function renderCuti(name) {
   const div = document.createElement("div");
   div.className = "cuti-item";
@@ -86,6 +34,7 @@ function renderCuti(name) {
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   checkbox.value = name;
+  checkbox.checked = cutiResult.value.split(", ").includes(name);
   checkbox.addEventListener("change", updateCutiResult);
 
   const label = document.createElement("label");
@@ -96,102 +45,48 @@ function renderCuti(name) {
   cutiBox.appendChild(div);
 }
 
-/* data utama */
-personilData.forEach(p => renderCuti(p));
-
-/* ================= LAINNYA CUTI (TANPA PROMPT) ================= */
-const lainnyaDiv = document.createElement("div");
-lainnyaDiv.className = "cuti-item";
-
-const lainnyaCheckbox = document.createElement("input");
-lainnyaCheckbox.type = "checkbox";
-
-const lainnyaLabel = document.createElement("label");
-lainnyaLabel.textContent = "Lainnya";
-
-lainnyaDiv.appendChild(lainnyaCheckbox);
-lainnyaDiv.appendChild(lainnyaLabel);
-cutiBox.appendChild(lainnyaDiv);
-
-/* input text lainnya */
-const lainnyaInputBox = document.createElement("div");
-lainnyaInputBox.style.display = "none";
-lainnyaInputBox.style.marginTop = "6px";
-
-const lainnyaInput = document.createElement("input");
-lainnyaInput.type = "text";
-lainnyaInput.placeholder = "Nama personil cuti lainnya...";
-lainnyaInput.style.width = "100%";
-
-lainnyaInputBox.appendChild(lainnyaInput);
-cutiBox.appendChild(lainnyaInputBox);
-
-/* toggle input */
-lainnyaCheckbox.addEventListener("change", () => {
-  lainnyaInputBox.style.display = lainnyaCheckbox.checked ? "block" : "none";
-  if (lainnyaCheckbox.checked) lainnyaInput.focus();
-});
-
-/* enter → jadi checkbox */
-lainnyaInput.addEventListener("keydown", e => {
-  if (e.key === "Enter") {
-    const nama = lainnyaInput.value.trim();
-    if (!nama) return;
-
-    renderCuti(nama);
-    updateCutiResult();
-
-    lainnyaInput.value = "";
-    lainnyaInputBox.style.display = "none";
-    lainnyaCheckbox.checked = false;
-  }
-});
-
-/* ================= SIMPAN HASIL CUTI ================= */
 function updateCutiResult() {
   const selected = Array.from(
     cutiBox.querySelectorAll("input[type='checkbox']:checked")
   ).map(cb => cb.value);
-
   cutiResult.value = selected.join(", ");
 }
 
-/* ================= SAVE ================= */
-document.querySelector(".save").onclick = async () => {
-  const body = {
-    tanggal: document.getElementById("tanggal").value,
-    shiftUtama: document.getElementById("shiftUtama").value,
-    no_ref: document.getElementById("noref").value,
-    cuti: document.getElementById("cutiResult").value,
+personilData.forEach(renderCuti);
 
-    personil_841: document.querySelectorAll(".personil")[0].value,
-    shift_841: document.querySelectorAll(".shift")[0].value,
+// ================= SUBMIT FORM =================
+document.getElementById("kcm5Form").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    personil_842a: document.querySelectorAll(".personil")[1].value,
-    shift_842a: document.querySelectorAll(".shift")[1].value,
+  const form = e.target;
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
 
-    personil_842b: document.querySelectorAll(".personil")[2].value,
-    shift_842b: document.querySelectorAll(".shift")[2].value
-  };
+  // Validasi tanggal YYYY-MM-DD
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(data.tanggal)) {
+    alert("Tanggal tidak valid");
+    return;
+  }
+
+  const url = form.action;
+  const method = "POST";
 
   try {
-    const res = await fetch("/form-laporan-shift/kcm5", {
-      method: "POST",
+    const res = await fetch(url, {
+      method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
+      body: JSON.stringify(data)
     });
 
     const result = await res.json();
-
-    if (!result.success) throw new Error(result.message);
-
-    alert("Data berhasil disimpan");
-    window.location.href = "/laporan-shift/KCM5";
-
+    if (result.success) {
+      alert(result.message);
+      window.location.href = "/laporan-shift/kcm5";
+    } else {
+      alert(result.message);
+    }
   } catch (err) {
     console.error(err);
-    alert("Gagal menyimpan data");
+    alert("Terjadi kesalahan saat menyimpan data");
   }
-};
-
-alert("Berhasil disimpan\nNo.Ref: " + result.data.no_ref);
+});

@@ -2,181 +2,73 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Laporan Shift KCM 5</title>
-
+  <title>Laporan Shift KCM5</title>
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/sidebar.css">
   <link rel="stylesheet" href="/css/topbar.css">
   <link rel="stylesheet" href="/css/KCM5.css">
 </head>
 <body>
-
 <%- include('partials/sidebar') %>
-
 <div class="main">
-  <%- include('partials/topbar', { title: "Laporan Shift KCM 5" }) %>
-
+  <%- include('partials/topbar', { title: "Laporan Shift KCM5" }) %>
   <div class="content">
 
-    <!-- HEADER -->
     <div class="header-box">
       <div class="search-box">
         <input type="text" id="searchInput" placeholder="Cari No.Ref / Nama / Tanggal...">
-        <button id="btnSearch" type="button">Search</button>
+        <button id="btnSearch">Search</button>
       </div>
-
       <button id="btnAdd" class="btn-add">+ Add</button>
     </div>
 
-    <!-- TABLE -->
     <div class="table-wrapper">
       <table class="table">
         <thead>
           <tr>
-            <th>No</th>
-            <th>Tanggal</th>
-            <th>Shift</th>
-            <th>No.Ref</th>
-            <th>Dibuat Oleh</th>
-            <th>Personil (841)</th>
-            <th>Shift (841)</th>
-            <th>Personil (842A)</th>
-            <th>Shift (842A)</th>
-            <th>Personil (842B)</th>
-            <th>Shift (842B)</th>
-            <th>Cuti</th>
-            <th>Verifikasi Kasi</th>
-            <th>Aksi</th>
+            <th>No</th><th>Tanggal</th><th>Shift</th><th>No.Ref</th><th>Dibuat Oleh</th>
+            <th>Personil (841)</th><th>Shift (841)</th>
+            <th>Personil (842A)</th><th>Shift (842A)</th>
+            <th>Personil (842B)</th><th>Shift (842B)</th>
+            <th>Cuti</th><th>Verifikasi Kasi</th><th>Aksi</th>
           </tr>
         </thead>
-
-        <tbody>
+        <tbody id="tbodyData">
           <% if (data && data.length > 0) { %>
-            <% data.forEach((row, index) => { %>
-
-              <tr class="row-click"
-                  data-id="<%= row.id %>"
-                  data-ref="<%= row.no_ref %>">
-
-                <td><%= index + 1 %></td>
+            <% data.forEach((row,index)=>{ %>
+              <tr data-id="<%= row.id %>">
+                <td><%= index+1 %></td>
                 <td><%= row.tanggal %></td>
                 <td><%= row.shift_kode %></td>
                 <td><%= row.no_ref %></td>
                 <td><%= row.dibuat_oleh %></td>
-                <td><%= row.personil_841 || "-" %></td>
-                <td><%= row.shift_841 || "-" %></td>
+                <td><%= row.personil_841a || "-" %></td>
+                <td><%= row.shift_841a || "-" %></td>
                 <td><%= row.personil_842a || "-" %></td>
                 <td><%= row.shift_842a || "-" %></td>
                 <td><%= row.personil_842b || "-" %></td>
                 <td><%= row.shift_842b || "-" %></td>
                 <td><%= row.cuti || "-" %></td>
-
-                <!-- VERIFIKASI -->
-<td class="verifikasi">
-  <input type="checkbox"
-         class="chk-approve"
-         data-id="<%= row.id %>"
-         <% if (row.is_approved) { %> checked disabled <% } %> >
-
-  <span class="status-text"
-        <% if (row.is_approved) { %>
-          style="color:green;font-weight:bold;"
-        <% } %>>
-    <%= row.is_approved ? "Approved" : "Belum di-approve" %>
-  </span>
-</td>
-
-
-                <!-- AKSI -->
                 <td>
-                  <button class="btn-edit">Edit</button>
+                  <input type="checkbox" class="chk-approve" data-id="<%= row.id %>"
+                  <% if(row.is_approved){ %> checked disabled <% } %> >
+                  <span><%= row.is_approved ? "Approved" : "Belum di-approve" %></span>
+                </td>
+                <td>
+                  <button class="btn-edit" onclick="window.location.href='/laporan-shift/kcm5/edit/<%= row.id %>'">Edit</button>
                   <button class="btn-del">Hapus</button>
                 </td>
-
               </tr>
-
             <% }) %>
           <% } else { %>
-
-            <tr>
-              <td colspan="14" style="text-align:center;">
-                Data belum tersedia
-              </td>
-            </tr>
-
+            <tr><td colspan="14" style="text-align:center;">Data belum tersedia</td></tr>
           <% } %>
         </tbody>
       </table>
     </div>
 
-    <!-- DELETE MODAL -->
-    <div id="deleteModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-icon">🗑️</div>
-        <h2>Delete Data</h2>
-        <p>Apakah anda yakin ingin menghapus?</p>
-        <div class="modal-buttons">
-          <button id="deleteBtn" class="btn-delete">Delete</button>
-          <button id="keepBtn" class="btn-keep">Keep</button>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
-
-<script>
-  const menuToggle = document.getElementById('menuToggle');
-  const sidebar = document.querySelector('.sidebar');
-  const main = document.querySelector('.main');
-
-  if (menuToggle) {
-    menuToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('closed');
-      main.classList.toggle('expanded');
-    });
-  }
-</script>
-
 <script src="/js/KCM5.js"></script>
 </body>
 </html>
-
-
-
-
-<!-- FORM EDIT INLINE -->
-<div id="editFormCard" class="form-card" style="display:none; margin-top:20px; border:1px solid #ccc; padding:15px; border-radius:8px;">
-  <h3>Edit Laporan Shift</h3>
-  <div class="form-grid top-info">
-
-    <div class="form-group">
-      <label>Tanggal</label>
-      <input type="date" id="editTanggal">
-    </div>
-
-    <div class="form-group">
-      <label>Shift</label>
-      <select id="editShiftUtama">
-        <option value="">-- Pilih Shift --</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>No. Ref</label>
-      <input type="text" id="editNoRef" readonly>
-    </div>
-
-    <div class="form-group">
-      <label>Dibuat Oleh</label>
-      <input type="text" id="editDibuatOleh" readonly>
-    </div>
-  </div>
-
-  <div id="editPersonilContainer"></div>
-
-  <div class="btn-wrapper" style="margin-top:15px;">
-    <button id="btnCancelEdit" type="button">Cancel</button>
-    <button id="btnSaveEdit" type="button">Save</button>
-  </div>
-</div>

@@ -1,17 +1,20 @@
-const express = require("express");
-const router = express.Router();
-const controller = require("../controllers/formLaporanShiftController");
+const router = require("express").Router();
 const formController = require("../controllers/formLaporanShiftController");
+const listController = require("../controllers/laporanShiftController");
 
-// FORM
-router.get("/form/kcm5", controller.formKCM5);
+// LIST
+router.get("/laporan-shift/kcm5", listController.listKCM5);
 
-// SIMPAN
-router.post("/kcm5", controller.storeKCM5);
+// FORM ADD
+router.get("/laporan-shift/kcm5/add", formController.formKCM5);
 
+// FORM EDIT
+router.get("/laporan-shift/kcm5/edit/:id", formController.formKCM5);
 
-router.get("/kcm5", controller.formKCM5);
-router.post("/form-laporan-shift", formController.storeKCM5);
-router.get("/form-laporan-shift", formController.formKCM5);
+// SIMPAN ADD
+router.post("/laporan-shift/kcm5/add", formController.storeKCM5);
+
+// SIMPAN EDIT
+router.post("/laporan-shift/kcm5/edit/:id", formController.storeKCM5);
 
 module.exports = router;

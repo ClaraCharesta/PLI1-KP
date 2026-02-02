@@ -1,52 +1,39 @@
-console.log("CONTROLLER YANG DIPAKAI:", __filename);
-
-const LaporanShift = require("../models/LaporanShift");
+// controllers/laporanShiftController.js
 const { Op } = require("sequelize");
+const LaporanShift = require("../models/LaporanShift");
 const { shiftMap } = require("../utils/shiftHelper");
 
-// ===============================
-// HELPER: Mapping shift
-// ===============================
-function mapShiftData(data) {
-  return data.map(row => {
-    const obj = row.toJSON();
-    Object.keys(obj).forEach(key => {
-      if (key.startsWith("shift_") && obj[key]) {
-        obj[key] = shiftMap[obj[key]] || obj[key];
-      }
-    });
-    return obj;
-  });
-}
 
-// ===============================
-// FORM LAPORAN SHIFT KCM 5
-// GET /form/kcm5
-// ===============================
-exports.formKCM5 = (req, res) => {
+
+// ==============================
+// LIST HALAMAN KCM5
+// ==============================
+exports.listKCM5 = async (req, res) => {
   try {
-    res.render("laporanshiftKCM5", {
-      title: "Laporan Shift KCM 5",
-      active: "home",
+    const data = await LaporanShift.findAll({
+      where: { area: "KCM5" },
+      order: [["tanggal", "DESC"]],
     });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Server Error");
+    res.render("kcm5", { 
+      data, 
+      active: "laporan",
+      title: "Laporan Shift KCM5"
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Gagal memuat data");
   }
 };
 
-// ===============================
-// LIST / SEARCH ALL
-// GET /
-// ===============================
-exports.list = async (req, res) => {
-  const area = req.query.area || "KCM";
-  const keyword = req.query.keyword || "";
-
+// ==============================
+// JSON SEARCH
+// ==============================
+exports.listKCM5JSON = async (req, res) => {
   try {
+    const keyword = req.query.keyword || "";
     const data = await LaporanShift.findAll({
       where: {
-        area,
+        area: "KCM5",
         [Op.or]: [
           { no_ref: { [Op.like]: `%${keyword}%` } },
           { dibuat_oleh: { [Op.like]: `%${keyword}%` } },
@@ -55,159 +42,151 @@ exports.list = async (req, res) => {
       },
       order: [["tanggal", "DESC"]],
     });
-
-    res.json(mapShiftData(data));
+    res.json(data);
   } catch (err) {
     console.error(err);
-    res.status(500).json({
-      success: false,
-      error: "Gagal mengambil data",
-    });
+    res.status(500).json({ error: "Terjadi kesalahan server" });
   }
 };
 
-// ===============================
-// LIST KHUSUS KCM5
-// GET /kcm5
-// ===============================
-exports.listKCM5 = async (req, res) => {
+// ==============================
+// FORM ADD / EDIT
+// ==============================
+exports.formKCM5 = async (req, res) => {
   try {
-    const data = await LaporanShift.findAll({
-      where: { area: "KCM5" },
-      order: [["tanggal", "DESC"]],
-    });
+    const { id } = req.params;
+    let formData = {};
+    let mode = "add";
 
-    res.render("kcm5", {
-      title: "Laporan Shift KCM 5",
-      active: "laporan",
-      data: mapShiftData(data),
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Terjadi kesalahan server");
-  }
-};
+    if (id) {
+      const data = await LaporanShift.findByPk(id);
+      if (!data) return res.status(404).send("Data tidak ditemukan");
 
-// ===============================
-// LIST KHUSUS RM FM5
-// GET /rmfm5
-// ===============================
-exports.listRMFM5 = async (req, res) => {
-  try {
-    const data = await LaporanShift.findAll({
-      where: { area: "RMFM5" },
-      order: [["tanggal", "DESC"]],
-    });
+      formData = data.toJSON();
 
-    res.render("rmfm5", {
-      title: "Laporan Shift RM FM 5",
-      active: "laporan",
-      data: mapShiftData(data),
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Terjadi kesalahan server");
-  }
-};
+      // Aman untuk <input type=date>
+      if (formData.tanggal) {
+        const d = new Date(formData.tanggal);
+        formData.tanggal = !isNaN(d) ? d.toISOString().split("T")[0] : '';
+      } else {
+        formData.tanggal = '';
+      }
 
-// ===============================
-// DETAIL
-// GET /:id
-// ===============================
-exports.detail = async (req, res) => {
-  const id = req.params.id;
-
-  try {
-    const row = await LaporanShift.findByPk(id);
-    if (!row) {
-      return res.status(404).send("Data tidak ditemukan");
+      mode = "edit";
     }
 
-    res.json(mapShiftData([row])[0]);
+    res.render("form-kcm5", {
+      user: req.session.user,
+      active: "laporan",
+      mode,
+      formData,
+      shifts: ["01","02","03","A","B","LIBUR"]
+    });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Terjadi kesalahan server");
+    res.status(500).send("Gagal memuat form KCM5");
   }
 };
 
-// ===============================
-// CREATE
-// POST /
-// ===============================
-exports.create = async (req, res) => {
-  try {
-    const newData = await LaporanShift.create(req.body);
-    res.status(201).json(newData);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Gagal membuat data baru");
-  }
-};
 
-// ===============================
-// UPDATE
-// PUT /:id
-// ===============================
-exports.update = async (req, res) => {
-  const id = req.params.id;
+// ==============================
+// SAVE ADD / EDIT
+// ==============================
+const moment = require("moment"); // pastikan ini di atas file
 
+exports.saveKCM5 = async (req, res) => {
   try {
-    const row = await LaporanShift.findByPk(id);
-    if (!row) {
-      return res.status(404).send("Data tidak ditemukan");
+    const {
+      id, tanggal,
+      shift_kode, personil_841, shift_841,
+      personil_842a, shift_842a, personil_842b, shift_842b,
+      cuti
+    } = req.body;
+
+    const userEmail = req.session.user?.email || req.session.user?.nama;
+
+    // Pastikan tanggal selalu ISO format
+    const d = new Date(tanggal);
+    if (isNaN(d)) {
+      return res.status(400).send("Tanggal tidak valid");
+    }
+    const tanggalISO = d.toISOString().split("T")[0]; // YYYY-MM-DD
+
+    if (id) {
+      // EDIT
+      const data = await LaporanShift.findByPk(id);
+      if (!data) return res.status(404).send("Data tidak ditemukan");
+
+      await data.update({
+        tanggal: tanggalISO,
+        shift_kode,
+        personil_841a: personil_841,
+        shift_841a: shift_841,
+        personil_842a,
+        shift_842a,
+        personil_842b,
+        shift_842b,
+        cuti
+      });
+    } else {
+      // ADD
+      const no_ref = await generateNoRefKCM5();
+
+      await LaporanShift.create({
+        area: "KCM5",
+        tanggal: tanggalISO,
+        shift_kode,
+        no_ref,
+        dibuat_oleh: userEmail,
+        personil_841a: personil_841,
+        shift_841a: shift_841,
+        personil_842a,
+        shift_842a,
+        personil_842b,
+        shift_842b,
+        cuti
+      });
     }
 
-    await row.update(req.body);
-    res.json(row);
+    // redirect harus di sini, di dalam try
+    res.redirect("/laporan-shift/kcm5");
+
   } catch (err) {
     console.error(err);
-    res.status(500).send("Gagal mengupdate data");
+    res.status(500).send("Gagal menyimpan data KCM5");
   }
 };
 
-// ===============================
-// DELETE
-// DELETE /:id
-// ===============================
+
+
+// ==============================
+// DELETE DATA
+// ==============================
 exports.delete = async (req, res) => {
-  const id = req.params.id;
-
   try {
-    const row = await LaporanShift.findByPk(id);
-    if (!row) {
-      return res.status(404).send("Data tidak ditemukan");
-    }
+    const data = await LaporanShift.findByPk(req.params.id);
+    if (!data) return res.status(404).json({ error: "Data tidak ditemukan" });
 
-    await row.destroy();
-    res.json({ message: "Data berhasil dihapus" });
+    await data.destroy();
+    res.json({ success: true });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Gagal menghapus data");
+    res.status(500).json({ error: "Gagal menghapus data" });
   }
 };
 
-// ===============================
-// APPROVE
-// POST /approve/:id
-// ===============================
+// ==============================
+// APPROVE DATA
+// ==============================
 exports.approve = async (req, res) => {
-  const id = req.params.id;
-
   try {
-    const row = await LaporanShift.findByPk(id);
-    if (!row) {
-      return res.status(404).send("Data tidak ditemukan");
-    }
+    const data = await LaporanShift.findByPk(req.params.id);
+    if (!data) return res.status(404).json({ error: "Data tidak ditemukan" });
 
-    row.is_approved = true;
-    await row.save();
-
-    res.json({
-      message: "Data berhasil di-approve",
-      data: row,
-    });
+    await data.update({ is_approved: true });
+    res.json({ success: true });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Gagal meng-approve data");
+    res.status(500).json({ error: "Gagal approve data" });
   }
 };

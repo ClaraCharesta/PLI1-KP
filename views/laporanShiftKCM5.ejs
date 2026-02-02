@@ -1,83 +1,90 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Laporan Shift</title>
-
-<link rel="stylesheet" href="/css/layout.css">
-<link rel="stylesheet" href="/css/sidebar.css">
-<link rel="stylesheet" href="/css/topbar.css">
-<link rel="stylesheet" href="/css/laporanShiftKCM5.css">
+  <meta charset="UTF-8">
+  <title><%= mode === 'edit' ? 'Edit Laporan Shift KCM5' : 'Tambah Laporan Shift KCM5' %></title>
+  
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/laporanShiftKCM5.css">
 </head>
 <body>
 
-<%- include('partials/sidebar') %>
+<%- include('partials/sidebar', { active: 'laporan' }) %>
 
 <div class="main">
-  <%- include('partials/topbar', { title }) %>
+  <%- include('partials/topbar', { 
+    title: mode === 'edit' ? 'Edit Laporan Shift KCM5' : 'Tambah Laporan Shift KCM5'
+  }) %>
 
   <div class="content">
     <div class="form-card">
 
-      <!-- ================= FORM MULAI ================= -->
-      <form action="/form-laporan-shift" method="POST">
+      <form id="kcm5Form" method="POST" action="<%= mode === 'edit' ? '/laporan-shift/kcm5/edit/' + formData.id : '/laporan-shift/kcm5/add' %>">
 
+        <!-- ===== INFO ATAS ===== -->
         <div class="form-grid top-info">
-
           <div class="form-group">
             <label>Tanggal</label>
-            <input type="date" id="tanggal" name="tanggal" required>
+            <input type="date" name="tanggal" id="tanggal" required value="<%= formData?.tanggal || '' %>">
           </div>
 
           <div class="form-group">
-            <label>Shift</label>
-            <select id="shiftUtama" name="shiftUtama" required>
+            <label>Shift Utama</label>
+            <select name="shiftUtama" id="shiftUtama" required>
               <option value="">-- Pilih Shift --</option>
+              <% ["01","02","03","A","B","LIBUR"].forEach(s => { %>
+                <option value="<%= s %>" <%= formData?.shift_kode === s ? 'selected' : '' %>><%= s %></option>
+              <% }) %>
             </select>
           </div>
 
           <div class="form-group">
             <label>No. Ref</label>
-            <input type="text" id="noref" name="no_ref" readonly>
+            <input type="text" readonly value="<%= formData?.no_ref || 'Auto generate saat simpan' %>">
           </div>
 
           <div class="form-group">
             <label>Dibuat Oleh</label>
-            <input type="text" value="<%= user.email %>" readonly>
+            <input type="text" readonly value="<%= user?.email || user?.nama %>">
           </div>
-
         </div>
 
-        <!-- LOOP POS -->
-        <% ['841','842A','842B','843A','843B'].forEach(p => { %>
+        <!-- ===== PERSONIL ===== -->
+        <% ['841','842A','842B'].forEach(p => { 
+            const keyPersonil = 'personil_' + p.toLowerCase() + (p === '841' ? 'a' : '');
+            const keyShift = 'shift_' + p.toLowerCase() + (p === '841' ? 'a' : '');
+        %>
+          <div class="personil-wrapper">
+            <label>Personil (<%= p %>)</label>
+            <input type="text" class="personil" name="<%= keyPersonil %>" value="<%= formData?.[keyPersonil] || '' %>" placeholder="Isi nama personil">
 
-          <label>Personil (<%= p %>)</label>
-          <select class="personil" name="personil[]">
-            <option value="">-- Pilih Personil --</option>
-          </select>
-
-          <label>Shift (<%= p %>)</label>
-          <select class="shift" name="shift[]">
-            <option value="">-- Pilih Shift --</option>
-          </select>
-
+            <label>Shift (<%= p %>)</label>
+            <select class="shift" name="<%= keyShift %>">
+              <option value="">-- Pilih Shift --</option>
+              <% ["01","02","03","A","B","LIBUR"].forEach(s => { %>
+                <option value="<%= s %>" <%= formData?.[keyShift] === s ? 'selected' : '' %>><%= s %></option>
+              <% }) %>
+            </select>
+          </div>
         <% }) %>
 
-        <label>Personil (Cuti)</label>
-        <div class="cuti-box" id="cutiBox"></div>
+        <!-- ===== CUTI ===== -->
+        <div class="form-group">
+          <label>Personil Cuti</label>
+          <textarea name="cuti" id="cutiResult" rows="3" placeholder="Isi jika ada personil cuti..."><%= formData?.cuti || '' %></textarea>
+          <div id="cutiBox"></div>
+        </div>
 
-        <input type="hidden" id="cutiResult" name="cuti">
-
+        <!-- ===== BUTTON ===== -->
         <div class="btn-wrapper">
-          <div class="btn">
-            <button class="back" type="button">Back</button>
-            <button class="clear" type="button">Clear</button>
-            <button class="save" type="submit">Save</button>
-          </div>
+          <button type="button" class="back">Back</button>
+          <button type="reset" class="clear">Clear</button>
+          <button type="submit" class="save"><%= mode === 'edit' ? 'Update' : 'Save' %></button>
         </div>
 
       </form>
-      <!-- ================= FORM SELESAI ================= -->
 
     </div>
   </div>
@@ -87,13 +94,9 @@
 <script src="/js/formShiftKCM5.js"></script>
 
 <script>
-  const menuToggle = document.getElementById('menuToggle');
-  const sidebar = document.querySelector('.sidebar');
-
-  menuToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('closed');
-  });
+  document.querySelector(".back").onclick = () => {
+    window.location.href = "/laporan-shift/kcm5";
+  }
 </script>
-
 </body>
 </html>

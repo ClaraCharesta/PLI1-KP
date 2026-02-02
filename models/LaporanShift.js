@@ -9,7 +9,11 @@ const LaporanShift = sequelize.define(
     area: { type: DataTypes.STRING, allowNull: false }, // KCM / RM FM
     tanggal: { type: DataTypes.DATEONLY, allowNull: false },
     shift_kode: DataTypes.STRING,
-    no_ref: { type: DataTypes.STRING, unique: true },
+    no_ref: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
+    },
     dibuat_oleh: DataTypes.STRING,
 
     // KCM 841 & 842
