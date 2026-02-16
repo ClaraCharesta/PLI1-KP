@@ -12,7 +12,7 @@
 </head>
 <body>
 
-  <%- include('partials/sidebar') %>
+  <%- include('partials/sidebar', { active: 'dataBMCMPPI' }) %>
 
   <div class="main">
     <%- include('partials/topbar', { title: "Update Realisasi PK Harian" }) %>
@@ -21,130 +21,186 @@
       <div class="form-card">
         <h2>Update Realisasi PK Harian</h2>
 
-        <form id="formUpdateDataBMCM">
+<form
+  id="formDataBMCMPPI"
+  action="/dataBMCMPPI/update/<%= data.id %>"
+  method="POST"
+  enctype="multipart/form-data"
+>
 
           <div class="form-group">
             <label for="tanggal">Tanggal</label>
-            <input type="date" id="tanggal" name="tanggal" required>
+            <input type="date" id="tanggal" name="tanggal" value="<%= tanggalFormatted %>" required
+>
+
           </div>
 
           <div class="form-group">
             <label for="area">Area</label>
             <select id="area" name="area" required>
               <option value="">-- Pilih Area --</option>
-              <option value="RM5">RM5</option>
-              <option value="KCM5">KCM5</option>
-              <option value="AUTO5">AUTO5</option>
-              <option value="FM5">FM5</option>
-              <option value="Shift KCM 5">Shift KCM 5</option>
-              <option value="Shift RMFM 5">Shift RMFM 5</option>
+              <option value="PPI 02" <%= data.area==="PPI 02"?"selected":"" %>>PPI 02</option>
+              <option value="PPI 03" <%= data.area==="PPI 03"?"selected":"" %>>PPI 03</option>
+              <option value="PPI 04" <%= data.area==="PPI 04"?"selected":"" %>>PPI 04</option>
             </select>
           </div>
 
-          <div class="form-group">
-            <label for="supervisor">Supervisor</label>
-            <select id="supervisor" name="supervisor" required>
-              <option value="">-- Pilih Executor --</option>
-              <option value="HENDRA GUNAWAN">HENDRA GUNAWAN</option>
-              <option value="DWI SUKMANADI">DWI SUKMANADI</option>
-              <option value="DASRIZAL ASRUL">DASRIZAL ASRUL</option>
-              <option value="MUHAMMMAD SALMAN">MUHAMMMAD SALMAN</option>
-            </select>
-          </div>
+        <div class="form-group">
+          <label for="supervisor">Supervisor</label>
+          <select id="supervisor" name="supervisor" required>
+            <option value="">-- Pilih Supervisor --</option>
 
-          <div class="form-group">
-            <label for="executor">Executor</label>
-            <select id="executor" name="executor" required>
-              <option value="HENDRA GUNAWAN">HENDRA GUNAWAN</option>
-              <option value="DWI SUKMANADI">DWI SUKMANADI</option>
-              <option value="DASRIZAL ASRUL">DASRIZAL ASRUL</option>
-              <option value="MUHAMMMAD SALMAN">MUHAMMMAD SALMAN</option>
-            </select>
-          </div>
+            <% [
+              "HENDRA GUNAWAN","DWI SUKMANADI","DASRIZAL ASRUL","MUHAMMMAD SALMAN"
+            ].forEach(s => { %>
 
-          <div class="form-group">
-            <label for="activities">Activities</label>
-            <select id="activities" name="activities" required>
-              <option value="">-- Pilih Aktivitas --</option>
-              <option value="Filter Dust Cleaning Task">Filter Dust Cleaning Task</option>
-              <option value="Gearbox Lubrication Check">Gearbox Lubrication Check</option>
-              <option value="Bearing Temperature Monitoring">Bearing Temperature Monitoring</option>
-              <option value="Brake Shoe Inspection">Brake Shoe Inspection</option>
-              <option value="Coupling Alignment Check">Coupling Alignment Check</option>
-            </select>
-          </div>
+              <option value="<%= s %>" <%= data.supervisor===s?"selected":"" %>><%= s %></option>
+            <% }) %>
+
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="executor">Executor</label>
+          <select id="executor" name="executor" required>
+            <option value="">-- Pilih Executor --</option>
+
+            <% [
+              "HENDRA GUNAWAN","DWI SUKMANADI","DASRIZAL ASRUL","MUHAMMMAD SALMAN"
+            ].forEach(e => { %>
+
+              <option value="<%= e %>" <%= data.executor===e?"selected":"" %>><%= e %></option>
+            <% }) %>
+
+          </select>
+        </div>
+
+        <!-- CATEGORY -->
+
+        <div class="form-group">
+          <label for="activitiesCategory">Activities Category</label>
+          <select id="activitiesCategory" name="activitiesCategory" required>
+            <option value="">-- Pilih Kategori --</option>
+            <option value="BM (Basic Maintenance)"
+              <%= data.activity_category?.startsWith("BM")?"selected":"" %>>
+              BM (Basic Maintenance)
+            </option>
+
+            <option value="CM (Corective Maintenance)"
+              <%= data.activity_category?.startsWith("CM")?"selected":"" %>>
+              CM (Corective Maintenance)
+            </option>
+          </select>
+        </div>
+
+        <!-- ACTIVITIES (FIX DI SINI 🔥🔥🔥) -->
+
+        <div class="form-group">
+          <label for="activities">Activities</label>
+          <select
+            id="activities"
+            name="activities"
+            required
+            data-current="<%= data.activities %>"
+          >
+            <option value="">-- Pilih Aktivitas --</option>
+          </select>
+        </div>
 
           <div class="form-group">
             <label for="detailActivities">Detail Activities</label>
-            <input type="text" id="detailActivities" name="detailActivities" placeholder="Deskripsi detail aktivitas">
+            <input
+            type="text"
+            id="detail_activities"
+            name="detail_activities"
+            value="<%= data.detail_activities %>"
+            >
+
           </div>
 
-          <div class="form-group">
-            <label for="duration">Duration (Jam)</label>
-            <div class="input-counter">
-              <button type="button" class="btn-counter" data-action="minus">−</button>
-              <input type="number" id="duration" name="duration" value="0" min="0" readonly>
-              <button type="button" class="btn-counter" data-action="plus">+</button>
-            </div>
-          </div>
+        <!-- COUNTER -->
 
-          <div class="form-group">
-            <label for="jumlahPersonel">Jumlah Personel</label>
-            <div class="input-counter">
-              <button type="button" class="btn-counter" data-action="minus">−</button>
-              <input type="number" id="jumlahPersonel" name="jumlahPersonel" value="0" min="0" readonly>
-              <button type="button" class="btn-counter" data-action="plus">+</button>
-            </div>
-          </div>
+        <% const counter = (id, label, val, maxLimit=null) => { %>
+        <div class="form-group">
+          <label for="<%= id %>"><%= label %></label>
+        <div class="input-counter">
+          <button type="button" class="btn-counter" data-action="minus">−</button>
+        <input 
+         type="number" 
+         id="<%= id %>" 
+         name="<%= id %>" 
+         value="<%= val %>"  
+         <%= maxLimit !== null ? `max="${maxLimit}"` : "" %>
+        >
+        <button type="button" class="btn-counter" data-action="plus">+</button>
+        </div>
+        </div>
+        <% } %>
 
-          <div class="form-group">
-            <label for="statusPersen">Status % (Realisasi)</label>
-            <div class="input-counter">
-              <button type="button" class="btn-counter" data-action="minus">−</button>
-              <input type="number" id="statusPersen" name="statusPersen" value="0" min="0" max="100" readonly>
-              <button type="button" class="btn-counter" data-action="plus">+</button>
-            </div>
-          </div>
+        <% counter("duration", "Duration (Jam)", data.duration); %>
+        <% counter("jumlahPersonel", "Jumlah Personel", data.jumlah_personil); %>
+        <% counter("statusPersen", "Status %", data.status_persen, 100); %>
 
-          <div class="form-group">
-            <label for="status">Status</label>
-            <select id="status" name="status" required>
-              <option value="">-- Pilih Status --</option>
-              <option value="Open">Open</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Close">Close</option>
-            </select>
-          </div>
+        <!-- STATUS -->
 
-          <div class="form-group">
-            <label for="keterangan">Keterangan</label>
-            <textarea id="keterangan" name="keterangan" rows="3" placeholder="Catatan tambahan..."></textarea>
-          </div>
+        <div class="form-group">
 
-          <!-- ================= UPLOAD FILES ================= -->
-          <div class="upload-section">
-            <h3>Upload Dokumentasi</h3>
-            
-            <div class="upload-grid">
-              <div class="upload-box">
-                <input type="file" id="fotoSafetyTalk" name="fotoSafetyTalk" accept="image/*" style="display:none;">
-                <label for="fotoSafetyTalk" class="upload-label">
-                  <span class="upload-icon">📎</span>
-                  <span class="upload-text">Upload Foto Safety Talk</span>
-                </label>
-                <div id="previewSafetyTalk" class="upload-preview"></div>
+          <label for="status">Status</label>
+          <select id="status" name="status" required>
+            <option value="">-- Pilih Status --</option>
+            <option value="Open" <%= data.status==="Open"?"selected":"" %>>Open</option>
+            <option value="In Progress" <%= data.status==="In Progress"?"selected":"" %>>In Progress</option>
+            <option value="Close" <%= data.status==="Close"?"selected":"" %>>Close</option>
+          </select>
+
+        </div>
+
+         <!-- KETERANGAN -->
+
+        <div class="form-group">
+          <label for="keterangan">Keterangan</label>
+          <textarea id="keterangan" name="keterangan"><%= data.keterangan %></textarea>
+        </div>
+
+        <!-- UPLOAD -->
+
+        <div class="upload-section">
+          <div class="upload-grid">
+            <div class="upload-box">
+              <input type="file" id="fotoSafetyTalk" name="fotoSafetyTalk" accept="image/*" hidden>
+              <label for="fotoSafetyTalk" class="upload-label">
+                <span class="upload-icon">📎</span>
+                <span class="upload-text">Upload Foto Safety Talk</span>
+              </label>
+              <div class="upload-preview">
+                <% if (data.foto_safety_talk) { %>
+                  <img src="/uploads/<%= data.foto_safety_talk %>">
+                <% } %>
               </div>
+            </div>
 
-              <div class="upload-box">
-                <input type="file" id="fotoCheckSheet" name="fotoCheckSheet" accept="image/*" style="display:none;">
-                <label for="fotoCheckSheet" class="upload-label">
-                  <span class="upload-icon">📎</span>
-                  <span class="upload-text">Upload Foto Check Sheet</span>
-                </label>
-                <div id="previewCheckSheet" class="upload-preview"></div>
+            <div class="upload-box">
+
+              <input type="file" id="fotoCheckSheet" name="fotoCheckSheet" accept="image/*" hidden>
+              <label for="fotoCheckSheet" class="upload-label">
+
+                <span class="upload-icon">📎</span>
+                <span class="upload-text">Upload Foto Check Sheet</span>
+
+              </label>
+
+              <div class="upload-preview">
+
+                <% if (data.foto_check_sheet) { %>
+
+                  <img src="/uploads/<%= data.foto_check_sheet %>">
+
+                <% } %>
+
               </div>
             </div>
           </div>
+        </div>
 
           <!-- ================= BUTTONS ================= -->
           <div class="btn-wrapper">
@@ -170,6 +226,19 @@
       });
     }
   </script>
+
+  <!-- ================= CANCEL MODAL ================= -->
+  <div id="cancelModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-icon">⚠️</div>
+      <h2>Batalkan Perubahan</h2>
+      <p>Apakah anda yakin ingin membatalkan perubahan?</p>
+      <div class="modal-buttons">
+        <button id="confirmCancelBtn" class="btn-confirm">Ya, Batalkan</button>
+        <button id="keepCancelBtn" class="btn-keep">Tidak</button>
+      </div>
+    </div>
+  </div>
 
   <script src="/js/formUpdateDataBMCMPPI.js"></script>
 

@@ -1,13 +1,20 @@
+/* =========================================================
+   FORM DATA BMCM - UI ONLY SCRIPT
+   (NO FETCH, NO AJAX, LET FORM SUBMIT NATIVELY)
+   ========================================================= */
+
 /* ================= INPUT COUNTER ================= */
 document.querySelectorAll('.btn-counter').forEach(btn => {
   btn.addEventListener('click', (e) => {
     e.preventDefault();
-    
+
     const action = btn.dataset.action;
     const input = btn.parentElement.querySelector('input[type="number"]');
+    if (!input) return;
+
     const currentValue = parseInt(input.value) || 0;
     const maxValue = parseInt(input.max) || Infinity;
-    
+
     if (action === 'plus') {
       input.value = Math.min(currentValue + 1, maxValue);
     } else if (action === 'minus') {
@@ -17,159 +24,105 @@ document.querySelectorAll('.btn-counter').forEach(btn => {
 });
 
 /* ================= FILE UPLOAD PREVIEW ================= */
-const fotoSafetyTalk = document.getElementById('fotoSafetyTalk');
-const previewSafetyTalk = document.getElementById('previewSafetyTalk');
+function setupImagePreview(inputId, previewId) {
+  const input = document.getElementById(inputId);
+  const preview = document.getElementById(previewId);
 
-if (fotoSafetyTalk) {
-  fotoSafetyTalk.addEventListener('change', (e) => {
+  if (!input || !preview) return;
+
+  const uploadBox = input.closest('.upload-box');
+  const placeholder = uploadBox?.querySelector('.upload-placeholder');
+
+  input.addEventListener('change', (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        previewSafetyTalk.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-      };
-      reader.readAsDataURL(file);
+    if (!file) {
+      preview.innerHTML = '';
+      if (placeholder) placeholder.classList.remove('hidden');
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      preview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+      if (placeholder) placeholder.classList.add('hidden');
+    };
+    reader.readAsDataURL(file);
   });
-}
 
-const fotoCheckSheet = document.getElementById('fotoCheckSheet');
-const previewCheckSheet = document.getElementById('previewCheckSheet');
-
-if (fotoCheckSheet) {
-  fotoCheckSheet.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        previewCheckSheet.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-}
-
-/* ================= FORM SUBMIT ================= */
-const formDataBMCM = document.getElementById('formDataBMCM');
-console.log('formDataBMCM.js loaded');
-
-// Presence check for required elements will run only when the form exists (prevents warnings on other pages)
-if (formDataBMCM) {
-  const requiredIds = ['tanggal','area','supervisor','executor','activitiesCategory','activities','duration','jumlahPersonel','statusPersen','status'];
-  requiredIds.forEach(id => {
-    const exists = document.getElementById(id) !== null;
-    if (!exists) console.warn(`Form element with id="${id}" is missing from DOM`);
-  });
-}
-
-if (formDataBMCM) {
-  function getValueSafe(id) {
-    const el = document.getElementById(id);
-    if (!el) {
-      console.error(`Element with id="${id}" not found`);
-      return null;
-    }
-    return el.value;
+  // Check if there's already an image on page load (for update forms)
+  if (preview.querySelector('img')) {
+    if (placeholder) placeholder.classList.add('hidden');
   }
+}
 
-  formDataBMCM.addEventListener('submit', async (e) => {
-    e.preventDefault();
+setupImagePreview('fotoSafetyTalk', 'previewSafetyTalk');
+setupImagePreview('fotoCheckSheet', 'previewCheckSheet');
 
-    try {
-      // Ambil data dari form (ambil nilai teks, jangan kirim file saat ini)
-      const tanggal = getValueSafe('tanggal');
-      const area = getValueSafe('area');
-      const supervisor = getValueSafe('supervisor');
-      const executor = getValueSafe('executor');
-      const activity_category = getValueSafe('activitiesCategory');
-      const activitiesVal = getValueSafe('activities');
-      const detail_activities = getValueSafe('detailActivities');
-      const durationRaw = getValueSafe('duration');
-      const jumlahPersonelRaw = getValueSafe('jumlahPersonel');
-      const statusPersenRaw = getValueSafe('statusPersen');
-      const status = getValueSafe('status');
-      const keterangan = getValueSafe('keterangan');
+/* ================= FORM SUBMIT (NATIVE) ================= */
+const formDataBMCM = document.getElementById('formDataBMCM');
 
-      // If any required element is missing, stop and show clear error
-      const requiredIds = ['tanggal','area','supervisor','executor','activitiesCategory','activities','duration','jumlahPersonel','statusPersen','status'];
-      const missing = requiredIds.filter(id => document.getElementById(id) === null);
-      if (missing.length) {
-        const msg = 'Form element(s) missing: ' + missing.join(', ');
-        console.error(msg);
-        alert(msg);
-        return;
-      }
+if (formDataBMCM) {
+  console.log('formDataBMCM.js loaded (native submit mode)');
 
-      const duration = Number(durationRaw || 0);
-      const jumlah_personil = Number(jumlahPersonelRaw || 0);
-      const status_persen = Number(statusPersenRaw || 0);
+  // OPTIONAL: simple client-side validation
+  formDataBMCM.addEventListener('submit', (e) => {
+    const requiredIds = [
+      'tanggal',
+      'area',
+      'supervisor',
+      'executor',
+      'activitiesCategory',
+      'activities',
+      'duration',
+      'jumlahPersonel',
+      'statusPersen',
+      'status'
+    ];
 
-      const payload = {
-        tanggal,
-        area,
-        supervisor,
-        executor,
-        activity_category,
-        activities: activitiesVal,
-        detail_activities,
-        duration,
-        jumlah_personil,
-        status_persen,
-        status,
-        keterangan,
-        // file upload TBD
-        foto_safety_talk: null,
-        foto_check_sheet: null
-      };
+    const missing = requiredIds.filter(id => {
+      const el = document.getElementById(id);
+      return !el || !el.value;
+    });
 
-      console.log('Submitting payload', payload);
-
-      const res = await fetch('/data-bmcm', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'same-origin', // include session cookie
-        body: JSON.stringify(payload)
-      });
-
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || 'Request failed');
-      }
-
-      const json = await res.json();
-      console.log('Server response', json);
-      alert('Data berhasil disimpan');
-
-      // Reset form
-      formDataBMCM.reset();
-      if (previewSafetyTalk) previewSafetyTalk.innerHTML = '';
-      if (previewCheckSheet) previewCheckSheet.innerHTML = '';
-
-      // Optional: redirect to list page
-      window.location.href = '/dataBMCM';
-    } catch (err) {
-      console.error('Submit error', err);
-      alert('Gagal menyimpan data: ' + (err.message || 'Error'));
+    if (missing.length > 0) {
+      e.preventDefault(); // STOP submit
+      alert('Field wajib belum diisi:\n- ' + missing.join('\n- '));
     }
+
+    // JIKA TIDAK ADA e.preventDefault()
+    // 👉 FORM AKAN SUBMIT NORMAL
+    // 👉 MULTER AKTIF
+    // 👉 FILE TERKIRIM
   });
 }
 
 /* ================= CANCEL BUTTON ================= */
 const btnCancel = document.querySelector('.btn-cancel');
+const cancelModal = document.getElementById('cancelModal');
+const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+const keepCancelBtn = document.getElementById('keepCancelBtn');
 
-if (btnCancel) {
+if (btnCancel && cancelModal) {
   btnCancel.addEventListener('click', (e) => {
     e.preventDefault();
-    
-    if (confirm('Batalkan perubahan?')) {
-      window.history.back();
-    }
+    cancelModal.classList.add('show');
   });
+
+  if (confirmCancelBtn) {
+    confirmCancelBtn.addEventListener('click', () => {
+      cancelModal.classList.remove('show');
+      window.history.back();
+    });
+  }
+
+  if (keepCancelBtn) {
+    keepCancelBtn.addEventListener('click', () => {
+      cancelModal.classList.remove('show');
+    });
+  }
 }
 
-/* ================= ACTIVITIES FILTER (OPTIONAL) ================= */
+/* ================= ACTIVITIES FILTER ================= */
 const activitiesCategory = document.getElementById('activitiesCategory');
 const activities = document.getElementById('activities');
 
@@ -199,9 +152,9 @@ if (activitiesCategory && activities) {
   activitiesCategory.addEventListener('change', () => {
     const selectedCategory = activitiesCategory.value;
     const activityList = activitiesMap[selectedCategory] || [];
-    
+
     activities.innerHTML = '<option value="">-- Pilih Aktivitas --</option>';
-    
+
     activityList.forEach(activity => {
       const option = document.createElement('option');
       option.value = activity;
@@ -210,5 +163,3 @@ if (activitiesCategory && activities) {
     });
   });
 }
-
-

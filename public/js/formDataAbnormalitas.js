@@ -1,66 +1,84 @@
 /* ================= FILE UPLOAD PREVIEW ================= */
-const fotoSebelum = document.getElementById('fotoSebelum');
+// Foto Sebelum
+const inputSebelum = document.getElementById('fotoSebelum');
 const previewSebelum = document.getElementById('previewSebelum');
 
-if (fotoSebelum) {
-  fotoSebelum.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        previewSebelum.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-      };
-      reader.readAsDataURL(file);
+if (inputSebelum && previewSebelum) {
+    const uploadBoxSebelum = inputSebelum.closest('.upload-box');
+    const placeholderSebelum = uploadBoxSebelum?.querySelector('.upload-placeholder');
+    
+    inputSebelum.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewSebelum.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                if (placeholderSebelum) placeholderSebelum.classList.add('hidden');
+            }
+            reader.readAsDataURL(file);
+        } else {
+            previewSebelum.innerHTML = '';
+            if (placeholderSebelum) placeholderSebelum.classList.remove('hidden');
+        }
+    });
+
+    // Check if there's already an image on page load
+    if (previewSebelum.querySelector('img')) {
+        if (placeholderSebelum) placeholderSebelum.classList.add('hidden');
     }
-  });
 }
 
-const fotoSesudah = document.getElementById('fotoSesudah');
+// Foto Sesudah
+const inputSesudah = document.getElementById('fotoSesudah');
 const previewSesudah = document.getElementById('previewSesudah');
 
-if (fotoSesudah) {
-  fotoSesudah.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        previewSesudah.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-      };
-      reader.readAsDataURL(file);
+if (inputSesudah && previewSesudah) {
+    const uploadBoxSesudah = inputSesudah.closest('.upload-box');
+    const placeholderSesudah = uploadBoxSesudah?.querySelector('.upload-placeholder');
+    
+    inputSesudah.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewSesudah.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                if (placeholderSesudah) placeholderSesudah.classList.add('hidden');
+            }
+            reader.readAsDataURL(file);
+        } else {
+            previewSesudah.innerHTML = '';
+            if (placeholderSesudah) placeholderSesudah.classList.remove('hidden');
+        }
+    });
+
+    // Check if there's already an image on page load
+    if (previewSesudah.querySelector('img')) {
+        if (placeholderSesudah) placeholderSesudah.classList.add('hidden');
     }
-  });
-}
-
-/* ================= FORM SUBMIT ================= */
-const formDataAbnormalitas = document.getElementById('formDataAbnormalitas');
-
-if (formDataAbnormalitas) {
-  formDataAbnormalitas.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    // Ambil data dari form
-    const formData = new FormData(formDataAbnormalitas);
-    const data = Object.fromEntries(formData);
-    
-    console.log('Data form:', data);
-    alert('Data abnormalitas berhasil disimpan! (Frontend only - belum ada backend)');
-    
-    // Reset form
-    formDataAbnormalitas.reset();
-    previewSebelum.innerHTML = '';
-    previewSesudah.innerHTML = '';
-  });
 }
 
 /* ================= CANCEL BUTTON ================= */
 const btnCancel = document.querySelector('.btn-cancel');
+const cancelModal = document.getElementById('cancelModal');
+const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+const keepCancelBtn = document.getElementById('keepCancelBtn');
 
-if (btnCancel) {
+if (btnCancel && cancelModal) {
   btnCancel.addEventListener('click', (e) => {
     e.preventDefault();
-    
-    if (confirm('Batalkan perubahan?')) {
-      window.history.back();
-    }
+    cancelModal.classList.add('show');
   });
+
+  if (confirmCancelBtn) {
+    confirmCancelBtn.addEventListener('click', () => {
+      cancelModal.classList.remove('show');
+      window.history.back();
+    });
+  }
+
+  if (keepCancelBtn) {
+    keepCancelBtn.addEventListener('click', () => {
+      cancelModal.classList.remove('show');
+    });
+  }
 }

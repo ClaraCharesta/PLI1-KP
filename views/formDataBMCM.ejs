@@ -21,7 +21,13 @@
       <div class="form-card">
         <h2>Add Realisasi PK Harian</h2>
 
-        <form id="formDataBMCM">
+        <form
+  id="formDataBMCM"
+  action="/dataBMCM"
+  method="POST"
+  enctype="multipart/form-data"
+>
+
 
           <div class="form-group">
             <label for="tanggal">Tanggal</label>
@@ -169,21 +175,25 @@
             
             <div class="upload-grid">
               <div class="upload-box">
-                <input type="file" id="fotoSafetyTalk" name="fotoSafetyTalk" accept="image/*" style="display:none;">
+                <input type="file" id="fotoSafetyTalk" name="fotoSafetyTalk" accept="image/*" hidden>
                 <label for="fotoSafetyTalk" class="upload-label">
-                  <span class="upload-icon">📎</span>
-                  <span class="upload-text">Upload Foto Safety Talk</span>
+                  <div class="upload-placeholder">
+                    <span class="upload-icon">📸</span>
+                    <span class="upload-text">Upload Foto Safety Talk</span>
+                  </div>
+                  <div id="previewSafetyTalk" class="upload-preview"></div>
                 </label>
-                <div id="previewSafetyTalk" class="upload-preview"></div>
               </div>
 
               <div class="upload-box">
-                <input type="file" id="fotoCheckSheet" name="fotoCheckSheet" accept="image/*" style="display:none;">
+                <input type="file" id="fotoCheckSheet" name="fotoCheckSheet" accept="image/*" hidden>
                 <label for="fotoCheckSheet" class="upload-label">
-                  <span class="upload-icon">📎</span>
-                  <span class="upload-text">Upload Foto Check Sheet</span>
+                  <div class="upload-placeholder">
+                    <span class="upload-icon">📸</span>
+                    <span class="upload-text">Upload Foto Check Sheet</span>
+                  </div>
+                  <div id="previewCheckSheet" class="upload-preview"></div>
                 </label>
-                <div id="previewCheckSheet" class="upload-preview"></div>
               </div>
             </div>
           </div>
@@ -212,6 +222,19 @@
       });
     }
   </script>
+
+  <!-- ================= CANCEL MODAL ================= -->
+  <div id="cancelModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-icon">⚠️</div>
+      <h2>Batalkan Perubahan</h2>
+      <p>Apakah anda yakin ingin membatalkan perubahan?</p>
+      <div class="modal-buttons">
+        <button id="confirmCancelBtn" class="btn-confirm">Ya, Batalkan</button>
+        <button id="keepCancelBtn" class="btn-keep">Tidak</button>
+      </div>
+    </div>
+  </div>
 
   <script src="/js/formDataBMCM.js"></script>
 

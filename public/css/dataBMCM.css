@@ -32,6 +32,13 @@
   font-weight: 600;
 }
 
+/* ================= HEADER ACTIONS ================= */
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
 /* ================= ADD BUTTON ================= */
 .btn-add {
   background: white;
@@ -45,6 +52,21 @@
 
 .btn-add:hover {
   background: #f0f0f0;
+}
+
+/* ================= CHART BUTTON ================= */
+.btn-chart {
+  background: rgba(255, 255, 255, 0.9);
+  color: #8b0000;
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-chart:hover {
+  background: white;
 }
 
 /* ================= TABLE WRAPPER ================= */

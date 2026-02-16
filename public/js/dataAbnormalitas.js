@@ -1,104 +1,152 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-  /* ================= ELEMENT ================= */
-  const searchInput = document.getElementById("searchInput");
-  const btnSearch = document.getElementById("btnSearch");
-  const tableRows = document.querySelectorAll(".table tbody tr");
-
-  if (!searchInput || tableRows.length === 0) {
-    console.error("Search input atau table row tidak ditemukan");
-    return;
-  }
-
-  /* ================= SEARCH FUNCTION ================= */
-  const doSearch = () => {
-    const keyword = searchInput.value.toLowerCase().trim();
-
-    tableRows.forEach(row => {
-      const rowText = row.innerText.toLowerCase();
-
-      if (rowText.includes(keyword)) {
-        row.style.display = "";
-      } else {
-        row.style.display = "none";
-      }
-    });
-  };
-
-  /* ================= EVENT ================= */
-
-  // Ketik langsung search
-  searchInput.addEventListener("input", doSearch);
-
-  // Klik tombol Search
-  btnSearch.addEventListener("click", doSearch);
-
-  // Tekan ENTER di input
-  searchInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      doSearch();
+    loadData();
+    
+    // Add button handler
+    const btnAdd = document.getElementById("btnAdd");
+    if (btnAdd) {
+        btnAdd.addEventListener("click", () => {
+            window.location.href = "/dataAbnormalitas/add";
+        });
     }
 
-    // ESC untuk reset
-    if (e.key === "Escape") {
-      searchInput.value = "";
-      doSearch();
-      searchInput.blur();
-    }
-  });
-
-  /* ================= DELETE BUTTON & MODAL ================= */
-  const modal = document.getElementById("deleteModal");
-  const deleteBtn = document.getElementById("deleteBtn");
-  const keepBtn = document.getElementById("keepBtn");
-  let rowToDelete = null;
-
-  document.querySelectorAll(".delete").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      rowToDelete = btn.closest("tr");
-      modal.classList.add("show");
-    });
-  });
-
-  deleteBtn.addEventListener("click", () => {
-    if (rowToDelete) {
-      rowToDelete.remove();
-      modal.classList.remove("show");
-      rowToDelete = null;
-    }
-  });
-
-  keepBtn.addEventListener("click", () => {
-    modal.classList.remove("show");
-    rowToDelete = null;
-  });
-
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.classList.remove("show");
-      rowToDelete = null;
-    }
-  });
-
-  /* ================= EDIT BUTTON ================= */
-  document.querySelectorAll(".edit").forEach((btn, index) => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const rowId = index + 1;
-      window.location.href = `/updateDataAbnormalitas?id=${rowId}`;
-    });
-  });
-
-  /* ================= ADD BUTTON ================= */
-  document.querySelectorAll(".btn-add").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const target = btn.dataset.target;
-      if (target) {
-        window.location.href = `/${target}`;
-      }
-    });
-  });
-
+    // Initialize search for server-side rendered data
+    initSearch();
 });
+
+async function loadData() {
+    try {
+        const res = await fetch("/dataAbnormalitas/api"); // Pastikan path ini benar
+        const data = await res.json();
+        const tbody = document.querySelector(".table tbody");
+        tbody.innerHTML = "";
+
+        data.forEach((item, index) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${item.status || "-"}</td>
+                <td>${item.week_number || "-"}</td>
+                <td>${item.abnormal_date || "-"}</td>
+                <td>${item.report_by || "-"}</td>
+                <td>${item.area || "-"}</td>
+                <td>${item.nomenclature || "-"}</td>
+                <td>${item.activity || "-"}</td>
+                <td>${item.prioritas || "-"}</td>
+                <td>${item.condition || "-"}</td>
+                <td>${item.action || "-"}</td>
+                <td>${item.abnormal || "-"}</td>
+                <td>${item.source || "-"}</td>
+                <td>${item.detail_info || "-"}</td>
+                <td>${item.rencana_perbaikan || "-"}</td>
+                <td>${item.notifikasi_unit || "-"}</td>
+                <td>${item.id_mso || "-"}</td>
+                <td>
+                    ${item.foto_sebelum ? `<img src="/uploads/${item.foto_sebelum}" class="img-thumb">` : "-"}
+                </td>
+                <td>
+                    ${item.foto_sesudah ? `<img src="/uploads/${item.foto_sesudah}" class="img-thumb">` : "-"}
+                </td>
+                <td class="aksi">
+                    <button class="edit" data-id="${item.abnormal_id}">Edit</button>
+                    <button class="delete" data-id="${item.abnormal_id}">Hapus</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Initialize search after data is loaded
+        initSearch();
+    } catch (err) {
+        console.error("Gagal load data:", err);
+    }
+}
+
+// ================= SEARCH FUNCTION =================
+let searchInitialized = false;
+
+function initSearch() {
+    if (searchInitialized) return; // Prevent double initialization
+    
+    const searchInput = document.getElementById("searchInput");
+    const btnSearch = document.getElementById("btnSearch");
+    const tbody = document.querySelector(".table tbody");
+
+    if (!searchInput || !tbody) return;
+
+    function performSearch() {
+        const keyword = searchInput.value.toLowerCase().trim();
+        const rows = tbody.querySelectorAll("tr");
+
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(keyword) ? "" : "none";
+        });
+    }
+
+    // Search on input
+    searchInput.addEventListener("input", performSearch);
+
+    // Search on button click
+    if (btnSearch) {
+        btnSearch.addEventListener("click", performSearch);
+    }
+
+    // Search on Enter key
+    searchInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            performSearch();
+        }
+    });
+
+    searchInitialized = true;
+}
+
+// EVENT LISTENER TABLE
+const deleteModal = document.getElementById("deleteModal");
+const deleteBtn = document.getElementById("deleteBtn");
+const keepBtn = document.getElementById("keepBtn");
+let deleteId = null;
+
+// Use event delegation on the table wrapper to handle dynamically added rows
+const tableWrapper = document.querySelector(".table-wrapper");
+if (tableWrapper) {
+    tableWrapper.addEventListener("click", (e) => {
+        if (e.target.classList.contains("edit")) {
+            const id = e.target.dataset.id;
+            window.location.href = `/dataAbnormalitas/edit/${id}`;
+        }
+        if (e.target.classList.contains("delete")) {
+            deleteId = e.target.dataset.id;
+            if (deleteModal) deleteModal.classList.add("show");
+        }
+    });
+}
+
+if (deleteBtn) {
+    deleteBtn.addEventListener("click", async () => {
+        if (!deleteId) return;
+        
+        try {
+            const res = await fetch(`/dataAbnormalitas/${deleteId}`, {
+                method: "DELETE"
+            });
+            
+            if (!res.ok) throw new Error("Gagal hapus data");
+            
+            if (deleteModal) deleteModal.classList.remove("show");
+            deleteId = null;
+            loadData(); // refresh table
+        } catch (err) {
+            console.error("Gagal hapus data:", err);
+            alert("Gagal menghapus data");
+        }
+    });
+}
+
+if (keepBtn) {
+    keepBtn.addEventListener("click", () => {
+        deleteId = null;
+        if (deleteModal) deleteModal.classList.remove("show");
+    });
+}

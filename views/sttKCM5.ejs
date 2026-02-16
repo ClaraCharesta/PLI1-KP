@@ -2,80 +2,117 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Laporan Shift KCM 5</title>
+<title>Serah Terima Tool KCM 5</title>
 
 <link rel="stylesheet" href="/css/layout.css">
 <link rel="stylesheet" href="/css/sidebar.css">
 <link rel="stylesheet" href="/css/topbar.css">
 <link rel="stylesheet" href="/css/sttKCM5.css">
 </head>
+
 <body>
 
 <%- include('partials/sidebar') %>
 
 <div class="main">
-  <%- include('partials/topbar', { title: "Laporan Shift KCM 5" }) %>
+  <%- include('partials/topbar', { title: "Serah Terima Tool KCM 5" }) %>
 
   <div class="content">
-    <div class="form-card">
 
+    <!-- ================= FORM STT ================= -->
+    <form id="sttForm"
+          method="POST"
+          action="/laporan-shift/kcm5/stt/save"
+          class="form-card">
+
+      <!-- Hidden No Ref -->
+      <input type="hidden" name="no_ref" value="<%= no_ref %>">
+
+      <!-- Radio Comm -->
       <div class="form-group">
-        <label>Radio Comm<span></span></label>
-        <input type="text" id="radioComm">
+        <label>Radio Comm</label>
+        <input type="text" name="radioComm" required>
       </div>
 
+      <!-- Kunci Mobil -->
       <div class="form-group">
-        <label>Kunci Mobil<span></span></label>
-        <select id="kunciMobil">
+        <label>Kunci Mobil</label>
+        <select name="kunciMobil" required>
           <option value="">None</option>
+          <option>Ada</option>
+          <option>Tidak Ada</option>
         </select>
       </div>
 
+      <!-- Kunci Motor -->
       <div class="form-group">
-        <label>Kunci Motor<span></span></label>
-        <select id="kunciMotor">
+        <label>Kunci Motor</label>
+        <select name="kunciMotor" required>
           <option value="">None</option>
+          <option>Ada</option>
+          <option>Tidak Ada</option>
         </select>
       </div>
 
+      <!-- Kunci Subst -->
       <div class="form-group">
-        <label>Kunci Subst<span></span></label>
-        <select id="kunciSubst">
+        <label>Kunci Subst</label>
+        <select name="kunciSubst" required>
           <option value="">None</option>
+          <option>Lengkap</option>
+          <option>Tidak Lengkap</option>
         </select>
       </div>
 
+      <!-- Toolset -->
       <div class="form-group">
-        <label>Toolset<span></span></label>
-        <select id="toolset">
+        <label>Toolset</label>
+        <select name="toolset" required>
           <option value="">None</option>
+          <option>Lengkap</option>
+          <option>Tidak Lengkap</option>
         </select>
       </div>
 
+      <!-- BUTTON -->
       <div class="btn-wrapper">
-        <div class="btn">
-          <button class="back" type="button">Back</button>
-          <button class="clear" type="button">Clear</button>
-          <button class="save" type="button">Save</button>
-        </div>
+        <button type="button" class="back">Back</button>
+        <button type="reset" class="clear">Clear</button>
+        <button type="submit" class="save">Save</button>
       </div>
 
-    </div>
+    </form>
+    <!-- ================= END FORM ================= -->
+
   </div>
 </div>
 
 <script>
+  // Sidebar toggle
   const menuToggle = document.getElementById('menuToggle');
   const sidebar = document.querySelector('.sidebar');
   const main = document.querySelector('.main');
 
-  menuToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('closed');
-    main.classList.toggle('expanded');
-  });
+  if(menuToggle){
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('closed');
+      main.classList.toggle('expanded');
+    });
+  }
+
+  // BACK → kembali ke laporan detail
+  document.querySelector(".back").onclick = () => {
+    window.location.href =
+      "/laporan-shift/kcm5/detail?noref=<%= no_ref %>";
+  };
+
+  // CLEAR → reset form
+  document.querySelector(".clear").onclick = () => {
+    document.getElementById("sttForm").reset();
+  };
 </script>
 
 <script src="/js/sidebar.js"></script>
-<script src="/js/sttKCM5.js"></script>
+
 </body>
 </html>

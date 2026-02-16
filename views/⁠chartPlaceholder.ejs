@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chart - PLI 1 Maintenance</title>
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+</head>
+<body>
+  <%- include('partials/sidebar') %>
+  <div class="main">
+    <%- include('partials/topbar', { title: typeof chartTitle !== 'undefined' ? chartTitle : 'Chart' }) %>
+    <div class="content" style="padding: 40px; text-align: center;">
+      <p style="font-size: 1.1rem; color: #666;">Halaman chart ini belum tersedia.</p>
+      <a href="/chart" style="color: #8b0000; font-weight: 600;">← Kembali ke Menu Chart</a>
+    </div>
+  </div>
+</body>
+</html>

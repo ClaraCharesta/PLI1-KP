@@ -32,7 +32,7 @@
         <table class="table">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>No</th>
               <th>Status</th>
               <th>Week Number</th>
               <th>Abnormal Date</th>
@@ -55,110 +55,59 @@
             </tr>
           </thead>
 
+          <!-- 🔴 WAJIB ADA -->
           <tbody>
-            <tr>
-              <td>1</td>
-              <td><span class="badge badge-open">Open</span></td>
-              <td>35</td>
-              <td>26/08/2025</td>
-              <td>Fill Ardi</td>
-              <td>FM5</td>
-              <td>FM-841</td>
-              <td>Bearing Check</td>
-              <td><span class="priority priority-high">High</span></td>
-              <td>Bearing Panas</td>
-              <td>Penggantian Bearing</td>
-              <td>Suara Bising</td>
-              <td>Operator</td>
-              <td>Bearing temperature naik 45°C</td>
-              <td>Ganti bearing FM-841 minggu depan</td>
-              <td>Maintenance</td>
-              <td>MSO-001</td>
-              <td><i class="icon">📸</i></td>
-              <td><i class="icon">📸</i></td>
-              <td>
-                <button class="edit">Edit</button>
-                <button class="delete">Hapus</button>
-              </td>
-            </tr>
+            <% if (typeof data !== "undefined" && data.length > 0) { %>
+              <% data.forEach((item, index) => { %>
+                <tr>
+                  <td><%= index + 1 %></td>
+                  <td><%= item.status %></td>
+                  <td><%= item.week_number %></td>
+                  <td><%= item.abnormal_date %></td>
+                  <td><%= item.report_by %></td>
+                  <td><%= item.area %></td>
+                  <td><%= item.nomenclature %></td>
+                  <td><%= item.activity %></td>
+                  <td><%= item.prioritas %></td>
+                  <td><%= item.condition %></td>
+                  <td><%= item.action %></td>
+                  <td><%= item.abnormal %></td>
+                  <td><%= item.source %></td>
+                  <td><%= item.detail_info %></td>
+                  <td><%= item.rencana_perbaikan %></td>
+                  <td><%= item.notifikasi_unit %></td>
+                  <td><%= item.id_mso %></td>
 
-            <tr>
-              <td>2</td>
-              <td><span class="badge badge-close">Close</span></td>
-              <td>36</td>
-              <td>02/09/2025</td>
-              <td>Rivaldi</td>
-              <td>KCM5</td>
-              <td>KCM-842A</td>
-              <td>Gearbox Inspection</td>
-              <td><span class="priority priority-medium">Medium</span></td>
-              <td>Kebocoran Oli</td>
-              <td>Perbaikan Seal</td>
-              <td>Tetesan Oli</td>
-              <td>Visual Inspection</td>
-              <td>Seal bocor di sisi depan gearbox</td>
-              <td>Perbaikan seal sudah dilakukan</td>
-              <td>-</td>
-              <td>MSO-002</td>
-              <td><i class="icon">📸</i></td>
-              <td><i class="icon">📸</i></td>
-              <td>
-                <button class="edit">Edit</button>
-                <button class="delete">Hapus</button>
-              </td>
-            </tr>
+                  <td>
+                    <% if (item.foto_sebelum) { %>
+                      <img src="/uploads/<%= item.foto_sebelum %>" class="img-thumb">
+                    <% } else { %>
+                      -
+                    <% } %>
+                  </td>
 
-            <tr>
-              <td>3</td>
-              <td><span class="badge badge-open">Open</span></td>
-              <td>36</td>
-              <td>03/09/2025</td>
-              <td>Lisofrizal</td>
-              <td>RM5</td>
-              <td>RM-843B</td>
-              <td>Motor Vibration</td>
-              <td><span class="priority priority-high">High</span></td>
-              <td>Getaran Tinggi</td>
-              <td>Realignment Motor</td>
-              <td>Getaran Abnormal</td>
-              <td>Vibration Analyzer</td>
-              <td>Getaran 15 mm/s, melebihi standar 10 mm/s</td>
-              <td>Realignment coupling motor minggu depan</td>
-              <td>Maintenance, Operations</td>
-              <td>MSO-003</td>
-              <td><i class="icon">📸</i></td>
-              <td><i class="icon">📸</i></td>
-              <td>
-                <button class="edit">Edit</button>
-                <button class="delete">Hapus</button>
-              </td>
-            </tr>
+                  <td>
+                    <% if (item.foto_sesudah) { %>
+                      <img src="/uploads/<%= item.foto_sesudah %>" class="img-thumb">
+                    <% } else { %>
+                      -
+                    <% } %>
+                  </td>
 
-            <tr>
-              <td>4</td>
-              <td><span class="badge badge-in-progress">In Progress</span></td>
-              <td>37</td>
-              <td>09/09/2025</td>
-              <td>Suryadi</td>
-              <td>AUTO5</td>
-              <td>AUTO-001</td>
-              <td>Temperature Monitoring</td>
-              <td><span class="priority priority-medium">Medium</span></td>
-              <td>Suhu Tinggi</td>
-              <td>Cleaning Filter</td>
-              <td>Suhu Output 85°C</td>
-              <td>Temperature Sensor</td>
-              <td>Suhu lebih tinggi dari setpoint 80°C</td>
-              <td>Pembersihan filter sedang dilakukan</td>
-              <td>Operations</td>
-              <td>MSO-004</td>
-              <td><i class="icon">📸</i></td>
-              <td><i class="icon">📸</i></td>
-              <td>
-                <button class="edit">Edit</button>
-                <button class="delete">Hapus</button>
-              </td>
-            </tr>
+                  <td class="aksi">
+                    <button class="edit" data-id="<%= item.abnormal_id %>">Edit</button>
+                    <button class="delete" data-id="<%= item.abnormal_id %>">Hapus</button>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <!-- KONDISI DATA KOSONG -->
+              <tr>
+                <td colspan="21" style="text-align:center; padding:20px;">
+                  Belum ada data abnormalitas
+                </td>
+              </tr>
+            <% } %>
           </tbody>
         </table>
       </div>

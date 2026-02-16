@@ -1,0 +1,217 @@
+/* ================= CHART BMCM PAGE ================= */
+.chart-page {
+  padding: 24px;
+}
+
+.chart-page h2 {
+  margin-bottom: 24px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.chart-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow-x: auto;
+}
+
+/* ================= CHART CONTAINER ================= */
+.chart-container {
+  flex: 0 0 auto;
+  width: 380px;
+  min-height: 340px;
+  position: relative;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e3e6f0;
+  padding: 12px;
+
+  /* 🔥 WAJIB */
+  overflow: visible;
+  z-index: 1;
+}
+
+.chart-container canvas {
+  max-width: 100%;
+  max-height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 1200px) {
+  .chart-container {
+    width: 360px;
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-page {
+    padding: 16px;
+  }
+
+  .chart-wrapper {
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+  }
+
+  .chart-container {
+    width: 380px;
+  }
+}
+
+/* ================= HEADER ================= */
+.chart-card-header {
+  position: relative;
+  z-index: 50;                 /* 🔥 HEADER DI ATAS CHART */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e3e6f0;
+  background: #ffffff;         /* 🔥 SOLID */
+}
+
+.chart-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+  flex: 1;
+  padding-right: 8px;
+}
+
+/* ================= ACTIONS ================= */
+.chart-actions {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.chart-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #8b0000;
+  color: #ffffff;
+}
+
+.chart-btn:hover,
+.chart-btn-filter.active {
+  background: #a00;
+}
+
+/* ================= DROPDOWN (FIX TOTAL) ================= */
+.chart-filter-dropdown {
+  display: none;
+  position: absolute;
+
+  /* 🔥 TURUN KE BAWAH — JAUH DARI CHART */
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+
+  min-width: 200px;
+  padding: 12px;
+
+  background-color: #ffffff !important;
+  opacity: 1 !important;
+
+  border-radius: 10px;
+  border: 1px solid #e3e6f0;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+
+  z-index: 99999;              /* 🔥 PALING ATAS */
+}
+
+.chart-filter-dropdown.is-open {
+  display: block;
+}
+
+/* isi dropdown */
+.chart-filter-dropdown .filter-list {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.chart-filter-dropdown .filter-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.chart-filter-dropdown input {
+  cursor: pointer;
+}
+
+.chart-btn-apply {
+  width: 100%;
+  background: #8b0000;
+  color: #ffffff;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chart-btn-apply:hover {
+  background: #a00;
+}
+
+/* ================= CHART CANVAS ================= */
+.chart-canvas-wrap {
+  position: relative;
+  width: 336px;
+  height: 280px;
+  min-height: 280px;
+  box-sizing: border-box;
+
+  /* 🔥 CHART SELALU DI BAWAH DROPDOWN */
+  z-index: 1;
+}
+
+.chart-canvas-wrap canvas {
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+/* ================= EXPAND MODAL ================= */
+.chart-expand-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0,0,0,0.5);
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-expand-overlay.is-open {
+  display: flex;
+}
+
+.chart-expand-modal {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 700px;
+  padding: 20px;
+  position: relative;
+}

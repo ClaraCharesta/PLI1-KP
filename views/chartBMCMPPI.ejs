@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'Chart Data BM & CM PPI' %></title>
+
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/chartBMCMPPI.css">
+  <link rel="stylesheet" href="/css/chartCard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <%- include('partials/sidebar') %>
+
+  <div class="main">
+    <%- include('partials/topbar', { title: "Chart Data BM & CM PPI" }) %>
+
+    <div class="content">
+      <div class="chart-page">
+        <h2>Realisasi PK - Harian PPI</h2>
+        <div class="chart-wrapper">
+          <div class="chart-container" data-chart-id="activityChart" data-chart-title="[Realisasi PK - Harian PPI] Chart Activities Category">
+            <div class="chart-card-header">
+              <h3 class="chart-card-title">[Realisasi PK - Harian PPI] Chart Activities Category</h3>
+              <div class="chart-actions">
+                <div class="chart-filter-dropdown" id="filter-activityChart">
+                  <div class="filter-list" data-filter-for="activityChart"></div>
+                  <button type="button" class="chart-btn-apply">Apply</button>
+                </div>
+                <button type="button" class="chart-btn chart-btn-filter">Filter</button>
+                <button type="button" class="chart-btn chart-btn-expand">Expand</button>
+              </div>
+            </div>
+            <div class="chart-canvas-wrap"><canvas id="activityChart"></canvas></div>
+          </div>
+          <div class="chart-container" data-chart-id="statusChart" data-chart-title="[Realisasi PK - Harian PPI] Chart Status">
+            <div class="chart-card-header">
+              <h3 class="chart-card-title">[Realisasi PK - Harian PPI] Chart Status</h3>
+              <div class="chart-actions">
+                <div class="chart-filter-dropdown" id="filter-statusChart">
+                  <div class="filter-list" data-filter-for="statusChart"></div>
+                  <button type="button" class="chart-btn-apply">Apply</button>
+                </div>
+                <button type="button" class="chart-btn chart-btn-filter">Filter</button>
+                <button type="button" class="chart-btn chart-btn-expand">Expand</button>
+              </div>
+            </div>
+            <div class="chart-canvas-wrap"><canvas id="statusChart"></canvas></div>
+          </div>
+          <div class="chart-container" data-chart-id="statusPersenChart" data-chart-title="[Realisasi PK - Harian PPI] Chart Status %">
+            <div class="chart-card-header">
+              <h3 class="chart-card-title">[Realisasi PK - Harian PPI] Chart Status %</h3>
+              <div class="chart-actions">
+                <div class="chart-filter-dropdown" id="filter-statusPersenChart">
+                  <div class="filter-list" data-filter-for="statusPersenChart"></div>
+                  <button type="button" class="chart-btn-apply">Apply</button>
+                </div>
+                <button type="button" class="chart-btn chart-btn-filter">Filter</button>
+                <button type="button" class="chart-btn chart-btn-expand">Expand</button>
+              </div>
+            </div>
+            <div class="chart-canvas-wrap"><canvas id="statusPersenChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-expand-overlay" id="chartExpandOverlay">
+    <div class="chart-expand-modal">
+      <button type="button" class="chart-expand-close" id="chartExpandClose" aria-label="Tutup">&times;</button>
+      <h3 class="chart-expand-title" id="chartExpandTitle"></h3>
+      <div class="chart-expand-canvas-wrap"><canvas id="chartExpandCanvas"></canvas></div>
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const main = document.querySelector('.main');
+    if (menuToggle && sidebar && main) {
+      menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('closed');
+        main.classList.toggle('expanded');
+      });
+    }
+  </script>
+
+  <script type="application/json" id="chart-data-json">
+    <%- JSON.stringify({
+      activityChart: activityChart || [],
+      statusChart: statusChart || [],
+      statusPersenChart: statusPersenChart || []
+    }) %>
+  </script>
+
+  <script src="/js/chartBMCMPPI.js"></script>
+
+</body>
+</html>

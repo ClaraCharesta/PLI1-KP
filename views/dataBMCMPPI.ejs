@@ -12,7 +12,7 @@
 </head>
 <body>
 
-  <%- include('partials/sidebar') %>
+  <%- include('partials/sidebar', { active: 'dataBMCMPPI' }) %>
 
   <div class="main">
     <%- include('partials/topbar', { title: "Data BM & CM PPI" }) %>
@@ -31,57 +31,34 @@
       <!-- TABLE WRAPPER FOR HORIZONTAL SCROLL -->
       <div class="table-wrapper">
   <table class="table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Week</th>
-        <th>Tanggal</th>
-        <th>Area</th>
-        <th>Supervisor</th>
-        <th>Executor</th>
-        <th>Activities Category</th>
-        <th>Activities</th>
-        <th>Detail Activities</th>
-        <th>Duration</th>
-        <th>Jumlah Personill</th>
-        <th>Main Hour</th>
-        <th>Status%</th>
-        <th>Status</th>
-        <th>Foto Safety Talk</th>
-        <th>Foto Check Sheet</th>
-        <th>Keterangan</th>
-        <th>Aksi</th>
-      </tr>
-    </thead>
+  <thead>
+    <tr>
+      <th>No</th>
+      <th>Week</th>
+      <th>Tanggal</th>
+      <th>Area</th>
+      <th>Supervisor</th>
+      <th>Executor</th>
+      <th>Activities Category</th>
+      <th>Activities</th>
+      <th>Detail Activities</th>
+      <th>Duration</th>
+      <th>Jumlah Personill</th>
+      <th>Main Hour</th>
+      <th>Status%</th>
+      <th>Status</th>
+      <th>Foto Safety Talk</th>
+      <th>Foto Check Sheet</th>
+      <th>Keterangan</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
 
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>Week 35</td>
-        <td>26/08/2025</td>
-        <td>PPI</td>
-        <td>HENGKI SURYADI</td>
-        <td>Jhoni Sadirman, Haryudi, Hendra</td>
-        <td>BM (Basic Maintenance)</td>
-        <td>BM-PPI : MAIN DRIVE MILL</td>
-        <td>Pembersihan dan inspeksi peralatan</td>
-        <td>3</td>
-        <td>3</td>
-        <td>9</td>
-        <td>100%</td>
-        <td>
-          <span class="badge badge-close">Close</span>
-        </td>
-        <td><i class="icon">⚠️</i></td>
-        <td><i class="icon">⚠️</i></td>
-        <td>-</td>
-        <td>
-          <button class="edit">Edit</button>
-          <button class="delete">Hapus</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <tbody id="tableBody">
+    <!-- DATA DARI DATABASE AKAN MASUK DI SINI -->
+  </tbody>
+</table>
+
 </div>
 
 
@@ -106,12 +83,10 @@
     const sidebar = document.querySelector('.sidebar');
     const main = document.querySelector('.main');
 
-    if (menuToggle) {
-      menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('closed');
-        main.classList.toggle('expanded');
-      });
-    }
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('closed');
+      main.classList.toggle('expanded');
+    });
   </script>
 
   <script src="/js/dataBMCMPPI.js"></script>

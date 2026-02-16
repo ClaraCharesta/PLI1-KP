@@ -1,3 +1,4 @@
+// models/User.js
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define("User", {
     user_id: {
@@ -5,13 +6,22 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    nama: DataTypes.STRING,
+    nama: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     email: {
       type: DataTypes.STRING,
-      unique: true
+      unique: true,
+      allowNull: false
     },
-    password: DataTypes.STRING,
-    role_id: DataTypes.INTEGER,
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    role_id: {
+      type: DataTypes.INTEGER
+    },
     is_active: {
       type: DataTypes.BOOLEAN,
       defaultValue: true
@@ -20,6 +30,14 @@ module.exports = (sequelize, DataTypes) => {
     tableName: "users",
     timestamps: false
   });
+
+  // ✅ RELASI HARUS DI DALAM SINI
+  User.associate = (models) => {
+    User.hasMany(models.DataBMCM, {
+      foreignKey: "created_by", // sesuaikan dengan kolom di tabel DataBMCM
+      as: "dataBMCM"
+    });
+  };
 
   return User;
 };

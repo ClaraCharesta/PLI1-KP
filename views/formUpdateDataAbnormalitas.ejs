@@ -21,136 +21,249 @@
       <div class="form-card">
         <h2>Update Data Abnormalitas</h2>
 
-        <form id="formUpdateDataAbnormalitas">
+<form
+  id="formUpdateDataAbnormalitas"
+  action="/dataAbnormalitas/update/<%= data.abnormal_id %>"
+  method="POST"
+  enctype="multipart/form-data"
+>
 
           <div class="form-group">
             <label for="status">Status</label>
             <select id="status" name="status" required>
               <option value="">-- Pilih Status --</option>
-              <option value="Open">Open</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Close">Close</option>
+              <option value="Open" <%= data.status === 'Open' ? 'selected' : '' %>>Open</option>
+              <option value="Close" <%= data.status === 'Close' ? 'selected' : '' %>>Close</option>
+              <option value="Pending Material" <%= data.status === 'Pending Material' ? 'selected' : '' %>>Pending Material</option>
+              <option value="Pending PMC" <%= data.status === 'Pending PMC' ? 'selected' : '' %>>Pending PMC</option>
+              <option value="Pending Kiln Stop" <%= data.status === 'Pending Kiln Stop' ? 'selected' : '' %>>Pending Kiln Stop</option>
+              <option value="Pending OH" <%= data.status === 'Pending OH' ? 'selected' : '' %>>Pending OH</option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="abnormalDate">Abnormal Date</label>
-            <input type="date" id="abnormalDate" name="abnormalDate" required>
+            <input type="date" id="abnormalDate" name="abnormal_date" value="<%= tanggalFormatted %>" required>   
           </div>
 
           <div class="form-group">
             <label for="reportBy">Report By</label>
-            <input type="text" id="reportBy" name="reportBy" placeholder="Nama yang melaporkan" required>
+            <input type="text" id="reportBy" name="report_by" value="<%= data.report_by || '' %>">
           </div>
 
           <div class="form-group">
             <label for="area">Area</label>
             <select id="area" name="area" required>
               <option value="">-- Pilih Area --</option>
-              <option value="RM5">RM5</option>
-              <option value="KCM5">KCM5</option>
-              <option value="AUTO5">AUTO5</option>
-              <option value="FM5">FM5</option>
+              <option value="RM5" <%= data.area === 'RM5' ? 'selected' : '' %>>RM5</option>
+              <option value="KCM5" <%= data.area === 'KCM5' ? 'selected' : '' %>>KCM5</option>
+              <option value="AUTO5" <%= data.area === 'AUTO5' ? 'selected' : '' %>>AUTO5</option>
+              <option value="FM5" <%= data.area === 'FM5' ? 'selected' : '' %>>FM5</option>
+              <option value="PPI" <%= data.area === 'PPI' ? 'selected' : '' %>>PPI</option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="nomenclature">Nomenclature</label>
-            <input type="text" id="nomenclature" name="nomenclature" placeholder="Kode peralatan" required>
+            <input type="text" id="nomenclature" name="nomenclature" placeholder="Kode peralatan" value="<%= data.nomenclature || '' %>" required>
           </div>
 
           <div class="form-group">
             <label for="activity">Activity</label>
-            <input type="text" id="activity" name="activity" placeholder="Jenis aktivitas/inspeksi" required>
+            <select id="activity" name="activity" required>
+              <option value="">-- Pilih Activity --</option>
+              <option value="Alignment" <%= data.activity === 'Alignment' ? 'selected' : '' %>>Alignment</option>
+              <option value="Balancing" <%= data.activity === 'Balancing' ? 'selected' : '' %>>Balancing</option>
+              <option value="Bending(Penekukan)" <%= data.activity === 'Bending(Penekukan)' ? 'selected' : '' %>>Bending(Penekukan)</option>
+              <option value="Adjustmen(Pengaturan)" <%= data.activity === 'Adjustmen(Pengaturan)' ? 'selected' : '' %>>Adjustmen(Pengaturan)</option>
+              <option value="Cabling(Penarikan Kabel)" <%= data.activity === 'Cabling(Penarikan Kabel)' ? 'selected' : '' %>>Cabling(Penarikan Kabel)</option>
+              <option value="Kalibrasi Cleaning(Pembersihan)" <%= data.activity === 'Kalibrasi Cleaning(Pembersihan)' ? 'selected' : '' %>>Kalibrasi Cleaning(Pembersihan)</option>
+              <option value="Connecting(Penyambungan)" <%= data.activity === 'Connecting(Penyambungan)' ? 'selected' : '' %>>Connecting(Penyambungan)</option>
+              <option value="Cutting(Pemotongan)" <%= data.activity === 'Cutting(Pemotongan)' ? 'selected' : '' %>>Cutting(Pemotongan)</option>
+              <option value="Data Collecting(Pengumpulan Data)" <%= data.activity === 'Data Collecting(Pengumpulan Data)' ? 'selected' : '' %>>Data Collecting(Pengumpulan Data)</option>
+              <option value="Design(Perancangan)" <%= data.activity === 'Design(Perancangan)' ? 'selected' : '' %>>Design(Perancangan)</option>
+              <option value="Digging(Penggalian)" <%= data.activity === 'Digging(Penggalian)' ? 'selected' : '' %>>Digging(Penggalian)</option>
+              <option value="Dismantling(Pembongkaran)" <%= data.activity === 'Dismantling(Pembongkaran)' ? 'selected' : '' %>>Dismantling(Pembongkaran)</option>
+              <option value="Draining(Pengurasan)" <%= data.activity === 'Draining(Pengurasan)' ? 'selected' : '' %>>Draining(Pengurasan)</option>
+              <option value="Drilling(Pengeboran)" <%= data.activity === 'Drilling(Pengeboran)' ? 'selected' : '' %>>Drilling(Pengeboran)</option>
+              <option value="Drying(Pengeringan)" <%= data.activity === 'Drying(Pengeringan)' ? 'selected' : '' %>>Drying(Pengeringan)</option>
+              <option value="Excavating(Pengerukan)" <%= data.activity === 'Excavating(Pengerukan)' ? 'selected' : '' %>>Excavating(Pengerukan)</option>
+              <option value="Fabricating(Fabrikasi)" <%= data.activity === 'Fabricating(Fabrikasi)' ? 'selected' : '' %>>Fabricating(Fabrikasi)</option>
+              <option value="Grinding(Menggerinda)" <%= data.activity === 'Grinding(Menggerinda)' ? 'selected' : '' %>>Grinding(Menggerinda)</option>
+              <option value="Inspection/Checking(Periksa)" <%= data.activity === 'Inspection/Checking(Periksa)' ? 'selected' : '' %>>Inspection/Checking(Periksa)</option>
+              <option value="Lubricating(Pelumasan)" <%= data.activity === 'Lubricating(Pelumasan)' ? 'selected' : '' %>>Lubricating(Pelumasan)</option>
+              <option value="Measurement(Pengukuran)" <%= data.activity === 'Measurement(Pengukuran)' ? 'selected' : '' %>>Measurement(Pengukuran)</option>
+              <option value="Overhaul Painting(Pengecatan)" <%= data.activity === 'Overhaul Painting(Pengecatan)' ? 'selected' : '' %>>Overhaul Painting(Pengecatan)</option>
+              <option value="Patching(Penambalan)" <%= data.activity === 'Patching(Penambalan)' ? 'selected' : '' %>>Patching(Penambalan)</option>
+              <option value="Programming(Pemrograman)" <%= data.activity === 'Programming(Pemrograman)' ? 'selected' : '' %>>Programming(Pemrograman)</option>
+              <option value="Reconditioning(Rekondisi)" <%= data.activity === 'Reconditioning(Rekondisi)' ? 'selected' : '' %>>Reconditioning(Rekondisi)</option>
+              <option value="Repairing(Perbaikan)" <%= data.activity === 'Repairing(Perbaikan)' ? 'selected' : '' %>>Repairing(Perbaikan)</option>
+              <option value="Replacement(Penggantian)" <%= data.activity === 'Replacement(Penggantian)' ? 'selected' : '' %>>Replacement(Penggantian)</option>
+              <option value="Rewinding(Penggulungan)" <%= data.activity === 'Rewinding(Penggulungan)' ? 'selected' : '' %>>Rewinding(Penggulungan)</option>
+              <option value="Sampling(Pengambilan sample)" <%= data.activity === 'Sampling(Pengambilan sample)' ? 'selected' : '' %>>Sampling(Pengambilan sample)</option>
+              <option value="Service(Servis)" <%= data.activity === 'Service(Servis)' ? 'selected' : '' %>>Service(Servis)</option>
+              <option value="Soldering(Menyolder)" <%= data.activity === 'Soldering(Menyolder)' ? 'selected' : '' %>>Soldering(Menyolder)</option>
+              <option value="Testing(Uji Coba)" <%= data.activity === 'Testing(Uji Coba)' ? 'selected' : '' %>>Testing(Uji Coba)</option>
+              <option value="Tightening(Pengencangan)" <%= data.activity === 'Tightening(Pengencangan)' ? 'selected' : '' %>>Tightening(Pengencangan)</option>
+              <option value="Transporting(Mengangkut)" <%= data.activity === 'Transporting(Mengangkut)' ? 'selected' : '' %>>Transporting(Mengangkut)</option>
+              <option value="Welding(Pengelasan)" <%= data.activity === 'Welding(Pengelasan)' ? 'selected' : '' %>>Welding(Pengelasan)</option>
+            </select>
           </div>
 
           <div class="form-group">
             <label for="prioritas">Prioritas</label>
             <select id="prioritas" name="prioritas" required>
               <option value="">-- Pilih Prioritas --</option>
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
+              <option value="Low" <%= data.prioritas === 'Low' ? 'selected' : '' %>>Low</option>
+              <option value="Medium" <%= data.prioritas === 'Medium' ? 'selected' : '' %>>Medium</option>
+              <option value="High" <%= data.prioritas === 'High' ? 'selected' : '' %>>High</option>
+              <option value="Emergency" <%= data.prioritas === 'Emergency' ? 'selected' : '' %>>Emergency</option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="condition">Condition</label>
-            <input type="text" id="condition" name="condition" placeholder="Kondisi abnormal" required>
+            <select id="condition" name="condition" required>
+              <option value="">-- Pilih Condition --</option>
+              <option value="Tidak Normal" <%= data.condition === 'Tidak Normal' ? 'selected' : '' %>>Tidak Normal</option>
+              <option value="Tidak Beroperasi" <%= data.condition === 'Tidak Beroperasi' ? 'selected' : '' %>>Tidak Beroperasi</option>
+            </select>
           </div>
 
           <div class="form-group">
             <label for="action">Action</label>
-            <input type="text" id="action" name="action" placeholder="Tindakan yang akan dilakukan" required>
+              <select id="action" name="action" required>
+              <option value="">-- Pilih Action --</option>
+              <option value="Tidak Bisa Diatasi Sendiri" <%= data.action === 'Tidak Bisa Diatasi Sendiri' ? 'selected' : '' %>>Tidak Bisa Diatasi Sendiri</option>
+              <option value="Bisa Diatasi Sendiri" <%= data.action === 'Bisa Diatasi Sendiri' ? 'selected' : '' %>>Bisa Diatasi Sendiri</option>
+            </select>
           </div>
 
           <div class="form-group">
             <label for="abnormal">Abnormal</label>
-            <input type="text" id="abnormal" name="abnormal" placeholder="Jenis abnormalitas" required>
-          </div>
+            <select id="abnormal" name="abnormal" required>
+            <option value="">-- Pilih Abnormal --</option>
+
+              <% [
+                "Bent(Bengkok)","Blocked(Tersumbat)","Break(Patah/Putus)","Broken(Pecah)",
+                "Burn Out(Terbakar)","Card Module Problem","Contaminated (Tercemar)",
+                "Cracked(Retak)","Deformed(Berubah Bentuk)","Display Unit Problem",
+                "Dirty (Kotor)","Drop Down (Jatuh)","Explode(Meledak)",
+                "High Pressure (Tekanan Tinggi)","High Temperature(Temperatur Tinggi)",
+                "High Vibration (Vibrasi Tinggi)","Hot Air(AC Tidak dingin)",
+                "Imbalance(Tidak seimbang)","Leak(Bocor)","Level Low (Isi Kurang)",
+                "Loose(Longgar)","Melt(Meleleh)","Meter Problem (Meter Rusak)",
+                "Mis-align(Tidak sejajar)","Missing Parts (Part Hilang)",
+                "Motherboard Problem","Network Failure(Gangguan Jaringan)",
+                "Noise(Kelainan Bunyi)","Over volatge (Tegangan tinggi)",
+                "Overload (Beban Lebih)","Power Failure (Listrik Mati)",
+                "Power Supply Unit Problem","Pressure Loss (Hilang Tekanan)",
+                "Sensor Problem (Sensor Rusak)","Short Circuit (Hubung Singkat)",
+                "Slip (Selip)","Strike (Mesin Mogok)","Stuck (Macet)",
+                "Tripped (Trip)","Torn (Sobek)","Low Voltage (Tegangan Rendah)",
+                "Wet/Humid (Basah/Lembab)","Worn Out (Aus)",
+                "Bearing Rough (Bearing Kasar)","Program DCS",
+                "False Air","Unsafe Action","Unsafe Condition"
+              ].forEach(e => { %>
+            
+              <option value="<%= e %>" <%= data.abnormal === e ? 'selected' : '' %>><%= e %></option>
+              <% }) %>
+
+              </select>
+            </div>
+
 
           <div class="form-group">
             <label for="source">Source</label>
             <select id="source" name="source" required>
-              <option value="">-- Pilih Sumber --</option>
-              <option value="Operator">Operator</option>
-              <option value="Visual Inspection">Visual Inspection</option>
-              <option value="Temperature Sensor">Temperature Sensor</option>
-              <option value="Vibration Analyzer">Vibration Analyzer</option>
-              <option value="Pressure Gauge">Pressure Gauge</option>
-              <option value="Alarm System">Alarm System</option>
+              <option value="">-- Pilih Source --</option>
+              <option value="Harian Pemeliharaan" <%= data.source === 'Harian Pemeliharaan' ? 'selected' : '' %>>Harian Pemeliharaan</option>
+              <option value="Inspeksi/SOT" <%= data.source === 'Inspeksi/SOT' ? 'selected' : '' %>>Inspeksi/SOT</option>
+              <option value="Shift Pemeliharaan" <%= data.source === 'Shift Pemeliharaan' ? 'selected' : '' %>>Shift Pemeliharaan</option>
+              <option value="Genba/TPM" <%= data.source === 'Genba/TPM' ? 'selected' : '' %>>Genba/TPM</option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="informasiDetail">Informasi Detail</label>
-            <textarea id="informasiDetail" name="informasiDetail" rows="3" placeholder="Penjelasan detail kondisi abnormal..."></textarea>
+            <textarea id="informasiDetail" name="detail_info"><%= data.detail_info || '' %></textarea>
           </div>
 
           <div class="form-group">
             <label for="rencanaPerbaikan">Rencana Perbaikan</label>
-            <textarea id="rencanaPerbaikan" name="rencanaPerbaikan" rows="3" placeholder="Rencana perbaikan atau tindak lanjut..."></textarea>
+            <select id="rencanaPerbaikan" name="rencana_perbaikan">
+              <option value="">-- Pilih Rencana Perbaikan --</option>
+              <option value="Saat BM/CM" <%= data.rencana_perbaikan === 'Saat BM/CM' ? 'selected' : '' %>>Saat BM/CM</option>
+              <option value="Saat PCM" <%= data.rencana_perbaikan === 'Saat PCM' ? 'selected' : '' %>>Saat PCM</option>
+              <option value="Saat Kiln Stop" <%= data.rencana_perbaikan === 'Saat Kiln Stop' ? 'selected' : '' %>>Saat Kiln Stop</option>
+              <option value="Overhaul" <%= data.rencana_perbaikan === 'Overhaul' ? 'selected' : '' %>>Overhaul</option>
+              <option value="Saat Mill Stop" <%= data.rencana_perbaikan === 'Saat Mill Stop' ? 'selected' : '' %>>Saat Mill Stop</option>
+            </select>          
           </div>
 
           <div class="form-group">
             <label for="notifikasiUnitLain">Notifikasi ke Unit Lain</label>
-            <input type="text" id="notifikasiUnitLain" name="notifikasiUnitLain" placeholder="Unit/Departemen yang perlu diberitahu">
+            <select id="notifikasiUnitLain" name="notifikasi_unit">
+              <option value="">-- Pilih Notifikasi ke Unit Lain --</option>
+              <option value="Planner" <%= data.notifikasi_unit === 'Planner' ? 'selected' : '' %>>Planner</option>
+              <option value="ILP/AC" <%= data.notifikasi_unit === 'ILP/AC' ? 'selected' : '' %>>ILP/AC</option>
+              <option value="Produksi" <%= data.notifikasi_unit === 'Produksi' ? 'selected' : '' %>>Produksi</option>
+              <option value="Mekanik" <%= data.notifikasi_unit === 'Mekanik' ? 'selected' : '' %>>Mekanik</option>
+              <option value="Kontrak Service AC" <%= data.notifikasi_unit === 'Kontrak Service AC' ? 'selected' : '' %>>Kontrak Service AC</option>
+              <option value="Bengkel Listrik" <%= data.notifikasi_unit === 'Bengkel Listrik' ? 'selected' : '' %>>Bengkel Listrik</option>
+              <option value="PUP" <%= data.notifikasi_unit === 'PUP' ? 'selected' : '' %>>PUP</option>
+              <option value="EPDC" <%= data.notifikasi_unit === 'EPDC' ? 'selected' : '' %>>EPDC</option>
+              <option value="ABI" <%= data.notifikasi_unit === 'ABI' ? 'selected' : '' %>>ABI</option>
+            </select>          
           </div>
 
           <div class="form-group">
             <label for="idMSO">ID MSO</label>
-            <input type="text" id="idMSO" name="idMSO" placeholder="Nomor MSO/Work Order">
+            <input type="text" id="idMSO" name="id_mso" value="<%= data.id_mso || '' %>">
           </div>
 
-          <!-- ================= UPLOAD FILES ================= -->
-          <div class="upload-section">
-            <h3>Upload Foto</h3>
-            
-            <div class="upload-grid">
-              <div class="upload-box">
-                <input type="file" id="fotoSebelum" name="fotoSebelum" accept="image/*" style="display:none;">
-                <label for="fotoSebelum" class="upload-label">
-                  <span class="upload-icon">📸</span>
-                  <span class="upload-text">Upload Foto Sebelum</span>
-                </label>
-                <div id="previewSebelum" class="upload-preview"></div>
-              </div>
+<!-- ================= UPLOAD FILES ================= -->
+<div class="upload-section">
+    <label>Upload Foto</label> <div class="upload-grid">
+        <div class="upload-box">
+            <input type="file" id="fotoSebelum" name="foto_sebelum" accept="image/*" hidden>
+            <label for="fotoSebelum" class="upload-label">
+                <div class="upload-placeholder">
+                    <span class="upload-icon">📸</span>
+                    <span class="upload-text">Upload Foto Sebelum</span>
+                </div>
+                <div id="previewSebelum" class="upload-preview">
+                  <% if (data.foto_sebelum) { %>
+                    <img src="/uploads/<%= data.foto_sebelum %>" alt="Foto Sebelum">
+                  <% } %>
+                </div>
+            </label>
+        </div>
 
-              <div class="upload-box">
-                <input type="file" id="fotoSesudah" name="fotoSesudah" accept="image/*" style="display:none;">
-                <label for="fotoSesudah" class="upload-label">
-                  <span class="upload-icon">📸</span>
-                  <span class="upload-text">Upload Foto Sesudah</span>
-                </label>
-                <div id="previewSesudah" class="upload-preview"></div>
-              </div>
-            </div>
-          </div>
+        <div class="upload-box">
+            <input type="file" id="fotoSesudah" name="foto_sesudah" accept="image/*" hidden>
+            <label for="fotoSesudah" class="upload-label">
+                <div class="upload-placeholder">
+                    <span class="upload-icon">📸</span>
+                    <span class="upload-text">Upload Foto Sesudah</span>
+                </div>
+                <div id="previewSesudah" class="upload-preview">
+                  <% if (data.foto_sesudah) { %>
+                    <img src="/uploads/<%= data.foto_sesudah %>" alt="Foto Sesudah">
+                  <% } %>
+                </div>
+            </label>
+        </div>
+    </div>
+</div>
+
+
+
 
           <!-- ================= BUTTONS ================= -->
           <div class="btn-wrapper">
             <button type="button" class="btn-cancel">Cancel</button>
-            <button type="submit" class="btn-save btn-update">Update</button>
+            <button type="submit" class="btn-save">Update</button>
           </div>
 
         </form>
@@ -171,6 +284,19 @@
       });
     }
   </script>
+
+  <!-- ================= CANCEL MODAL ================= -->
+  <div id="cancelModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-icon">⚠️</div>
+      <h2>Batalkan Perubahan</h2>
+      <p>Apakah anda yakin ingin membatalkan perubahan?</p>
+      <div class="modal-buttons">
+        <button id="confirmCancelBtn" class="btn-confirm">Ya, Batalkan</button>
+        <button id="keepCancelBtn" class="btn-keep">Tidak</button>
+      </div>
+    </div>
+  </div>
 
   <script src="/js/formUpdateDataAbnormalitas.js"></script>
 

@@ -1,17 +1,17 @@
-const DataBMCM = require("../models/DataBMCM");
+const db = require("../models");
+const DataBMCM = db.DataBMCM;
+const User = db.User;
 const { Op } = require("sequelize");
 
 // Helper: hitung ISO week seperti '2026-W04'
 function getWeekFromDate(dateStr) {
   if (!dateStr) return null;
   const date = new Date(dateStr);
-  // Copy date so don't modify original
   const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  // Set to nearest Thursday: current date + 4 - current day number
   d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-  const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1)/7);
-  return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2,'0')}`;
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
 }
 
 function toNumber(v) {
@@ -19,42 +19,64 @@ function toNumber(v) {
   return Number.isFinite(n) ? n : 0;
 }
 
-// LIST / SEARCH
-// GET /
+/* =====================================================
+   PAGE
+   GET /data-bmcm/page
+===================================================== */
+
+
+
+
+
 exports.list = async (req, res) => {
-  const area = req.query.area || null;
-  const keyword = req.query.keyword || "";
-
-  const where = {};
-  if (area) where.area = area;
-  if (keyword) {
-    where[Op.or] = [
-      { supervisor: { [Op.like]: `%${keyword}%` } },
-      { executor: { [Op.like]: `%${keyword}%` } },
-      { activities: { [Op.like]: `%${keyword}%` } },
-      { detail_activities: { [Op.like]: `%${keyword}%` } },
-      { keterangan: { [Op.like]: `%${keyword}%` } },
-      { week: { [Op.like]: `%${keyword}%` } },
-      { tanggal: { [Op.like]: `%${keyword}%` } },
-    ];
-  }
-
-  try {
-    const data = await DataBMCM.findAll({ where, order: [["tanggal", "DESC"]] });
-    res.json(data);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, error: "Gagal mengambil data" });
-  }
+  const data = await DataBMCM.findAll();
+  res.json(data);
 };
 
-// GET DETAIL
-// GET /:id
+
+/* =====================================================
+   LIST / SEARCH
+   GET /
+===================================================== */
+// PAGE (EJS)
+exports.page = async (req, res) => {
+  const data = await DataBMCM.findAll({
+    include: [
+      {
+        model: User,
+        as: "creator",
+        attributes: ["user_id", "nama"],
+      },
+    ],
+    order: [["tanggal", "ASC"]],
+  });
+
+  res.render("dataBMCM", {
+    title: "Data BMCM",
+    active: "dataBMCM",
+    data
+  });
+};
+
+
+/* =====================================================
+   DETAIL
+   GET /:id
+===================================================== */
 exports.detail = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const row = await DataBMCM.findByPk(id);
+    const row = await DataBMCM.findByPk(id, {
+      include: [
+        {
+          model: User,
+          as: "creator",
+          attributes: ["nama"],
+        },
+      ],
+    });
+
     if (!row) return res.status(404).send("Data tidak ditemukan");
 
     res.json(row);
@@ -64,107 +86,150 @@ exports.detail = async (req, res) => {
   }
 };
 
-// CREATE
-// POST /
+/* =====================================================
+   CREATE
+   POST /
+===================================================== */
 exports.create = async (req, res) => {
   try {
-    const body = req.body || {};
-    console.log('▶ POST /data-bmcm - session user:', req.session?.user ?? null, 'body:', body);
+    const body = req.body;
 
-    // Server-side validation for required fields (accepts snake_case or camelCase)
-    const required = ['tanggal','area','supervisor','executor','activity_category','activities','duration','jumlah_personil','status_persen','status'];
-    const missing = required.filter(f => {
-      const camel = f.replace(/_([a-z])/g, (m, g1) => g1.toUpperCase());
-      return (body[f] === undefined || body[f] === null || body[f] === '') &&
-             (body[camel] === undefined || body[camel] === null || body[camel] === '');
-    });
+    const fotoSafetyTalk =
+      req.files?.fotoSafetyTalk?.[0]?.filename ?? null;
 
-    if (missing.length) return res.status(400).json({ success: false, error: 'Missing required fields: ' + missing.join(', ') });
+    const fotoCheckSheet =
+      req.files?.fotoCheckSheet?.[0]?.filename ?? null;
 
-    const tanggal = body.tanggal || body.tanggal;
+    const tanggal = body.tanggal;
     const week = getWeekFromDate(tanggal);
 
-    const duration = toNumber(body.duration ?? body.duration);
-    const jumlah_personil = toNumber(body.jumlah_personil ?? body.jumlahPersonel ?? body.jumlah_personel);
-    const main_hour = String(duration * jumlah_personil);
-
-    const userId = req.session?.user?.id ?? null;
+    const duration = toNumber(body.duration);
+    const jumlah_personil = toNumber(body.jumlahPersonel);
 
     const record = {
       week,
-      tanggal: tanggal || null,
-      area: body.area || null,
-      supervisor: body.supervisor || null,
-      executor: body.executor || null,
-      activity_category: body.activity_category || body.activitiesCategory || null,
-      activities: body.activities || null,
-      detail_activities: body.detail_activities || body.detailActivities || null,
-      duration: duration ? String(duration) : null,
-      jumlah_personil: jumlah_personil || null,
-      main_hour,
-      status_persen: toNumber(body.status_persen ?? body.statusPersen),
-      status: body.status || null,
-      foto_safety_talk: body.foto_safety_talk || body.fotoSafetyTalk || null,
-      foto_check_sheet: body.foto_check_sheet || body.fotoCheckSheet || null,
-      keterangan: body.keterangan || null,
-      created_by: userId,
+      tanggal,
+      area: body.area,
+      supervisor: body.supervisor,
+      executor: body.executor,
+      activity_category: body.activitiesCategory,
+      activities: body.activities,
+      detail_activities: body.detailActivities,
+      duration: String(duration),
+      jumlah_personil,
+      main_hour: String(duration * jumlah_personil),
+      status_persen: toNumber(body.statusPersen),
+      status: body.status,
+      foto_safety_talk: fotoSafetyTalk,
+      foto_check_sheet: fotoCheckSheet,
+      keterangan: body.keterangan,
+      created_by: req.session?.user?.id ?? null,
     };
 
-    const newData = await DataBMCM.create(record);
-    res.status(201).json(newData);
+    await DataBMCM.create(record);
+
+    // ⬇⬇⬇ INI KUNCI NYA
+    res.redirect("/dataBMCM/page");
+
+
   } catch (err) {
     console.error(err);
-    res.status(500).send("Gagal membuat data baru");
+    res.status(500).send("Gagal menyimpan data");
   }
 };
 
-// UPDATE
-// PUT /:id
+/* =====================================================
+    ADD PAGE
+===================================================== */
+exports.addPage = (req, res) => {
+  res.render("formDataBMCM", {
+    title: "Add Realisasi PK Harian",
+    active: "dataBMCM"
+  });
+  
+};
+
+
+  /* =====================================================
+    UPDATE
+===================================================== */
 exports.update = async (req, res) => {
-  const id = req.params.id;
+    try {
+        const id = req.params.id;
+        const body = req.body;
+        
+        const row = await DataBMCM.findByPk(id);
+        if (!row) return res.status(404).send("Data tidak ditemukan");
 
+        // Ambil file atau gunakan foto lama
+        const fotoSafetyTalk = req.files?.fotoSafetyTalk?.[0]?.filename || row.foto_safety_talk;
+        const fotoCheckSheet = req.files?.fotoCheckSheet?.[0]?.filename || row.foto_check_sheet;
+
+        await row.update({
+            tanggal: body.tanggal,
+            week: getWeekFromDate(body.tanggal),
+            area: body.area,
+            supervisor: body.supervisor,
+            executor: body.executor,
+            activity_category: body.activitiesCategory,
+            activities: body.activities,
+            detail_activities: body.detailActivities,
+            duration: Number(body.duration) || 0,
+            jumlah_personil: Number(body.jumlahPersonel) || 0,
+            main_hour: (Number(body.duration) || 0) * (Number(body.jumlahPersonel) || 0),
+            status_persen: Number(body.statusPersen) || 0,
+            status: body.status,
+            foto_safety_talk: fotoSafetyTalk,
+            foto_check_sheet: fotoCheckSheet,
+            keterangan: body.keterangan
+        });
+
+        res.redirect("/dataBMCM/page");
+    } catch (err) {
+        console.error("Controller Update Error:", err);
+        res.status(500).send("Error: " + err.message);
+    }
+};
+  /* =====================================================
+    EDIT PAGE
+    ===================================================== */
+exports.editPage = async (req, res) => {
   try {
-    const row = await DataBMCM.findByPk(id);
-    if (!row) return res.status(404).send("Data tidak ditemukan");
+    const id = req.params.id;
 
-    const body = req.body || {};
+    const data = await DataBMCM.findByPk(id, {
+      include: [{
+        model: User,
+        as: "creator",
+        attributes: ["nama"]
+      }]
+    });
 
-    const tanggal = body.tanggal ?? row.tanggal;
-    const week = getWeekFromDate(tanggal);
+    if (!data) {
+      return res.redirect("/dataBMCM/page");
+    }
 
-    const duration = toNumber(body.duration ?? row.duration);
-    const jumlah_personil = toNumber(body.jumlah_personil ?? body.jumlahPersonel ?? row.jumlah_personil);
-    const main_hour = String(duration * jumlah_personil);
+    const tanggalFormatted = data.tanggal
+      ? new Date(data.tanggal).toISOString().split("T")[0]
+      : "";
 
-    const updates = {
-      week,
-      tanggal: tanggal || row.tanggal,
-      area: body.area ?? row.area,
-      supervisor: body.supervisor ?? row.supervisor,
-      executor: body.executor ?? row.executor,
-      activity_category: body.activity_category ?? body.activitiesCategory ?? row.activity_category,
-      activities: body.activities ?? row.activities,
-      detail_activities: body.detail_activities ?? body.detailActivities ?? row.detail_activities,
-      duration: (duration !== undefined) ? String(duration) : row.duration,
-      jumlah_personil: jumlah_personil || row.jumlah_personil,
-      main_hour,
-      status_persen: toNumber(body.status_persen ?? body.statusPersen ?? row.status_persen),
-      status: body.status ?? row.status,
-      foto_safety_talk: body.foto_safety_talk ?? body.fotoSafetyTalk ?? row.foto_safety_talk,
-      foto_check_sheet: body.foto_check_sheet ?? body.fotoCheckSheet ?? row.foto_check_sheet,
-      keterangan: body.keterangan ?? row.keterangan,
-    };
+    res.render("formUpdateDataBMCM", {
+      data,
+      tanggalFormatted,
+      active: "dataBMCM"
+    });
 
-    await row.update(updates);
-    res.json(row);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Gagal mengupdate data");
+  } catch (error) {
+    console.error(error);
+    res.redirect("/dataBMCM/page");
   }
 };
 
-// DELETE
-// DELETE /:id
+
+
+/* =====================================================
+   DELETE
+===================================================== */
 exports.delete = async (req, res) => {
   const id = req.params.id;
 

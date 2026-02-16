@@ -1,174 +1,174 @@
-/* ================= INPUT COUNTER ================= */
-document.querySelectorAll('.btn-counter').forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    e.preventDefault();
-    
-    const action = btn.dataset.action;
-    const input = btn.parentElement.querySelector('input[type="number"]');
-    const currentValue = parseInt(input.value) || 0;
-    const maxValue = parseInt(input.max) || Infinity;
-    
-    if (action === 'plus') {
-      input.value = Math.min(currentValue + 1, maxValue);
-    } else if (action === 'minus') {
-      input.value = Math.max(currentValue - 1, 0);
-    }
-  });
-});
+document.addEventListener('DOMContentLoaded', () => {
 
-/* ================= FILE UPLOAD PREVIEW ================= */
-const fotoSafetyTalk = document.getElementById('fotoSafetyTalk');
-const previewSafetyTalk = document.getElementById('previewSafetyTalk');
+  /* ================= COUNTER (LOGIKA LIMIT 100%) ================= */
+  document.querySelectorAll('.btn-counter').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-if (fotoSafetyTalk) {
-  fotoSafetyTalk.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        previewSafetyTalk.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-}
-
-const fotoCheckSheet = document.getElementById('fotoCheckSheet');
-const previewCheckSheet = document.getElementById('previewCheckSheet');
-
-if (fotoCheckSheet) {
-  fotoCheckSheet.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        previewCheckSheet.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-}
-
-/* ================= FORM SUBMIT (UPDATE) ================= */
-const formUpdateDataBMCM = document.getElementById('formUpdateDataBMCM');
-
-if (formUpdateDataBMCM) {
-  formUpdateDataBMCM.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    // Ambil data dari form
-    const formData = new FormData(formUpdateDataBMCM);
-    const data = Object.fromEntries(formData);
-    
-    console.log('Data update:', data);
-    alert('Data berhasil diupdate! (Frontend only - belum ada backend)');
-  });
-}
-
-/* ================= CANCEL BUTTON ================= */
-const btnCancel = document.querySelector('.btn-cancel');
-
-if (btnCancel) {
-  btnCancel.addEventListener('click', (e) => {
-    e.preventDefault();
-    
-    if (confirm('Batalkan perubahan?')) {
-      window.history.back();
-    }
-  });
-}
-
-/* ================= PRE-POPULATE DATA (OPTIONAL) ================= */
-function loadDataFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  
-  const dataId = params.get('id');
-  
-  if (dataId) {
-    // Simulasi fetch data dari backend
-    console.log('Loading data ID:', dataId);
-    
-    // Contoh data dummy (dalam produksi ini dari backend)
-    const dummyData = {
-      tanggal: '2026-01-20',
-      area: 'RM5',
-      supervisor: 'Fill Ardi',
-      executor: 'Rivaldi',
-      activitiesCategory: 'BM (Basic Maintenance)',
-      activities: 'Filter Dust Cleaning Task',
-      detailActivities: 'Cleaning filter di area intake',
-      duration: '3',
-      jumlahPersonel: '2',
-      statusPersen: '80',
-      status: 'In Progress',
-      keterangan: 'Proses pembersihan sudah mencapai 80%'
-    };
-    
-    // Populate form dengan data
-    Object.keys(dummyData).forEach(key => {
-      const element = document.getElementById(key);
-      if (element) {
-        element.value = dummyData[key];
+      const counter = btn.closest('.input-counter');
+      if (!counter) return;
+      
+      const input = counter.querySelector('input[type="number"]');
+      if (!input) {
+        // Fallback: coba cari input biasa jika tidak ada input[type="number"]
+        const fallbackInput = counter.querySelector('input');
+        if (!fallbackInput) return;
+        handleCounterClick(btn, fallbackInput);
+        return;
       }
+
+      handleCounterClick(btn, input);
     });
+  });
+
+  function handleCounterClick(btn, input) {
+    let val = parseInt(input.value) || 0;
+    
+    // Mengambil nilai max dari atribut HTML
+    const maxAttr = input.getAttribute('max');
+    const max = (maxAttr !== null && maxAttr !== "" && !isNaN(parseInt(maxAttr))) ? parseInt(maxAttr) : Infinity;
+
+    if (btn.dataset.action === 'plus') {
+      // LOGIKA UTAMA: Button + berfungsi selama nilai < max (100)
+      if (val < max) {
+        input.value = val + 1;
+        // Trigger input event untuk memastikan nilai ter-update
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }
+
+    if (btn.dataset.action === 'minus') {
+      // Tombol minus tetap berfungsi selama nilai di atas 0
+      if (val > 0) {
+        input.value = val - 1;
+        // Trigger input event untuk memastikan nilai ter-update
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }
+  }
+
+    /* ================= IMAGE PREVIEW ================= */
+    function previewImage(inputId) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  const uploadBox = input.closest('.upload-box');
+  const preview = uploadBox?.querySelector('.upload-preview');
+  const placeholder = uploadBox?.querySelector('.upload-placeholder');
+
+  if (!preview) return;
+
+  input.addEventListener('change', () => {
+    const file = input.files[0];
+    if (!file) {
+      preview.innerHTML = '';
+      if (placeholder) placeholder.classList.remove('hidden');
+      return;
+    }
+
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'cover';
+    img.onload = () => URL.revokeObjectURL(img.src);
+
+    preview.innerHTML = '';
+    preview.appendChild(img);
+    if (placeholder) placeholder.classList.add('hidden');
+  });
+
+  // Check if there's already an image on page load
+  if (preview.querySelector('img')) {
+    if (placeholder) placeholder.classList.add('hidden');
   }
 }
 
-// Load data saat halaman dibuka
-document.addEventListener('DOMContentLoaded', loadDataFromURL);
+previewImage('fotoSafetyTalk');
+previewImage('fotoCheckSheet');
 
-/* ================= ACTIVITIES FILTER (OPTIONAL) ================= */
-const activitiesCategory = document.getElementById('activitiesCategory');
-const activities = document.getElementById('activities');
 
-if (activitiesCategory && activities) {
-  const activitiesMap = {
-    'BM (Basic Maintenance)': [
-      'Filter Dust Cleaning Task',
-      'Gearbox Lubrication Check',
-      'Bearing Temperature Monitoring',
-      'Brake Shoe Inspection',
-      'Bolt & Nut Tightening'
-    ],
-    'PM (Plannet Corective Maint)': [
-      'Coupling Alignment Check',
-      'Motor Repair',
-      'Bearing Replacement',
-      'Seal Repair'
-    ],
-    'Pekerjaan CAPEX': [
-      'Installation Equipment',
-      'Testing System',
-      'Commissioning'
-    ],
-    'Persiapan Runnning': [
-      'System Check',
-      'Safety Training',
-      'Documentation Review'
-    ],
-    'PCM': [
-      'Vibration Analysis',
-      'Temperature Monitoring',
-      'Oil Analysis'
-    ],
-    'Lain-Lain': [
-      'General Maintenance',
-      'Support Activity',
-      'Other Work'
-    ]
-  };
+  /* ================= ACTIVITIES FILTER ================= */
+    const categorySelect = document.getElementById('activitiesCategory');
+    const activitiesSelect = document.getElementById('activities');
 
-  activitiesCategory.addEventListener('change', () => {
-    const selectedCategory = activitiesCategory.value;
-    const activityList = activitiesMap[selectedCategory] || [];
-    
-    activities.innerHTML = '<option value="">-- Pilih Aktivitas --</option>';
-    
-    activityList.forEach(activity => {
-      const option = document.createElement('option');
-      option.value = activity;
-      option.textContent = activity;
-      activities.appendChild(option);
+    if (categorySelect && activitiesSelect) {
+        const activitiesMap = {
+            'BM (Basic Maintenance)': [
+                'Filter Dust Cleaning Task',
+                'Gearbox Lubrication Check',
+                'Bearing Temperature Monitoring',
+                'Brake Shoe Inspection',
+                'Bolt & Nut Tightening'
+            ],
+            'CM (Corective Maintenance)': [
+                'Coupling Alignment Check',
+                'Motor Repair',
+                'Bearing Replacement',
+                'Seal Repair'
+            ]
+        };
+
+        function loadActivities(category) {
+            // Ambil nilai yang tersimpan di data-current (dari database)
+            const currentValue = activitiesSelect.getAttribute('data-current') || '';
+            
+            activitiesSelect.innerHTML = `<option value="">-- Pilih Aktivitas --</option>`;
+
+            if (activitiesMap[category]) {
+                activitiesMap[category].forEach(act => {
+                    const opt = document.createElement('option');
+                    opt.value = act;
+                    opt.textContent = act;
+
+                    // Jika aktivitas ini sama dengan yang di database, jadikan 'selected'
+                    if (act === currentValue) {
+                        opt.selected = true;
+                    }
+                    activitiesSelect.appendChild(opt);
+                });
+            }
+        }
+
+        // Jalankan otomatis saat halaman edit terbuka
+        if (categorySelect.value) {
+            loadActivities(categorySelect.value);
+        }
+
+        // Jalankan setiap kali kategori diubah manual oleh user
+        categorySelect.addEventListener('change', function() {
+            // Hapus data-current jika user mengubah kategori secara sengaja
+            activitiesSelect.setAttribute('data-current', ''); 
+            loadActivities(this.value);
+        });
+    }
+
+  /* ================= CANCEL BUTTON ================= */
+  const btnCancel = document.querySelector('.btn-cancel');
+  const cancelModal = document.getElementById('cancelModal');
+  const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+  const keepCancelBtn = document.getElementById('keepCancelBtn');
+
+  if (btnCancel && cancelModal) {
+    btnCancel.addEventListener('click', (e) => {
+      e.preventDefault();
+      cancelModal.classList.add('show');
     });
-  });
-}
+
+    if (confirmCancelBtn) {
+      confirmCancelBtn.addEventListener('click', () => {
+        cancelModal.classList.remove('show');
+        window.location.href = '/data-bmcm/page';
+      });
+    }
+
+    if (keepCancelBtn) {
+      keepCancelBtn.addEventListener('click', () => {
+        cancelModal.classList.remove('show');
+      });
+    }
+  }
+});

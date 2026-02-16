@@ -3,19 +3,35 @@ document.querySelector(".clear").onclick = () => {
   document.getElementById("catatan").value = "";
 };
 
-// BACK → arahkan ke halaman laporan KCM5
-document.querySelector(".back").onclick = ()=>{
-  window.location.href = "/laporanKCM5"; // nanti buat filenya
+// BACK
+document.querySelector(".back").onclick = () => {
+  window.history.back();
 };
 
-// SAVE (dummy dulu)
-document.querySelector(".save").onclick = () => {
-  const catatan = document.getElementById("catatan").value.trim();
+// SAVE
+document.querySelector(".save").addEventListener("click", async (e) => {
+  e.preventDefault(); // 🔥 WAJIB
 
-  if (!catatan) {
-    alert("Catatan tidak boleh kosong");
-    return;
+  const no_ref = document.getElementById("no_ref").value;
+  const catatan = document.getElementById("catatan").value;
+
+  try {
+    const res = await fetch("/catatan/store", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ no_ref, catatan })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("Catatan berhasil disimpan");
+    }
+
+  } catch (err) {
+    alert("Server tidak merespon");
   }
+});
 
-  alert("Catatan KCM 5 siap disimpan");
-};

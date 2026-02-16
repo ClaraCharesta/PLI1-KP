@@ -1,39 +1,47 @@
-// ENUM DATA
-const enumAda = ["Ada", "Tidak Ada"];
-const enumLengkap = ["Lengkap", "Tidak Lengkap"];
-
-// helper isi select TANPA None
-function fillSelect(id, values) {
-  const el = document.getElementById(id);
-
-  values.forEach(v => {
-    const opt = document.createElement("option");
-    opt.value = v;
-    opt.textContent = v;
-    el.appendChild(opt);
-  });
-}
-
-// isi dropdown
-fillSelect("kunciMobil", enumAda);
-fillSelect("kunciMotor", enumAda);
-fillSelect("kunciSubst", enumLengkap);
-fillSelect("toolset", enumLengkap);
-
 // CLEAR
-document.querySelector(".clear").onclick = ()=>{
-  document.querySelectorAll("input, select, textarea").forEach(el=>{
-    if(el.type !== "button") el.value = "";
+document.querySelector(".clear").onclick = () => {
+  document.querySelectorAll("select, textarea").forEach(el => {
+    el.value = "";
   });
-  ruteLainnya.hidden = true;
 };
 
-// BACK → arahkan ke halaman laporan KCM5
-document.querySelector(".back").onclick = ()=>{
-  window.location.href = "/laporanKCM5"; // nanti buat filenya
+// BACK
+document.querySelector(".back").onclick = () => {
+  window.history.back();
 };
 
-// SAVE (dummy)
-document.querySelector(".save").onclick = () => {
-  alert("Data STT KCM 5 siap disimpan");
-};
+// SAVE
+document.querySelector(".save").addEventListener("click", async () => {
+
+  const payload = {
+    no_ref: document.getElementById("no_ref").value,
+    radioComm: document.getElementById("radioComm").value,
+    kunciMobil: document.getElementById("kunciMobil").value,
+    kunciMotor: document.getElementById("kunciMotor").value,
+    kunciSubst: document.getElementById("kunciSubst").value,
+    toolset: document.getElementById("toolset").value
+  };
+
+  try {
+
+    const res = await fetch("/stt/store", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("STT berhasil disimpan");
+    } else {
+      alert(data.message);
+    }
+
+  } catch (err) {
+    alert("Server tidak merespon");
+  }
+
+});

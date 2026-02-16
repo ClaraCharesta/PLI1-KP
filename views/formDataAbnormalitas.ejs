@@ -21,26 +21,34 @@
       <div class="form-card">
         <h2>Add Data Abnormalitas</h2>
 
-        <form id="formDataAbnormalitas">
+<form
+  id="formDataAbnormalitas"
+  action="/dataAbnormalitas/add"
+  method="POST"
+  enctype="multipart/form-data"
+>
 
           <div class="form-group">
             <label for="status">Status</label>
             <select id="status" name="status" required>
               <option value="">-- Pilih Status --</option>
               <option value="Open">Open</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Close">Close</option>
+              <option value="Close">CLose</option>
+              <option value="Pending Material">Pending Material</option>
+              <option value="Pending PMC">Pending PMC</option>
+              <option value="Pending Kiln Stop">Pending Kiln Stop</option>
+              <option value="Pending OH">Pending OH</option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="abnormalDate">Abnormal Date</label>
-            <input type="date" id="abnormalDate" name="abnormalDate" required>
+            <input type="date" id="abnormalDate" name="abnormal_date" required>   
           </div>
 
           <div class="form-group">
             <label for="reportBy">Report By</label>
-            <input type="text" id="reportBy" name="reportBy" placeholder="Nama yang melaporkan" required>
+            <input type="text" id="reportBy" name="report_by">
           </div>
 
           <div class="form-group">
@@ -51,6 +59,7 @@
               <option value="KCM5">KCM5</option>
               <option value="AUTO5">AUTO5</option>
               <option value="FM5">FM5</option>
+              <option value="PPI">PPI</option>
             </select>
           </div>
 
@@ -61,7 +70,44 @@
 
           <div class="form-group">
             <label for="activity">Activity</label>
-            <input type="text" id="activity" name="activity" placeholder="Jenis aktivitas/inspeksi" required>
+            <select id="activity" name="activity" required>
+              <option value="">-- Pilih Activity --</option>
+              <option value="Alignment">Alignment</option>
+              <option value="Balancing">Balancing</option>
+              <option value="Bending(Penekukan)">Bending(Penekukan)</option>
+              <option value="Adjustmen(Pengaturan)">Adjustmen(Pengaturan)</option>
+              <option value="Cabling(Penarikan Kabel)">Cabling(Penarikan Kabel)</option>
+              <option value="Kalibrasi Cleaning(Pembersihan)">Kalibrasi Cleaning(Pembersihan)</option>
+              <option value="Connecting(Penyambungan)">Connecting(Penyambungan)</option>
+              <option value="Cutting(Pemotongan)">Cutting(Pemotongan)</option>
+              <option value="Data Collecting(Pengumpulan Data)">Data Collecting(Pengumpulan Data)</option>
+              <option value="Design(Perancangan)">Design(Perancangan)</option>
+              <option value="Digging(Penggalian)">Digging(Penggalian)</option>
+              <option value="Dismantling(Pembongkaran)">Dismantling(Pembongkaran)</option>
+              <option value="Draining(Pengurasan)">Draining(Pengurasan)</option>
+              <option value="Drilling(Pengeboran)">Drilling(Pengeboran)</option>
+              <option value="Drying(Pengeringan)">Drying(Pengeringan)</option>
+              <option value="Excavating(Pengerukan)">Excavating(Pengerukan)</option>
+              <option value="Fabricating(Fabrikasi)">Fabricating(Fabrikasi)</option>
+              <option value="Grinding(Menggerinda)">Grinding(Menggerinda)</option>
+              <option value="Inspection/Checking(Periksa)">Inspection/Checking(Periksa)</option>
+              <option value="Lubricating(Pelumasan)">Lubricating(Pelumasan)</option>
+              <option value="Measurement(Pengukuran)">Measurement(Pengukuran)</option>
+              <option value="Overhaul Painting(Pengecatan)">Overhaul Painting(Pengecatan)</option>
+              <option value="Patching(Penambalan)">Patching(Penambalan)</option>
+              <option value="Programming(Pemrograman)">Programming(Pemrograman)</option>
+              <option value="Reconditioning(Rekondisi)">Reconditioning(Rekondisi)</option>
+              <option value="Repairing(Perbaikan)">Repairing(Perbaikan)</option>
+              <option value="Replacement(Penggantian)">Replacement(Penggantian)</option>
+              <option value="Rewinding(Penggulungan)">Rewinding(Penggulungan)</option>
+              <option value="Sampling(Pengambilan sample)">Sampling(Pengambilan sample)</option>
+              <option value="Service(Servis)">Service(Servis)</option>
+              <option value="Soldering(Menyolder)">Soldering(Menyolder)</option>
+              <option value="Testing(Uji Coba)">Testing(Uji Coba)</option>
+              <option value="Tightening(Pengencangan)">Tightening(Pengencangan)</option>
+              <option value="Transporting(Mengangkut)">Transporting(Mengangkut)</option>
+              <option value="Welding(Pengelasan)">Welding(Pengelasan)</option>
+            </select>
           </div>
 
           <div class="form-group">
@@ -71,81 +117,141 @@
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
               <option value="High">High</option>
+              <option value="Emergency">Emergency</option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="condition">Condition</label>
-            <input type="text" id="condition" name="condition" placeholder="Kondisi abnormal" required>
+            <select id="condition" name="condition" required>
+              <option value="">-- Pilih Condition --</option>
+              <option value="Tidak Normal">Tidak Normal</option>
+              <option value="Tidak Beroperasi">Tidak Beroperasi</option>
+            </select>
           </div>
 
           <div class="form-group">
             <label for="action">Action</label>
-            <input type="text" id="action" name="action" placeholder="Tindakan yang akan dilakukan" required>
+              <select id="action" name="action" required>
+              <option value="">-- Pilih Action --</option>
+              <option value="Tidak Bisa Diatasi Sendiri">Tidak Bisa Diatasi Sendiri</option>
+              <option value="Bisa Diatasi Sendiri">Bisa Diatasi Sendiri</option>
+            </select>
           </div>
 
           <div class="form-group">
             <label for="abnormal">Abnormal</label>
-            <input type="text" id="abnormal" name="abnormal" placeholder="Jenis abnormalitas" required>
-          </div>
+            <select id="abnormal" name="abnormal" required>
+            <option value="">-- Pilih Abnormal --</option>
+
+              <% [
+                "Bent(Bengkok)","Blocked(Tersumbat)","Break(Patah/Putus)","Broken(Pecah)",
+                "Burn Out(Terbakar)","Card Module Problem","Contaminated (Tercemar)",
+                "Cracked(Retak)","Deformed(Berubah Bentuk)","Display Unit Problem",
+                "Dirty (Kotor)","Drop Down (Jatuh)","Explode(Meledak)",
+                "High Pressure (Tekanan Tinggi)","High Temperature(Temperatur Tinggi)",
+                "High Vibration (Vibrasi Tinggi)","Hot Air(AC Tidak dingin)",
+                "Imbalance(Tidak seimbang)","Leak(Bocor)","Level Low (Isi Kurang)",
+                "Loose(Longgar)","Melt(Meleleh)","Meter Problem (Meter Rusak)",
+                "Mis-align(Tidak sejajar)","Missing Parts (Part Hilang)",
+                "Motherboard Problem","Network Failure(Gangguan Jaringan)",
+                "Noise(Kelainan Bunyi)","Over volatge (Tegangan tinggi)",
+                "Overload (Beban Lebih)","Power Failure (Listrik Mati)",
+                "Power Supply Unit Problem","Pressure Loss (Hilang Tekanan)",
+                "Sensor Problem (Sensor Rusak)","Short Circuit (Hubung Singkat)",
+                "Slip (Selip)","Strike (Mesin Mogok)","Stuck (Macet)",
+                "Tripped (Trip)","Torn (Sobek)","Low Voltage (Tegangan Rendah)",
+                "Wet/Humid (Basah/Lembab)","Worn Out (Aus)",
+                "Bearing Rough (Bearing Kasar)","Program DCS",
+                "False Air","Unsafe Action","Unsafe Condition"
+              ].forEach(e => { %>
+            
+              <option value="<%= e %>"><%= e %></option>
+              <% }) %>
+
+              </select>
+            </div>
+
 
           <div class="form-group">
             <label for="source">Source</label>
             <select id="source" name="source" required>
-              <option value="">-- Pilih Sumber --</option>
-              <option value="Operator">Operator</option>
-              <option value="Visual Inspection">Visual Inspection</option>
-              <option value="Temperature Sensor">Temperature Sensor</option>
-              <option value="Vibration Analyzer">Vibration Analyzer</option>
-              <option value="Pressure Gauge">Pressure Gauge</option>
-              <option value="Alarm System">Alarm System</option>
+              <option value="">-- Pilih Source --</option>
+              <option value="Harian Pemeliharaan">Harian Pemeliharaan</option>
+              <option value="Inspeksi/SOT">Inspeksi/SOT</option>
+              <option value="Shift Pemeliharaan">Shift Pemeliharaan</option>
+              <option value="Genba/TPM">Genba/TPM</option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="informasiDetail">Informasi Detail</label>
-            <textarea id="informasiDetail" name="informasiDetail" rows="3" placeholder="Penjelasan detail kondisi abnormal..."></textarea>
+            <textarea id="informasiDetail" name="detail_info"></textarea>
           </div>
 
           <div class="form-group">
             <label for="rencanaPerbaikan">Rencana Perbaikan</label>
-            <textarea id="rencanaPerbaikan" name="rencanaPerbaikan" rows="3" placeholder="Rencana perbaikan atau tindak lanjut..."></textarea>
+            <select id="rencanaPerbaikan" name="rencana_perbaikan">
+              <option value="">-- Pilih Rencana Perbaikan --</option>
+              <option value="Saat BM/CM">Saat BM/CM</option>
+              <option value="Saat PCM">Saat PCM</option>
+              <option value="Saat Kiln Stop">Saat Kiln Stop</option>
+              <option value="Overhaul">Overhaul</option>
+              <option value="Saat Mill Stop">Saat Mill Stop</option>
+            </select>          
           </div>
 
           <div class="form-group">
             <label for="notifikasiUnitLain">Notifikasi ke Unit Lain</label>
-            <input type="text" id="notifikasiUnitLain" name="notifikasiUnitLain" placeholder="Unit/Departemen yang perlu diberitahu">
+            <select id="notifikasiUnitLain" name="notifikasi_unit">
+              <option value="">-- Pilih Notifikasi ke Unit Lain --</option>
+              <option value="Planner">Planner</option>
+              <option value="ILP/AC">ILP/AC</option>
+              <option value="Produksi">Produksi</option>
+              <option value="Mekanik">Mekanik</option>
+              <option value="Kontrak Service AC">Kontrak Service AC</option>
+              <option value="Bengkel Listrik">Bengkel Listrik</option>
+              <option value="PUP">PUP</option>
+              <option value="EPDC">EPDC</option>
+              <option value="ABI">ABI</option>
+            </select>          
           </div>
 
           <div class="form-group">
             <label for="idMSO">ID MSO</label>
-            <input type="text" id="idMSO" name="idMSO" placeholder="Nomor MSO/Work Order">
+            <input type="text" id="idMSO" name="id_mso">
           </div>
 
-          <!-- ================= UPLOAD FILES ================= -->
-          <div class="upload-section">
-            <h3>Upload Foto</h3>
-            
-            <div class="upload-grid">
-              <div class="upload-box">
-                <input type="file" id="fotoSebelum" name="fotoSebelum" accept="image/*" style="display:none;">
-                <label for="fotoSebelum" class="upload-label">
-                  <span class="upload-icon">📸</span>
-                  <span class="upload-text">Upload Foto Sebelum</span>
-                </label>
+<!-- ================= UPLOAD FILES ================= -->
+<div class="upload-section">
+    <label>Upload Foto</label>
+    <div class="upload-grid">
+        <div class="upload-box">
+            <input type="file" id="fotoSebelum" name="foto_sebelum" accept="image/*" hidden>
+            <label for="fotoSebelum" class="upload-label">
+                <div class="upload-placeholder">
+                    <span class="upload-icon">📸</span>
+                    <span class="upload-text">Upload Foto Sebelum</span>
+                </div>
                 <div id="previewSebelum" class="upload-preview"></div>
-              </div>
+            </label>
+        </div>
 
-              <div class="upload-box">
-                <input type="file" id="fotoSesudah" name="fotoSesudah" accept="image/*" style="display:none;">
-                <label for="fotoSesudah" class="upload-label">
-                  <span class="upload-icon">📸</span>
-                  <span class="upload-text">Upload Foto Sesudah</span>
-                </label>
+        <div class="upload-box">
+            <input type="file" id="fotoSesudah" name="foto_sesudah" accept="image/*" hidden>
+            <label for="fotoSesudah" class="upload-label">
+                <div class="upload-placeholder">
+                    <span class="upload-icon">📸</span>
+                    <span class="upload-text">Upload Foto Sesudah</span>
+                </div>
                 <div id="previewSesudah" class="upload-preview"></div>
-              </div>
-            </div>
-          </div>
+            </label>
+        </div>
+    </div>
+</div>
+
+
+
 
           <!-- ================= BUTTONS ================= -->
           <div class="btn-wrapper">
@@ -171,6 +277,19 @@
       });
     }
   </script>
+
+  <!-- ================= CANCEL MODAL ================= -->
+  <div id="cancelModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-icon">⚠️</div>
+      <h2>Batalkan Perubahan</h2>
+      <p>Apakah anda yakin ingin membatalkan perubahan?</p>
+      <div class="modal-buttons">
+        <button id="confirmCancelBtn" class="btn-confirm">Ya, Batalkan</button>
+        <button id="keepCancelBtn" class="btn-keep">Tidak</button>
+      </div>
+    </div>
+  </div>
 
   <script src="/js/formDataAbnormalitas.js"></script>
 

@@ -2,33 +2,26 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Laporan Shift RM FM 5</title>
-
+  <title>Laporan Shift KCM5</title>
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/sidebar.css">
   <link rel="stylesheet" href="/css/topbar.css">
-  <link rel="stylesheet" href="/css/RMFM5.css">
+  <link rel="stylesheet" href="/css/KCM5.css">
 </head>
 <body>
-
 <%- include('partials/sidebar') %>
-
 <div class="main">
-  <%- include('partials/topbar', { title: "Laporan Shift KCM 5" }) %>
-
+  <%- include('partials/topbar', { title: "Laporan Shift KCM5" }) %>
   <div class="content">
 
-    <!-- HEADER -->
     <div class="header-box">
       <div class="search-box">
         <input type="text" id="searchInput" placeholder="Cari No.Ref / Nama / Tanggal...">
-        <button id="btnSearch" type="button">Search</button>
+        <button id="btnSearch">Search</button>
       </div>
-
       <button id="btnAdd" class="btn-add">+ Add</button>
     </div>
 
-    <!-- TABLE -->
     <div class="table-wrapper">
       <table class="table">
         <thead>
@@ -38,105 +31,68 @@
             <th>Shift</th>
             <th>No.Ref</th>
             <th>Dibuat Oleh</th>
-            <th>Personil (851)</th>
-            <th>Shift (851)</th>
-            <th>Personil (852A)</th>
-            <th>Shift (852A)</th>
-            <th>Personil (852B)</th>
-            <th>Shift (852B)</th>
-
+            <th>Personil (841)</th>
+            <th>Shift (841)</th>
+            <th>Personil (842A)</th>
+            <th>Shift (842A)</th>
+            <th>Personil (842B)</th>
+            <th>Shift (842B)</th>
             <th>Cuti</th>
-            <!-- TAMBAHAN -->
+            <th>Troubleshooting</th>
             <th>Verifikasi Kasi</th>
             <th>Aksi</th>
           </tr>
         </thead>
+        <tbody id="tbodyData">
+          <% if (data && data.length > 0) { %>
+            <% data.forEach((row,index)=>{ %>
+              <tr data-id="<%= row.id %>" data-noref="<%= row.no_ref %>">
+                <td><%= index+1 %></td>
+                <td><%= row.tanggal %></td>
+                <td><%= row.shift_kode %></td>
+                <td><%= row.no_ref %></td>
+                <td><%= row.dibuat_oleh %></td>
+                <td><%= row.personil_841a || "-" %></td>
+                <td><%= row.shift_841a || "-" %></td>
+                <td><%= row.personil_842a || "-" %></td>
+                <td><%= row.shift_842a || "-" %></td>
+                <td><%= row.personil_842b || "-" %></td>
+                <td><%= row.shift_842b || "-" %></td>
+                <td><%= row.cuti || "-" %></td>
+                
+                <!-- Kolom Troubleshooting -->
+                <td>
+                  <% if (tsMap[row.no_ref] && tsMap[row.no_ref].length > 0) { %>
+                    <ul style="padding-left:15px; margin:0;">
+                      <% tsMap[row.no_ref].forEach(ts => { %>
+                        <li><%= ts.deskripsi || ts.keterangan || "-" %> - <%= ts.status || "-" %></li>
+                      <% }) %>
+                    </ul>
+                  <% } else { %>
+                    -
+                  <% } %>
+                </td>
 
-        <tbody>
-          <tr class="row-click" data-ref="REF001">
-            <td>1</td>
-            <td>20-01-2026</td>
-            <td>01</td>
-            <td>REF001</td>
-            <td>zhanshielinsone@gmail.com</td>
-            <td>Irsyadunnas</td>
-            <td>01</td>
-            <td>Rafki</td>
-            <td>01</td>
-            <td>Salman</td>
-            <td>01</td>
-
-            <td>Meri</td>
-
-            <!-- TAMBAHAN -->
-            <td class="verifikasi">
-              <input type="checkbox" class="chk-approve">
-              <span class="status-text">Belum di-approve</span>
-            </td>
-
-            <td>
-              <button class="btn-edit">Edit</button>
-              <button class="btn-del">Hapus</button>
-            </td>
-          </tr>
-
-          <tr class="row-click" data-ref="REF002">
-            <td>2</td>
-            <td>21-01-2026</td>
-            <td>02</td>
-            <td>REF002</td>
-            <td>admin@mail.com</td>
-            <td>Ali</td>
-            <td>02</td>
-            <td>Budi</td>
-            <td>02</td>
-            <td>Dani</td>
-            <td>02</td>
-
-            <td>-</td>
-
-            <!-- TAMBAHAN -->
-            <td class="verifikasi">
-              <input type="checkbox" class="chk-approve">
-              <span class="status-text">Belum di-approve</span>
-            </td>
-
-            <td>
-              <button class="btn-edit">Edit</button>
-              <button class="btn-del">Hapus</button>
-            </td>
-          </tr>
+                <td>
+                  <input type="checkbox" class="chk-approve" data-id="<%= row.id %>"
+                  <% if(row.is_approved){ %> checked disabled <% } %> >
+                  <span><%= row.is_approved ? "Approved" : "Belum di-approve" %></span>
+                </td>
+                <td>
+                  <button class="btn-edit">Edit</button>
+                  <button class="btn-del">Hapus</button>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr><td colspan="15" style="text-align:center;">Data belum tersedia</td></tr>
+          <% } %>
         </tbody>
       </table>
     </div>
 
-    <!-- DELETE MODAL -->
-    <div id="deleteModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-icon">🗑️</div>
-        <h2>Delete Data</h2>
-        <p>Apakah anda yakin ingin menghapus?</p>
-        <div class="modal-buttons">
-          <button id="deleteBtn" class="btn-delete">Delete</button>
-          <button id="keepBtn" class="btn-keep">Keep</button>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
-
-<script>
-  const menuToggle = document.getElementById('menuToggle');
-  const sidebar = document.querySelector('.sidebar');
-  const main = document.querySelector('.main');
-
-  menuToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('closed');
-    main.classList.toggle('expanded');
-  });
-</script>
-
 <script src="/js/RMFM5.js"></script>
 </body>
 </html>

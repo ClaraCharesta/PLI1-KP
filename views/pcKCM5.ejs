@@ -3,11 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title><%= title %></title>
+
 <link rel="stylesheet" href="/css/layout.css">
 <link rel="stylesheet" href="/css/sidebar.css">
 <link rel="stylesheet" href="/css/topbar.css">
 <link rel="stylesheet" href="/css/pcKCM5.css">
 </head>
+
 <body>
 
 <%- include('partials/sidebar') %>
@@ -16,43 +18,65 @@
   <%- include('partials/topbar', { title: title }) %>
 
   <div class="content">
-    <div class="form-card">
+
+    <form id="monitorForm"
+          class="form-card"
+          method="POST"
+          action="/laporan-shift/kcm5/monitoring/save">
+
+      <!-- Hidden No Ref -->
+      <input type="hidden" name="no_ref" value="<%= no_ref %>">
 
       <div class="form-group">
-        <label>Kiln Feeding</label>
-        <input type="text" id="kilnFeeding" placeholder="Masukkan Kiln Feeding">
-      </div>
-
-      <div class="form-group">
-        <label>Kiln Speed</label>
-        <input type="text" id="kilnSpeed" placeholder="Masukkan Kiln Speed">
+        <label>Monitoring</label>
+        <textarea
+          name="monitoring"
+          id="monitoring"
+          rows="5"
+          placeholder="Masukkan hasil monitoring..."
+          required
+        ></textarea>
       </div>
 
       <div class="btn-wrapper">
         <div class="btn">
-            <button class="back" type="button">Back</button>
-            <button class="clear" type="button">Clear</button>
-            <button class="save" type="submit">Save</button>
-        
+          <button type="button" class="back">Back</button>
+          <button type="button" class="clear">Clear</button>
+          <button type="submit" class="save">Save</button>
         </div>
       </div>
 
-    </div>
+    </form>
+
   </div>
 </div>
 
 <script>
+  // Sidebar
   const menuToggle = document.getElementById('menuToggle');
   const sidebar = document.querySelector('.sidebar');
   const main = document.querySelector('.main');
 
-  menuToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('closed');
-    main.classList.toggle('expanded');
-  });
+  if(menuToggle){
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('closed');
+      main.classList.toggle('expanded');
+    });
+  }
+
+  // BACK → kembali ke detail
+document.querySelector('.back').addEventListener('click', () => {
+  window.location.href =
+    "/laporan-shift/kcm5/detail?noref=<%= no_ref %>";
+});
+
+
+  // CLEAR
+  document.querySelector(".clear").onclick = () => {
+    document.getElementById("monitoring").value = "";
+  };
 </script>
 
 <script src="/js/sidebar.js"></script>
-<script src="/js/pcKCM5.js"></script>
 </body>
 </html>

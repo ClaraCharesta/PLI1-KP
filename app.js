@@ -1,13 +1,29 @@
-// app.js
+// ===============================
+// IMPORT
+// ===============================
 const express = require("express");
 const session = require("express-session");
 const bcrypt = require("bcrypt");
-const db = require("./models"); // sequelize + semua model
+const db = require("./models");
 
-// ===== ROUTES =====
+// ===============================
+// ROUTES
+// ===============================
 const laporanShiftRoutes = require("./routes/laporanShiftRoutes");
-const formLaporanShiftRoutes = require("./routes/formLaporanShiftRoutes");
+
 const dataBMCMRoutes = require("./routes/dataBMCMRoutes");
+const dataBMCMPPIRoutes = require("./routes/dataBMCMPPIRoutes");
+
+const tsKCM5Routes = require("./routes/tsKCM5Routes");
+const monitoringRoutes = require("./routes/monitoringRoutes");
+const sttRoutes = require("./routes/sttRoutes");
+const catatanRoutes = require("./routes/catatanRoutes");
+const basicMaintenanceRoutes = require("./routes/basicMaintenanceRoutes");
+const dataAbnormalitasRoutes = require("./routes/dataAbnormalitasRoutes");
+const chartBMCMRoutes = require("./routes/chartBMCMRoutes");
+const chartBMCMPPIRoutes = require("./routes/chartBMCMPPIRoutes");
+const chartAbnormalitasRoutes = require("./routes/chartAbnormalitasRoutes");
+
 
 const app = express();
 
@@ -27,11 +43,13 @@ app.use(express.json());
 // ===============================
 // SESSION
 // ===============================
-app.use(session({
-  secret: "pli1-secret",
-  resave: false,
-  saveUninitialized: false
-}));
+app.use(
+  session({
+    secret: "pli1-secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 // ===============================
 // AUTH MIDDLEWARE
@@ -59,15 +77,28 @@ app.post("/login", async (req, res) => {
 
     const user = await User.findOne({
       where: { email, is_active: true },
-      include: { model: Role, include: RolePermission }
+      include: {
+        model: Role,
+        include: RolePermission,
+      },
     });
 
-    if (!user) return res.render("login", { error: "Email tidak terdaftar" });
+    if (!user) {
+      return res.render("login", { error: "Email tidak terdaftar" });
+    }
 
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.render("login", { error: "Password salah" });
 
-    req.session.user = { id: user.user_id, nama: user.nama, role: user.Role.role_name };
+    if (!match) {
+      return res.render("login", { error: "Password salah" });
+    }
+
+    req.session.user = {
+      id: user.user_id,
+      nama: user.nama,
+      role: user.Role.role_name,
+    };
+
     req.session.permissions = user.Role.RolePermissions;
 
     res.redirect("/home");
@@ -85,70 +116,225 @@ app.get("/logout", (req, res) => {
 });
 
 // ===============================
-// ROUTES: LAPORAN SHIFT / FORM / DATA BM CM
+// ROUTES MODULAR
 // ===============================
 app.use("/laporan-shift", auth, laporanShiftRoutes);
-app.use("/form-laporan-shift", auth, formLaporanShiftRoutes);
-app.use("/form-laporan-shift", require("./routes/formLaporanShiftRoutes"));
-app.use("/data-bmcm", auth, dataBMCMRoutes);
+app.use("/ts", auth, tsKCM5Routes);
+
+
+
+
+
+
+app.use("/monitoring", auth, monitoringRoutes);
+app.use("/catatan", auth, catatanRoutes);
+app.use("/stt", auth, sttRoutes);
+app.use("/maintenance", auth, basicMaintenanceRoutes);
+
+app.use("/dataBMCM", auth, dataBMCMRoutes);
+app.use("/dataAbnormalitas", auth, dataAbnormalitasRoutes);
+app.use("/uploads", express.static("public/uploads"));
+
+// sub chart
+app.use("/chart/bmcm", auth, chartBMCMRoutes);
+app.use("/chart/ppi", auth, chartBMCMPPIRoutes);
+app.use("/chart/abnormal", auth, chartAbnormalitasRoutes);
+
+// pivot chart kamu
+app.use("/chart/pivot", auth, require("./routes/pivotChartRoutes"));
+app.use("/dataBMCMPPI", auth, dataBMCMPPIRoutes);
 
 // ===============================
-// DEBUG TEMPORARY ROUTE
+// ALIAS MENU / REDIRECT
 // ===============================
-app.post('/debug/data-bmcm', (req, res) => {
-  console.log('▶ DEBUG POST /debug/data-bmcm - session user:', req.session?.user ?? null, 'body:', req.body);
-  res.json({ ok: true, session: req.session?.user ?? null, body: req.body });
+app.get("/KCM5", auth, (req, res) => {
+  res.redirect("/laporan-shift/kcm5");
+});
+
+app.get("/RMFM5", auth, (req, res) => {
+  res.redirect("/laporan-shift/rmfm5");
+});
+
+
+
+// ===============================
+// ROUTE NON LAPORAN
+// ===============================
+app.get("/home", auth, (req, res) => {
+  res.render("home", { title: "Home", active: "home" });
+});
+
+// menu utama
+app.get("/chart", auth, (req, res) => {
+  res.render("chartMenu");
+});
+
+
+
+app.get("/kelola-user", auth, (req, res) => {
+  res.render("kelolaUser", { title: "Kelola User", active: "user" });
+});
+
+app.get("/ubahPassword", auth, (req, res) => {
+  res.render("ubahPassword", {
+    title: "Ganti Password",
+    active: "about",
+  });
+});
+
+app.get("/about", auth, (req, res) => {
+  res.render("about", { title: "About", active: "about" });
+});
+
+app.get("/feedback", auth, (req, res) => {
+  res.render("feedback", { title: "Feedback", active: "feedback" });
 });
 
 // ===============================
-// ROUTE NON-LAPORAN (HOME, CHART, USER, ABOUT, DLL)
-// ===============================
-app.get("/home", auth, (req, res) => res.render("home", { title: "Home", active: "home" }));
-app.get("/chart", auth, (req, res) => res.render("chart", { active: "chart" }));
-app.get("/kelola-user", auth, (req, res) => res.render("kelolaUser", { title: "Kelola User", active: "user" }));
-app.get("/ubahPassword", auth, (req, res) => res.render("ubahPassword", { title: "Ganti Password", active: "about" }));
-app.get("/about", auth, (req, res) => res.render("about", { title: "About", active: "about" }));
-app.get("/feedback", auth, (req, res) => res.render("feedback", { active: "feedback" }));
-app.get("/KCM5", auth, (req, res) => res.redirect("/laporan-shift/KCM5"));
-app.get("/RMFM5", auth, (req, res) => res.redirect("/laporan-shift/RMFM5"));
-
-// ===============================
-// ROUTE LAPORAN PAGE STATIC
+// LAPORAN PAGES (DYNAMIC)
 // ===============================
 const laporanPages = [
-  { path: "/laporanShiftKCM5", file: "laporanShiftKCM5", title: "Laporan Shift KCM 5", active: "laporan" },
-  { path: "/laporanShiftRMFM5", file: "laporanShiftRMFM5", title: "Laporan Shift RM FM 5", active: "laporan" },
-  { path: "/tsKCM5", file: "tsKCM5", title: "Laporan Shift KCM 5", active: "trouble shooting" },
-  { path: "/tsRMFM5", file: "tsRMFM5", title: "Laporan Shift RM FM 5", active: "trouble shooting RM FM" },
-  // ... tambahkan semua page lain yang sebelumnya ada
+  // KCM5 & RMFM5
+  {
+    path: "/laporanShiftKCM5",
+    file: "laporanShiftKCM5",
+    title: "Laporan Shift KCM 5",
+    active: "laporan",
+  },
+  {
+    path: "/laporanShiftRMFM5",
+    file: "laporanShiftRMFM5",
+    title: "Laporan Shift RM FM 5",
+    active: "laporan",
+  },
+  
+  {
+    path: "/tsRMFM5",
+    file: "tsRMFM5",
+    title: "Trouble Shooting RM FM 5",
+    active: "trouble shooting",
+  },
+  {
+    path: "/maintenanceKCM5",
+    file: "maintenanceKCM5",
+    title: "Maintenance KCM 5",
+    active: "maintenance",
+  },
+  {
+    path: "/maintenanceRMFM5",
+    file: "maintenanceRMFM5",
+    title: "Maintenance RM FM 5",
+    active: "maintenance",
+  },
+  {
+    path: "/pcKCM5",
+    file: "pcKCM5",
+    title: "Produksi Clinker KCM 5",
+    active: "produksi clinker",
+  },
+  {
+    path: "/pcRMFM5",
+    file: "pcRMFM5",
+    title: "Produksi Clinker RM FM 5",
+    active: "produksi clinker",
+  },
+  {
+    path: "/sttKCM5",
+    file: "sttKCM5",
+    title: "Serah Terima Tool KCM 5",
+    active: "serah terima tool",
+  },
+  {
+    path: "/sttRMFM5",
+    file: "sttRMFM5",
+    title: "Serah Terima Tool RM FM 5",
+    active: "serah terima tool",
+  },
+  {
+    path: "/catatanKCM5",
+    file: "catatanKCM5",
+    title: "Catatan KCM 5",
+    active: "catatan",
+  },
+  {
+    path: "/catatanRMFM5",
+    file: "catatanRMFM5",
+    title: "Catatan RM FM 5",
+    active: "catatan",
+  },
+  {
+    path: "/laporanKCM5",
+    file: "laporanKCM5",
+    title: "Laporan KCM 5",
+    active: "laporan",
+  },
+  {
+    path: "/laporanRMFM5",
+    file: "laporanRMFM5",
+    title: "Laporan RM FM 5",
+    active: "laporan",
+  },
+
+  // Data BM & CM
+ 
+
+  // Data Abnormalitas
+
+  {
+    path: "/formDataAbnormalitas",
+    file: "formDataAbnormalitas",
+    title: "Add Data Abnormalitas",
+    active: "dataAbnormalitas",
+  },
+  {
+    path: "/updateDataAbnormalitas",
+    file: "formUpdateDataAbnormalitas",
+    title: "Update Data Abnormalitas",
+    active: "dataAbnormalitas",
+  },
 ];
 
-laporanPages.forEach(page => {
+// Loop route
+laporanPages.forEach((page) => {
   app.get(page.path, auth, (req, res) => {
-    res.render(page.file, { title: page.title, active: page.active });
+    const noRef = req.query.noref || "";
+
+    res.render(page.file, {
+      title: page.title,
+      active: page.active,
+      no_ref: noRef,
+    });
   });
 });
 
 // ===============================
-// SYNC DATABASE & CREATE ADMIN DEFAULT
+// SYNC DATABASE + DEFAULT ADMIN
 // ===============================
 (async () => {
   try {
     await db.sequelize.sync();
-    console.log("✅ Semua tabel tersinkronisasi");
 
     const { Role, User } = db;
-    const [adminRole] = await Role.findOrCreate({ where: { role_name: "Admin" } });
+
+    const [adminRole] = await Role.findOrCreate({
+      where: { role_name: "Admin" },
+    });
+
     const hash = await bcrypt.hash("admin123", 10);
 
     await User.findOrCreate({
       where: { email: "admin@gmail.com" },
-      defaults: { nama: "Admin PLI 1", password: hash, role_id: adminRole.role_id, is_active: true }
+      defaults: {
+        nama: "Admin PLI 1",
+        password: hash,
+        role_id: adminRole.role_id,
+        is_active: true,
+      },
     });
 
-    console.log("✅ Role & User admin siap login");
+    console.log("✅ Database & admin siap login");
   } catch (err) {
-    console.error("❌ Gagal sync database / create admin:", err);
+    console.error(err);
   }
 })();
 
@@ -156,11 +342,7 @@ laporanPages.forEach(page => {
 // SERVER
 // ===============================
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`✅ Server jalan di http://localhost:${PORT}`))
-   .on("error", (err) => console.error("❌ SERVER ERROR:", err.message));
 
-// ===============================
-// KEEP ALIVE LOG
-// ===============================
-process.on("uncaughtException", (err) => console.error("❌ UNCAUGHT EXCEPTION:", err));
-process.on("unhandledRejection", (reason) => console.error("❌ UNHANDLED REJECTION:", reason));
+app.listen(PORT, () => {
+  console.log(`✅ Server jalan di http://localhost:${PORT}`);
+});

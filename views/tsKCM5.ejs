@@ -1,149 +1,290 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>TS KCM 5</title>
+  <meta charset="UTF-8">
+  <title>Tambah Troubleshooting KCM 5</title>
 
-<link rel="stylesheet" href="/css/layout.css">
-<link rel="stylesheet" href="/css/sidebar.css">
-<link rel="stylesheet" href="/css/topbar.css">
-<link rel="stylesheet" href="/css/tsKCM5.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/tsKCM5.css">
+
+  <!-- Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <style>
+    .select2-container--default .select2-selection--single {
+      height: 35px;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      line-height: 35px;
+    }
+  </style>
 </head>
 <body>
 
-<%- include('partials/sidebar') %>
+<%- include('partials/sidebar', { active: 'laporan' }) %>
 
 <div class="main">
-  <%- include('partials/topbar', { title: 'Laporan Shift KCM 5' }) %>
-
-
+  <%- include('partials/topbar', { title: 'Tambah Troubleshooting KCM 5' }) %>
 
   <div class="content">
-    <div class="form-card">
+<form method="POST" action="/laporan-shift/kcm5/troubleshooting" class="form-card">
 
-      <!-- FORM -->
+    <input type="hidden" name="no_ref" value="<%= no_ref %>">
+
+      <!-- TANGGAL -->
       <div class="form-group">
         <label>Tanggal</label>
-        <input type="date" id="tanggal">
+        <input type="date" id="tanggal" name="tanggal" required>
       </div>
 
+      <!-- WEEK -->
       <div class="form-group">
         <label>Week</label>
-        <input type="number" id="week" readonly>
+        <input type="number" id="week" name="week" readonly>
       </div>
 
+      <!-- AREA -->
       <div class="form-group">
         <label>Area</label>
-        <select id="area">
-          <option value="">None</option>
+        <select id="area" name="area">
+          <option value="">-- Pilih --</option>
         </select>
-        <input type="text" id="areaLainnya" placeholder="Isi area lainnya" hidden>
+        <input type="text" id="areaLainnya" name="area_lainnya" placeholder="Isi area lainnya" hidden>
       </div>
 
+      <!-- NOMENCLATURE -->
       <div class="form-group">
         <label>Nomenclature</label>
-        <input type="text" id="nomenclature">
+        <select id="nomenclature" name="nomenclature" style="width:100%">
+          <option value="">-- Pilih --</option>
+          <% nomenclatures.forEach(n => { %>
+            <option value="<%= n.id %>"><%= n.name %></option>
+          <% }) %>
+        </select>
       </div>
 
+      <!-- MULAI -->
       <div class="form-group">
         <label>Mulai</label>
-        <input type="time" id="mulai" step="1">
+        <input type="time" id="mulai" name="mulai" step="1">
       </div>
 
+      <!-- SELESAI -->
       <div class="form-group">
         <label>Selesai</label>
-        <input type="time" id="selesai" step="1">
+        <input type="time" id="selesai" name="selesai" step="1">
       </div>
 
+      <!-- DURASI -->
       <div class="form-group">
         <label>Durasi (jam)</label>
-        <input type="text" id="durasi" readonly>
+        <input type="text" id="durasi" name="durasi" readonly>
       </div>
 
+      <!-- ALARM -->
       <div class="form-group">
         <label>Alarm</label>
-        <input type="text" id="alarm">
+        <input type="text" name="alarm">
       </div>
 
+      <!-- INDIKASI MASALAH -->
       <div class="form-group">
-        <label>Indikasi Masalah 1</label>
-        <input type="text">
+        <label>Indikasi Masalah</label>
+        <input type="text" name="indikasi">
       </div>
 
+      <!-- KLASIFIKASI PERALATAN -->
       <div class="form-group">
-        <label>Klasifikasi</label>
-        <select id="klasifikasi">
-          <option value="">None</option>
+        <label>Klasifikasi Peralatan</label>
+        <select id="klasifikasiPeralatan" name="klasifikasi_peralatan">
+          <option value="">-- Pilih --</option>
         </select>
-        <input type="text" id="klasifikasiLainnya" placeholder="Isi klasifikasi lainnya" hidden>
+        <input type="text" id="kplLainnya" placeholder="Isi lain-lain" hidden>
       </div>
 
+      <!-- KLASIFIKASI PEKERJAAN -->
       <div class="form-group">
-        <label>Indikasi Masalah 2</label>
-        <select id="indikasi2">
-          <option value="">None</option>
+        <label>Klasifikasi Pekerjaan</label>
+        <select id="klasifikasiPekerjaan" name="klasifikasi_pekerjaan">
+          <option value="">-- Pilih --</option>
         </select>
-        <input type="text" id="indikasi2Lainnya" placeholder="Isi indikasi lainnya" hidden>
+        <input type="text" id="kpLainnya" placeholder="Isi lain-lain" hidden>
       </div>
 
+      <!-- TINDAKAN -->
+      <div class="form-group">
+        <label>Tindakan</label>
+        <input type="text" name="tindakan">
+      </div>
+
+      <!-- PIC -->
+      <div class="form-group">
+        <label>PIC</label>
+        <div class="cuti-box" id="picBox"></div>
+        <select id="picSelect">
+          <option value="">-- Tambah PIC --</option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
+        <input type="text" id="picLainnya" placeholder="Isi PIC lainnya lalu tekan Enter" hidden>
+        <input type="hidden" name="pic" id="picResult">
+      </div>
+
+      <!-- STATUS -->
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="">-- Pilih --</option>
+          <option value="OK">OK</option>
+          <option value="NOK">NOK</option>
+        </select>
+      </div>
+
+      <!-- KETERANGAN -->
       <div class="form-group">
         <label>Keterangan</label>
-        <input type="text">
+        <input type="text" name="keterangan">
       </div>
 
-      <label>PIC</label>
-      <div class="cuti-box" id="picBox"></div>
-      <input type="text" id="picLainnya" placeholder="Tambah PIC lainnya">
-
+      <!-- STOP ALAT -->
       <div class="form-group">
-        <label>Status 1</label>
-        <select>
-          <option value="">None</option>
-          <option>OK</option>
-          <option>NOK</option>
+        <label>Stop Alat Utama</label>
+        <select name="stop_alat">
+          <option value="">-- Pilih --</option>
+          <option value="Menstop Alat Utama">Menstop Alat Utama</option>
+          <option value="Tidak Menstop Alat Utama">Tidak Menstop Alat Utama</option>
         </select>
       </div>
 
-      <div class="form-group">
-        <label>Status 2</label>
-        <input type="text">
-      </div>
-
-      <div class="form-group">
-        <label>Keterangan 2</label>
-        <select>
-          <option value="">None</option>
-          <option>Menstop Alat Utama</option>
-          <option>Tidak Menstop Alat Utama</option>
-        </select>
-      </div>
-
+      <!-- BUTTON -->
       <div class="btn">
-            <button class="back" type="button">Back</button>
-            <button class="clear" type="button">Clear</button>
-            <button class="save" type="submit">Save</button>
-    </div>
+        <button type="button" class="back">Back</button>
+        <button type="reset" class="clear">Clear</button>
+        <button type="submit" class="save">Save</button>
+      </div>
 
-
-    </div>
+    </form>
   </div>
 </div>
 
-<script>
-  const menuToggle = document.getElementById('menuToggle');
-  const sidebar = document.querySelector('.sidebar');
-  const main = document.querySelector('.main');
-
-  menuToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('closed');
-    main.classList.toggle('expanded');
-  });
-</script>
-
-
 <script src="/js/sidebar.js"></script>
-<script src="/js/tsKCM5.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+<script>
+$(document).ready(function() {
+
+  // SELECT2 NORMAL
+  $('#area, #klasifikasiPeralatan, #klasifikasiPekerjaan').select2({
+    placeholder: '-- Pilih --',
+    allowClear: true,
+    width: '100%'
+  });
+
+  // SELECT2 NOMENCLATURE (NON AJAX)
+  $('#nomenclature').select2({
+    placeholder: '-- Pilih Nomenclature --',
+    allowClear: true,
+    width: '100%'
+  });
+
+  // ===== WEEK =====
+  $('#tanggal').on('change', function() {
+    const d = new Date(this.value);
+    const start = new Date(d.getFullYear(),0,1);
+    const diff = (d - start)/86400000;
+    $('#week').val(Math.ceil((diff+1)/7));
+  });
+
+  // ===== AREA =====
+  const areaEnum = [
+    "5A1","5C1","5K1","5R","5R1","5R2","5U1","5W","5W1",
+    "5Z","5Z1","5Z2","KCM 5","RM FM 5","PPI","Lainnya"
+  ];
+  const area = $('#area');
+  areaEnum.forEach(a => area.append(`<option>${a}</option>`));
+  area.on('change', () => $('#areaLainnya').prop('hidden', area.val()!=='Lainnya'));
+
+  // ===== KLASIFIKASI =====
+  const klasifikasiPeralatanEnum = [
+    "AFR","ANALYZER","BCE","BELUM DIKETAHUI","BS RAW COAL","DBA","DBB",
+    "EMERGENCY SWITCH","EPDC","Feeder","Gate","GCT","GRATE COOLER","HMI",
+    "Hoist","HTDB","KOMPRESSOR","LCP Lubrication","LIFT","LRS","MCC",
+    "ME Problem","Motor LV","Motor MV","PMC","PROBLEM ME","PROBLEM PROD",
+    "PROGRAM PLC","ROLLER BREAKER","SENSOR","SIDE SCRAPER","SLIDE GATE",
+    "START STOP BUTTON","TANGKI CO","VSD","WELDING PANEL","Lainnya"
+  ];
+  const klasifikasiPekerjaanEnum = [
+    "Troubleshooting","Monitoring","Order prod","Order ME",
+    "ME Problem","ORDER 81","Order 82","PMC",
+    "Order KS","Order PUP","Material block","Lainnya"
+  ];
+  const kpl = $('#klasifikasiPeralatan');
+  klasifikasiPeralatanEnum.forEach(k => kpl.append(`<option>${k}</option>`));
+  kpl.on('change', () => $('#kplLainnya').prop('hidden', kpl.val()!=='Lainnya'));
+
+  const kp = $('#klasifikasiPekerjaan');
+  klasifikasiPekerjaanEnum.forEach(k => kp.append(`<option>${k}</option>`));
+  kp.on('change', () => $('#kpLainnya').prop('hidden', kp.val()!=='Lainnya'));
+
+  // ===== DURASI =====
+  function hitungDurasi(){
+    const mulai = $('#mulai').val();
+    const selesai = $('#selesai').val();
+    if(!mulai || !selesai) return;
+    const t1 = new Date(`1970-01-01T${mulai}`);
+    const t2 = new Date(`1970-01-01T${selesai}`);
+    $('#durasi').val(((t2-t1)/3600000).toFixed(2));
+  }
+  $('#mulai, #selesai').on('change', hitungDurasi);
+
+  // ===== PIC =====
+  const picEnum = [
+    "[ISD] Irsyadunnas","[RKB] Rafki Budiman","[SLM] Salman",
+    "[RKS] Riki Sulaiman","[WIK] Wahyu Ikhsan","[MFS] Meri Fernandes",
+    "[MTR] Martu Rizal","[SEP] Sepriadi","[NFJ] Nofriza Juanda",
+    "[HRT] Harto","[HMN] Harmen","[EDW] Edward",
+    "[WAP] Wahyu Arisal Putra, ST","[DRO] Desrianto","[AFZ] Afrizal",
+    "[JMB] Jumaidi Bakri","[AOP] Astoria Prima",
+    "[WSD] Willy Surya Dinata","[AGW] Angga Wahyudi",
+    "[SFL] Syafril","[RDP] Randi Pratama"
+  ];
+  const picBox = $('#picBox');
+  const picResult = $('#picResult');
+  const picSelect = $('#picSelect');
+  const picLainnya = $('#picLainnya');
+
+  function renderPic(name){
+    const div = $('<div class="cuti-item"></div>');
+    div.html(`<input type="checkbox" value="${name}"><label>${name}</label>`);
+    picBox.append(div);
+  }
+  picEnum.forEach(renderPic);
+
+  picBox.on('change', 'input', () => {
+    const val = picBox.find('input:checked').map((i,e)=>e.value).get().join(', ');
+    picResult.val(val);
+  });
+
+  picSelect.on('change', () => {
+    picLainnya.prop('hidden', picSelect.val()!=='Lainnya');
+    if(picSelect.val()==='Lainnya') picLainnya.focus();
+  });
+
+  picLainnya.on('keydown', e => {
+    if(e.key==='Enter'){
+      e.preventDefault();
+      const val = picLainnya.val().trim();
+      if(!val) return;
+      renderPic(val);
+      picLainnya.val('');
+    }
+  });
+
+  // ===== BACK =====
+  $('.back').click(()=>window.location.href="/laporan-shift/kcm5");
+});
+</script>
 
 </body>
 </html>

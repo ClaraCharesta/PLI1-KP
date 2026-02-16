@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chart - PLI 1 Maintenance</title>
+
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/chartMenu.css">
+</head>
+<body>
+
+  <%- include('partials/sidebar', { active: 'chart' }) %>
+
+
+  <div class="main">
+    <%- include('partials/topbar', { title: "Chart" }) %>
+
+    <div class="content">
+
+      <div class="chart-menu-header">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search menu...">
+          <button id="btnSearch" type="button">Search</button>
+        </div>
+      </div>
+
+      <div class="chart-cards-grid">
+
+        <div class="chart-card" data-route="/chart/bmcm">
+          <div class="chart-card-icon">
+            <img src="/img/Menu_BMCM.png" alt="Chart Data BM & CM IND 5">
+          </div>
+          <h3 class="chart-card-title">Chart Data BM & CM IND 5</h3>
+        </div>
+
+        <div class="chart-card" data-route="/chart/ppi">
+          <div class="chart-card-icon">
+            <img src="/img/Menu_Data BMCM PPI.png" alt="Chart Data BM & CM PPI">
+          </div>
+          <h3 class="chart-card-title">Chart Data BM & CM PPI</h3>
+        </div>
+
+        <div class="chart-card" data-route="/chart/abnormal">
+          <div class="chart-card-icon">
+            <img src="/img/Menu_Abnormalitas.png" alt="Chart Data Temuan Inspeksi">
+          </div>
+          <h3 class="chart-card-title">Chart Data Temuan Inspeksi</h3>
+        </div>
+
+        <div class="chart-card" data-route="/chart/pivot">
+        <div class="chart-card-icon">
+            <img src="/img/Menu_LaporanShiftKCM.png" alt="Pivot Dashboard">
+        </div>
+        <h3 class="chart-card-title">Pivot Dashboard</h3>
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/chartMenu.js"></script>
+</body>
+</html>

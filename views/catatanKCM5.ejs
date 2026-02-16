@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Catatan KCM 5</title>
+  <meta charset="UTF-8">
+  <title>Catatan KCM 5</title>
 
-<link rel="stylesheet" href="/css/layout.css">
-<link rel="stylesheet" href="/css/sidebar.css">
-<link rel="stylesheet" href="/css/topbar.css">
-<link rel="stylesheet" href="/css/catatanKCM5.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/catatanKCM5.css">
 </head>
 <body>
 
@@ -17,37 +17,57 @@
   <%- include('partials/topbar', { title: title }) %>
 
   <div class="content">
-    <div class="form-card">
+
+    <!-- 🔥 FORM POST NORMAL -->
+    <form method="POST" action="/laporan-shift/kcm5/catatan/save" class="form-card">
+
+      <!-- hidden no_ref -->
+      <input type="hidden" name="no_ref" value="<%= no_ref %>">
 
       <div class="form-group">
-        <label>Catatan<span></span></label>
-        <textarea id="catatan" placeholder="Tulis catatan di sini..."></textarea>
+        <label>Catatan</label>
+        <textarea
+          name="catatan"
+          id="catatan"
+          placeholder="Tulis catatan di sini..."
+          required
+        ></textarea>
       </div>
 
       <div class="btn-wrapper">
         <div class="btn">
-          <button class="back" type="button">Back</button>
-          <button class="clear" type="button">Clear</button>
-          <button class="save" type="button">Save</button>
+
+          <button class="back" type="button">
+            Back
+          </button>
+
+          <button class="clear" type="button">
+            Clear
+          </button>
+
+          <button class="save" type="submit">
+            Save
+          </button>
+
         </div>
       </div>
 
-    </div>
+    </form>
+
   </div>
 </div>
 
 <script>
-  const menuToggle = document.getElementById('menuToggle');
-  const sidebar = document.querySelector('.sidebar');
-  const main = document.querySelector('.main');
+document.querySelector(".clear").onclick = () => {
+  document.getElementById("catatan").value = "";
+};
 
-  menuToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('closed');
-    main.classList.toggle('expanded');
-  });
+document.querySelector(".back").onclick = () => {
+  window.location.href =
+    "/laporan-shift/kcm5/detail?noref=<%= no_ref %>";
+};
 </script>
 
 <script src="/js/sidebar.js"></script>
-<script src="/js/catatanKCM5.js"></script>
 </body>
 </html>

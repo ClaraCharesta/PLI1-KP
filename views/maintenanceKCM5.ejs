@@ -11,26 +11,100 @@
 </head>
 <body>
 
-<%- include('partials/sidebar') %>
+<%- include('partials/sidebar', { active: 'laporan' }) %>
 
 <div class="main">
   <%- include('partials/topbar', { title: title }) %>
 
-
   <div class="content">
-    <div class="form-card">
 
+    <form method="POST" action="/laporan-shift/kcm5/maintenance/save" class="form-card">
+
+      <!-- NO REF -->
+      <input type="hidden" name="no_ref" value="<%= no_ref %>">
+
+      <!-- WEEK (AUTO) -->
+      <input type="hidden" name="week" id="week">
+
+      <!-- RUTE -->
+      <!-- RUTE -->
       <div class="form-group">
-        <label>Rute BM</label>
-        <select id="ruteBM">
-          <option value="">None</option>
-        </select>
-        <input type="text" id="ruteLainnya" placeholder="Isi rute lainnya" hidden>
+      <label>Rute BM</label>
+            <select name="rute" id="ruteBM" style="width:100%">
+        <option value="">-- Pilih --</option>
+
+        <% (nomenclatures || []).forEach(n => { %>
+          <option value="<%= n.name %>"><%= n.name %></option>
+        <% }) %>
+
+      </select>
+
+      <input type="text" name="rute_lainnya" id="ruteLainnya" hidden placeholder="Isi rute lain">
+    </div>
+
+
+
+      <!-- TANGGAL -->
+      <div class="form-group">
+        <label>Tanggal</label>
+        <input type="date" name="tanggal" id="tanggal" required>
       </div>
 
+      <!-- JAM MULAI -->
+      <div class="form-group">
+        <label>Jam Mulai</label>
+        <input type="time" id="mulai" name="mulai" step="1">
+      </div>
+
+      <!-- JAM SELESAI -->
+      <div class="form-group">
+        <label>Jam Selesai</label>
+        <input type="time" id="selesai" name="selesai" step="1">
+      </div>
+
+      <!-- DURASI -->
+      <div class="form-group">
+        <label>Durasi (Jam)</label>
+        <input type="text" id="durasi" name="durasi" readonly>
+      </div>
+
+      <!-- AREA -->
+      <div class="form-group">
+  <label>Area</label>
+
+  <select name="area" id="areaSelect" onchange="toggleOtherArea(this.value)">
+    <option value="">-- Pilih Area --</option>
+
+    <option>5A1</option>
+    <option>5C1</option>
+    <option>5K1</option>
+    <option>5R</option>
+    <option>5R1</option>
+    <option>5R2</option>
+    <option>5U1</option>
+    <option>5W</option>
+    <option>5W1</option>
+    <option>5Z</option>
+    <option>5Z1</option>
+    <option>5Z2</option>
+    <option>KCM 5</option>
+    <option>RM FM 5</option>
+    <option>PPI</option>
+
+    <option value="lainnya">Lainnya</option>
+  </select>
+</div>
+
+<div class="form-group" id="otherAreaWrapper" style="display:none;">
+  <label>Area Lainnya</label>
+  <input type="text" id="otherAreaInput" placeholder="Masukkan area lain">
+</div>
+
+
+      <!-- STATUS -->
       <div class="form-group">
         <label>Status</label>
-        <select id="status">
+        <select name="status">
           <option value="">None</option>
           <option>Terlaksana Semua</option>
           <option>Terlaksana Sebagian</option>
@@ -38,50 +112,83 @@
         </select>
       </div>
 
-      <div class="form-group">
-        <label>Tanggal</label>
-        <input type="date" id="tanggal">
-      </div>
-
-      <div class="form-group">
-        <label>Jam Mulai</label>
-        <input type="time" id="mulai" step="1">
-      </div>
-
-      <div class="form-group">
-        <label>Jam Selesai</label>
-        <input type="time" id="selesai" step="1">
-      </div>
-
+      <!-- KENDALA -->
       <div class="form-group">
         <label>Kendala</label>
-        <textarea id="kendala"></textarea>
+        <textarea name="kendala" placeholder="Tuliskan kendala jika ada"></textarea>
       </div>
 
-      <div class="btn-wrapper">
-            <div class="btn">
-                <button class="back" type="button">Back</button>
-                <button class="clear">Clear</button>
-                <button class="save">Save</button>
-            </div>
-    </div>
+      <!-- BUTTON -->
+      <div class="btn">
+        <button type="button" class="back">Back</button>
+        <button type="reset" class="clear">Clear</button>
+        <button type="submit" class="save">Save</button>
+      </div>
 
-    </div>
+    </form>
   </div>
 </div>
 
 <script>
-  const menuToggle = document.getElementById('menuToggle');
-  const sidebar = document.querySelector('.sidebar');
-  const main = document.querySelector('.main');
 
-  menuToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('closed');
-    main.classList.toggle('expanded');
-  });
+// ================= RUTE LAIN =================
+const rute = document.getElementById('ruteBM');
+const ruteLainnya = document.getElementById('ruteLainnya');
+
+  function toggleOtherArea(value) {
+    const wrapper = document.getElementById("otherAreaWrapper");
+
+    if (value === "lainnya") {
+      wrapper.style.display = "block";
+    } else {
+      wrapper.style.display = "none";
+    }
+  }
+
+rute.onchange = () => {
+  ruteLainnya.hidden = rute.options[rute.selectedIndex].text !== 'Lainnya';
+};
+
+// ================= DURASI =================
+function hitungDurasi(){
+  const m = document.getElementById('mulai').value;
+  const s = document.getElementById('selesai').value;
+  if(!m || !s) return;
+
+  const t1 = new Date(`1970-01-01T${m}`);
+  const t2 = new Date(`1970-01-01T${s}`);
+
+  document.getElementById('durasi').value = ((t2 - t1)/3600000).toFixed(2);
+}
+
+document.getElementById('mulai').onchange = hitungDurasi;
+document.getElementById('selesai').onchange = hitungDurasi;
+
+
+// ================= WEEK AUTO =================
+function getWeekNumber(date){
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+  return Math.ceil((((d - yearStart) / 86400000) + 1)/7);
+}
+
+document.getElementById('tanggal').onchange = function(){
+  const val = this.value;
+  if(!val) return;
+
+  const week = getWeekNumber(new Date(val));
+  document.getElementById('week').value = week;
+};
+
+
+// ================= BACK BUTTON =================
+document.querySelector('.back').onclick = ()=>{
+  window.location.href = `/laporan-shift/kcm5/detail?noref=<%= no_ref %>`;
+}
+
 </script>
 
-<script src="/js/sidebar.js"></script>
-<script src="/js/maintenanceKCM5.js"></script>
 </body>
 </html>

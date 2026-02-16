@@ -1,29 +1,40 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("../controllers/dataBMCMController");
+const dataBMCMController = require("../controllers/dataBMCMController");
+const upload = require("../middlewares/dataBMCMMiddleware");
 
-// LIST
-router.get("/", controller.list);
+// PAGE
+router.get("/page", dataBMCMController.page);
+router.get("/add", dataBMCMController.addPage);
+router.get("/edit/:id", dataBMCMController.editPage);
+router.post('/dataBMCM/update/:id', dataBMCMController.update);
 
-// DETAIL
-router.get("/:id", controller.detail);
+// DATA
+router.get("/", dataBMCMController.page);
+router.get("/json", dataBMCMController.list);
 
-// CREATE  ←🔥 INI YANG HILANG / SALAH
-// router.post("/", controller.create);
+
+// CREATE
 router.post(
-  "/", 
-  (req, res, next) => {
-    console.log("✅ POST /data-bmcm MASUK ROUTE");
-    console.log("📦 BODY:", req.body);
-    next();
-  },
-  controller.create
+  "/",
+  upload.fields([
+    { name: "fotoSafetyTalk", maxCount: 1 },
+    { name: "fotoCheckSheet", maxCount: 1 }
+  ]),
+  dataBMCMController.create
 );
 
 // UPDATE
-router.put("/:id", controller.update);
+router.post(
+  "/update/:id",
+  upload.fields([
+    { name: "fotoSafetyTalk", maxCount: 1 },
+    { name: "fotoCheckSheet", maxCount: 1 }
+  ]),
+  dataBMCMController.update
+);
 
 // DELETE
-router.delete("/:id", controller.delete);
+router.delete("/:id", dataBMCMController.delete);
 
 module.exports = router;

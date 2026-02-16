@@ -2,102 +2,81 @@
 const fotoSebelum = document.getElementById('fotoSebelum');
 const previewSebelum = document.getElementById('previewSebelum');
 
-if (fotoSebelum) {
+if (fotoSebelum && previewSebelum) {
+  const uploadBoxSebelum = fotoSebelum.closest('.upload-box');
+  const placeholderSebelum = uploadBoxSebelum?.querySelector('.upload-placeholder');
+  
   fotoSebelum.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
         previewSebelum.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+        if (placeholderSebelum) placeholderSebelum.classList.add('hidden');
       };
       reader.readAsDataURL(file);
+    } else {
+      previewSebelum.innerHTML = '';
+      if (placeholderSebelum) placeholderSebelum.classList.remove('hidden');
     }
   });
+
+  // Check if there's already an image on page load
+  if (previewSebelum.querySelector('img')) {
+    if (placeholderSebelum) placeholderSebelum.classList.add('hidden');
+  }
 }
 
 const fotoSesudah = document.getElementById('fotoSesudah');
 const previewSesudah = document.getElementById('previewSesudah');
 
-if (fotoSesudah) {
+if (fotoSesudah && previewSesudah) {
+  const uploadBoxSesudah = fotoSesudah.closest('.upload-box');
+  const placeholderSesudah = uploadBoxSesudah?.querySelector('.upload-placeholder');
+  
   fotoSesudah.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
         previewSesudah.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+        if (placeholderSesudah) placeholderSesudah.classList.add('hidden');
       };
       reader.readAsDataURL(file);
+    } else {
+      previewSesudah.innerHTML = '';
+      if (placeholderSesudah) placeholderSesudah.classList.remove('hidden');
     }
   });
-}
 
-/* ================= FORM SUBMIT (UPDATE) ================= */
-const formUpdateDataAbnormalitas = document.getElementById('formUpdateDataAbnormalitas');
-
-if (formUpdateDataAbnormalitas) {
-  formUpdateDataAbnormalitas.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    // Ambil data dari form
-    const formData = new FormData(formUpdateDataAbnormalitas);
-    const data = Object.fromEntries(formData);
-    
-    console.log('Data update:', data);
-    alert('Data abnormalitas berhasil diupdate! (Frontend only - belum ada backend)');
-  });
+  // Check if there's already an image on page load
+  if (previewSesudah.querySelector('img')) {
+    if (placeholderSesudah) placeholderSesudah.classList.add('hidden');
+  }
 }
 
 /* ================= CANCEL BUTTON ================= */
 const btnCancel = document.querySelector('.btn-cancel');
+const cancelModal = document.getElementById('cancelModal');
+const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+const keepCancelBtn = document.getElementById('keepCancelBtn');
 
-if (btnCancel) {
+if (btnCancel && cancelModal) {
   btnCancel.addEventListener('click', (e) => {
     e.preventDefault();
-    
-    if (confirm('Batalkan perubahan?')) {
-      window.history.back();
-    }
+    cancelModal.classList.add('show');
   });
-}
 
-/* ================= PRE-POPULATE DATA (OPTIONAL) ================= */
-function loadDataFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  
-  const dataId = params.get('id');
-  
-  if (dataId) {
-    // Simulasi fetch data dari backend
-    console.log('Loading data ID:', dataId);
-    
-    // Contoh data dummy (dalam produksi ini dari backend)
-    const dummyData = {
-      status: 'Open',
-      abnormalDate: '2025-08-26',
-      reportBy: 'Fill Ardi',
-      area: 'FM5',
-      nomenclature: 'FM-841',
-      activity: 'Bearing Check',
-      prioritas: 'High',
-      condition: 'Bearing Panas',
-      action: 'Penggantian Bearing',
-      abnormal: 'Suara Bising',
-      source: 'Operator',
-      informasiDetail: 'Bearing temperature naik 45°C',
-      rencanaPerbaikan: 'Ganti bearing FM-841 minggu depan',
-      notifikasiUnitLain: 'Maintenance',
-      idMSO: 'MSO-001'
-    };
-    
-    // Populate form dengan data
-    Object.keys(dummyData).forEach(key => {
-      const element = document.getElementById(key);
-      if (element) {
-        element.value = dummyData[key];
-      }
+  if (confirmCancelBtn) {
+    confirmCancelBtn.addEventListener('click', () => {
+      cancelModal.classList.remove('show');
+      window.location.href = '/dataAbnormalitas';
+    });
+  }
+
+  if (keepCancelBtn) {
+    keepCancelBtn.addEventListener('click', () => {
+      cancelModal.classList.remove('show');
     });
   }
 }
-
-// Load data saat halaman dibuka
-document.addEventListener('DOMContentLoaded', loadDataFromURL);

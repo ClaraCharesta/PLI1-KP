@@ -18,17 +18,12 @@
 
   <div class="content">
 
-
-
     <div style="display:flex; justify-content:space-between; align-items:center;">
-  <div class="noref-box">
-    No.Ref : <span id="noRefText"></span>
-  </div>
-
-  <button id="btnPdf" class="btn-add">
-    Generate PDF
-  </button>
-</div>
+      <div class="noref-box">
+        No.Ref : <span id="noRefText"><%= row.no_ref %></span>
+      </div>
+      <button id="btnPdf" class="btn-add">Generate PDF</button>
+    </div>
 
     <!-- ================= LAPORAN SHIFT ================= -->
     <h3>Laporan Shift</h3>
@@ -46,31 +41,23 @@
           <th>Shift (842A)</th>
           <th>Personil (842B)</th>
           <th>Shift (842B)</th>
-          <th>Personil (843A)</th>
-          <th>Shift (843A)</th>
-          <th>Personil (843B)</th>
-          <th>Shift (843B)</th>
           <th>Cuti</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>1</td>
-          <td>20-01-2026</td>
-          <td>01</td>
-          <td class="noref-cell"></td>
-          <td>zhanshielinsone@gmail.com</td>
-          <td>Irsyadunnas</td>
-          <td>01</td>
-          <td>Rafki</td>
-          <td>01</td>
-          <td>Salman</td>
-          <td>01</td>
-          <td>Riki</td>
-          <td>01</td>
-          <td>Wahyu</td>
-          <td>01</td>
-          <td>Meri</td>
+          <td><%= row.tanggal %></td>
+          <td><%= row.shift_kode %></td>
+          <td class="noref-cell"><%= row.no_ref %></td>
+          <td><%= row.dibuat_oleh %></td>
+          <td><%= row.personil_841a || "-" %></td>
+          <td><%= row.shift_841a || "-" %></td>
+          <td><%= row.personil_842a || "-" %></td>
+          <td><%= row.shift_842a || "-" %></td>
+          <td><%= row.personil_842b || "-" %></td>
+          <td><%= row.shift_842b || "-" %></td>
+          <td><%= row.cuti || "-" %></td>
         </tr>
       </tbody>
     </table>
@@ -78,12 +65,17 @@
     <!-- ================= TROUBLESHOOTING ================= -->
     <div class="section-header">
       <h3>Troubleshooting</h3>
-      <button class="btn-add" data-target="tsKCM5">+ Add</button>
+<a 
+  href="/laporan-shift/kcm5/troubleshooting?noref=<%= row.no_ref %>" 
+  class="btn-add"
+>
+  + Add
+</a>
     </div>
-
     <table class="table" id="tsTable">
       <thead>
         <tr>
+          <th>No.Ref</th>
           <th>Tanggal</th>
           <th>Week</th>
           <th>Area</th>
@@ -92,151 +84,219 @@
           <th>Selesai</th>
           <th>Durasi</th>
           <th>Alarm</th>
+          <th>Indikasi Masalah</th>
+          <th>Klasifikasi Peralatan</th>
+          <th>Klasifikasi Pekerjaan</th>
+          <th>Tindakan</th>
           <th>PIC</th>
           <th>Status</th>
+          <th>Keterangan</th>
+          <th>Stop Alat Utama</th>
           <th>Aksi</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>20-01-2026</td>
-          <td>3</td>
-          <td>Raw Mill</td>
-          <td>RM-01</td>
-          <td>10:00</td>
-          <td>10:45</td>
-          <td>45 mnt</td>
-          <td>High Temp</td>
-          <td>Irsyad</td>
-          <td>Closed</td>
-          <td>
-            <button class="edit">Edit</button>
-            <button class="delete">Hapus</button>
-          </td>
-        </tr>
-      </tbody>
+  <% ts.forEach(t => { %>
+    <tr>
+      <td><%= row.no_ref %></td>
+      <td><%= t.tanggal %></td>
+      <td><%= t.week %></td>
+      <td><%= t.area %></td>
+      <td><%= t.nomenclature ? t.nomenclature.name : "-" %></td>
+      <td><%= t.mulai %></td>
+      <td><%= t.selesai %></td>
+      <td><%= t.durasi %></td>
+      <td><%= t.alarm %></td>
+      <td><%= t.indikasi || "-" %></td>
+      <td><%= t.klasifikasi_peralatan %></td>
+      <td><%= t.klasifikasi_pekerjaan %></td>
+      <td><%= t.tindakan %></td>
+      <td><%= t.pic %></td>
+      <td><%= t.status %></td>
+      <td><%= t.keterangan %></td>
+      <td><%= t.stop_alat || "-" %></td>
+      <td>
+        <button class="delete" data-id="<%= t.id %>" data-type="ts">Hapus</button>
+      </td>
+    </tr>
+  <% }) %>
+</tbody>
+
     </table>
 
     <!-- ================= BASIC MAINTENANCE ================= -->
     <div class="section-header">
       <h3>Basic Maintenance</h3>
-      <button class="btn-add" data-target="maintenanceKCM5">+ Add</button>
-    </div>
+      <a 
+  href="/laporan-shift/kcm5/maintenance?noref=<%= row.no_ref %>" 
+  class="btn-add"
+>
+  + Add
+</a>
 
-    <table class="table">
+
+    </div>
+    <table class="table" id="maintenanceKCM5">
       <thead>
         <tr>
-          <th>Rute</th>
-          <th>Status</th>
+          <th>No.Ref</th>
           <th>Tanggal</th>
+          <th>Week</th>
           <th>Mulai</th>
           <th>Selesai</th>
+          <th>Durasi</th>
+          <th>Rute</th>
+          <th>Area</th>
+          <th>Status</th>
           <th>Kendala</th>
           <th>Aksi</th>
         </tr>
       </thead>
       <tbody>
+        <% maintenance.forEach(m => { %>
         <tr>
-          <td>RM-841</td>
-          <td>OK</td>
-          <td>20-01-2026</td>
-          <td>08:00</td>
-          <td>09:00</td>
-          <td>-</td>
+          <td><%= m.no_ref %></td>
+          <td><%= m.tanggal %></td>
+          <td><%= m.week %></td>
+          <td><%= m.mulai %></td>
+          <td><%= m.selesai %></td>
+          <td><%= m.durasi %></td>
+          <td><%= m.rute %></td>
+          <td><%= m.area %></td>
+          <td><%= m.status %></td>
+          <td><%= m.kendala %></td>
           <td>
-            <button class="edit">Edit</button>
-            <button class="delete">Hapus</button>
+           
+          <button class="delete" data-id="<%= m.id %>" data-type="maintenance">Hapus</button>
+
+
           </td>
         </tr>
+        <% }) %>
       </tbody>
     </table>
 
-    <!-- ================= PRODUKSI CLINKER ================= -->
-    <div class="section-header">
-      <h3>Produksi Clinker</h3>
-      <button class="btn-add" data-target="pcKCM5">+ Add</button>
-    </div>
+    <!-- ================= MONITORING ================= -->
+<div class="section-header">
+  <h3>Monitoring</h3>
+  <a href="/laporan-shift/kcm5/monitoring?noref=<%= row.no_ref %>" 
+   class="btn-add">
+   + Add
+</a>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th>No.Ref</th>
-          <th>Kiln Feeding</th>
-          <th>Kiln Speed</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="noref-cell"></td>
-          <td>550</td>
-          <td>3.5 rpm</td>
-          <td>
-            <button class="edit">Edit</button>
-            <button class="delete">Hapus</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+</div>
+
+<table class="table" id="pcKCM5">
+  <thead>
+    <tr>
+      <th>No.Ref</th>
+      <th>Monitoring</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+
+<% if (monitoring.length === 0) { %>
+<tr>
+  <td colspan="3" style="text-align:center;">
+    Tidak ada data monitoring
+  </td>
+</tr>
+<% } %>
+
+<% monitoring.forEach(c => { %>
+
+    <tr>
+      <td class="noref-cell"><%= row.no_ref %></td>
+      <td><%= c.monitoring || "-" %></td>
+      <td>
+        
+        
+        <button class="delete" data-id="<%= c.id %>" data-type="monitoring">Hapus</button>
+
+
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
+
 
     <!-- ================= SERAH TERIMA TOOL ================= -->
     <div class="section-header">
       <h3>Serah Terima Tool</h3>
-      <button class="btn-add" data-target="sttKCM5">+ Add</button>
-    </div>
+      <a href="/laporan-shift/kcm5/stt?noref=<%= row.no_ref %>" 
+   class="btn-add">
+   + Add
+</a>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th>No.Ref</th>
-          <th>Radio</th>
-          <th>Kunci Mobil</th>
-          <th>Kunci Motor</th>
-          <th>Kunci Subst</th>
-          <th>Toolset</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="noref-cell"></td>
-          <td>✔</td>
-          <td>✔</td>
-          <td>✘</td>
-          <td>✔</td>
-          <td>✔</td>
-          <td>
-            <button class="edit">Edit</button>
-            <button class="delete">Hapus</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    </div>
+    <table class="table" id="sttKCM5">
+  <thead>
+    <tr>
+      <th>No.Ref</th>
+      <th>Radio</th>
+      <th>Kunci Mobil</th>
+      <th>Kunci Motor</th>
+      <th>Kunci Subst</th>
+      <th>Toolset</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% stt.forEach(s => { %>
+    <tr>
+      <td class="noref-cell"><%= row.no_ref %></td>
+      <td><%= s.radio_comm || "-" %></td>
+      <td><%= s.kunci_mobil || "-" %></td>
+      <td><%= s.kunci_motor || "-" %></td>
+      <td><%= s.kunci_subst || "-" %></td>
+      <td><%= s.toolset || "-" %></td>
+      <td>
+        <button class="delete" data-id="<%= s.id %>" data-type="stt">Hapus</button>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
 
 
     <!-- ================= CATATAN ================= -->
 <div class="section-header">
   <h3>Catatan</h3>
-  <button class="btn-add" data-target="catatanKCM5">+ Add</button>
+  <a href="/laporan-shift/kcm5/catatan?noref=<%= row.no_ref %>" 
+   class="btn-add">
+   + Add
+</a>
+
 </div>
 
-<table class="table">
+<table class="table" id="catatanKCM5">
   <thead>
     <tr>
+      <th>No.Ref</th>
       <th>Catatan</th>
       <th>Aksi</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>
-        Kondisi Raw Mill stabil, dilakukan monitoring lanjutan pada shift berikutnya.
-      </td>
-      <td>
-        <button class="edit">Edit</button>
-        <button class="delete">Hapus</button>
-      </td>
-    </tr>
+    <% if (catatan.length === 0) { %>
+      <tr>
+        <td colspan="3" style="text-align:center;">
+          Tidak ada data catatan
+        </td>
+      </tr>
+    <% } else { %>
+      <% catatan.forEach(ct => { %>
+        <tr>
+          <td class="noref-cell"><%= row.no_ref %></td>
+          <td><%= ct.catatan %></td>
+          <td>
+            <button class="delete" data-id="<%= ct.id %>" data-type="catatan">Hapus</button>
+          </td>
+        </tr>
+      <% }) %>
+    <% } %>
   </tbody>
 </table>
 
@@ -245,18 +305,16 @@
 </div>
 
 <script>
-  const menuToggle = document.getElementById('menuToggle');
-  const sidebar = document.querySelector('.sidebar');
-  const main = document.querySelector('.main');
-
-  menuToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('closed');
-    main.classList.toggle('expanded');
-  });
+  window.NO_REF = "<%= row.no_ref %>";
+  window.DATA_ROW = <%- JSON.stringify(row) %>;
+  window.TS = <%- JSON.stringify(ts) %>;
+  window.MAINTENANCE = <%- JSON.stringify(maintenance) %>;
+  window.MONITORING = <%- JSON.stringify(monitoring) %>;
+  window.STT = <%- JSON.stringify(stt) %>;
+  window.CATATAN = <%- JSON.stringify(catatan) %>;
 </script>
 
 <script src="/js/laporanKCM5.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
 </body>
 </html>

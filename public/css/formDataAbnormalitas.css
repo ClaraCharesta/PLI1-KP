@@ -100,69 +100,233 @@ textarea {
 
 /* ================= UPLOAD SECTION ================= */
 .upload-section {
-  margin: 24px 0;
-  padding-top: 20px;
-  border-top: 1px solid #e1e1e1;
+    margin-top: 15px;
+    width: 100%;
 }
 
-.upload-section h3 {
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 16px;
+.upload-section label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
 }
 
 .upload-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* INI AGAR GANDENGAN KIRI KANAN */
+    gap: 20px;
+    width: 100%;
 }
 
 .upload-box {
-  position: relative;
+    position: relative;
+    height: 160px; /* Sesuaikan tinggi kotak */
 }
 
 .upload-label {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 120px;
-  padding: 16px;
-  border: 2px dashed #ccc;
-  border-radius: 8px;
-  background: #f9f9f9;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  gap: 8px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #f9f9f9;
+    transition: all 0.3s;
 }
 
 .upload-label:hover {
-  border-color: #8b0000;
-  background: rgba(139, 0, 0, 0.04);
+    border-color: #8b0000;
+    background: rgba(139, 0, 0, 0.04);
+}
+
+.upload-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    z-index: 1;
+    transition: opacity 0.2s ease;
+    width: 100%;
+    pointer-events: none;
+}
+
+.upload-placeholder.hidden {
+    display: none;
 }
 
 .upload-icon {
-  font-size: 28px;
+    display: block;
+    font-size: 32px;
+    color: #666;
+    text-align: center;
 }
 
 .upload-text {
-  font-size: 13px;
-  font-weight: 500;
-  color: #666;
-  text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .upload-preview {
-  margin-top: 8px;
-  max-height: 100px;
-  overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    background: white;
+    z-index: 2;
+    pointer-events: none;
+    display: none;
+}
+
+.upload-preview:not(:empty) {
+    display: block;
 }
 
 .upload-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Responsif: Jika layar HP, baru jadi tumpuk atas bawah */
+@media (max-width: 600px) {
+    .upload-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ================= MODAL ================= */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
   width: 100%;
-  height: auto;
-  border-radius: 6px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 40px 32px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.modal-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.modal-content h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.modal-content p {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 24px 0;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn-confirm,
+.btn-keep {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-confirm {
+  background-color: #8b0000;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(139, 0, 0, 0.35);
+}
+
+.btn-confirm:hover {
+  background-color: #a00000;
+  box-shadow: 0 6px 14px rgba(139, 0, 0, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-confirm:active {
+  transform: scale(0.97);
+}
+
+.btn-keep {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.btn-keep:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-keep:active {
+  transform: scale(0.97);
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    max-width: 90%;
+    padding: 24px 20px;
+  }
+
+  .modal-icon {
+    font-size: 40px;
+  }
+
+  .modal-content h2 {
+    font-size: 18px;
+  }
+
+  .modal-content p {
+    font-size: 13px;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+  }
+
+  .btn-confirm,
+  .btn-keep {
+    width: 100%;
+  }
 }
 
 /* ================= BUTTON WRAPPER ================= */

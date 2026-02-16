@@ -32,6 +32,13 @@
   font-weight: 600;
 }
 
+/* ================= HEADER ACTIONS ================= */
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
 /* ================= ADD BUTTON ================= */
 .btn-add {
   background: white;
@@ -45,6 +52,21 @@
 
 .btn-add:hover {
   background: #f0f0f0;
+}
+
+/* ================= CHART BUTTON ================= */
+.btn-chart {
+  background: rgba(255, 255, 255, 0.9);
+  color: #8b0000;
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-chart:hover {
+  background: white;
 }
 
 /* ================= TABLE WRAPPER ================= */
@@ -385,4 +407,35 @@
   .btn-keep {
     width: 100%;
   }
+}
+
+/* ================= FOTO THUMBNAIL (WAJIB) ================= */
+
+/* Kolom foto supaya tidak melebar */
+.table td:has(.img-thumb) {
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Thumbnail foto (SEPERTI dataBMCM) */
+.img-thumb {
+  width: 60px;              /* ukuran kecil & konsisten */
+  height: 60px;
+  object-fit: cover;        /* potong rapi tanpa distorsi */
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  background: #f9f9f9;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* efek hover biar enak dilihat */
+.img-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  z-index: 10;
+  position: relative;
 }

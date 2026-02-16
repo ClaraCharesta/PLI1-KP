@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'Chart Abnormalitas' %></title>
+
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/chartAbnormalitas.css">
+  <link rel="stylesheet" href="/css/chartCard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <%- include('partials/sidebar') %>
+
+  <div class="main">
+    <%- include('partials/topbar', { title: "Chart Data Temuan Inspeksi" }) %>
+
+    <div class="content">
+      <div class="chart-page">
+        <h2>Data Temuan Inspeksi</h2>
+        <div class="chart-wrapper">
+          <div class="chart-container chart-donut" data-chart-id="areaChart" data-chart-title="[Abnormalitas] Chart Area">
+            <div class="chart-card-header">
+              <h3 class="chart-card-title">[Abnormalitas] Chart Area</h3>
+              <div class="chart-actions">
+                <div class="chart-filter-dropdown" id="filter-areaChart">
+                  <div class="filter-list" data-filter-for="areaChart"></div>
+                  <button type="button" class="chart-btn-apply">Apply</button>
+                </div>
+                <button type="button" class="chart-btn chart-btn-filter">Filter</button>
+                <button type="button" class="chart-btn chart-btn-expand">Expand</button>
+              </div>
+            </div>
+            <div class="chart-canvas-wrap"><canvas id="areaChart"></canvas></div>
+          </div>
+          <div class="chart-container chart-donut" data-chart-id="prioritasChart" data-chart-title="[Abnormalitas] Chart Prioritas">
+            <div class="chart-card-header">
+              <h3 class="chart-card-title">[Abnormalitas] Chart Prioritas</h3>
+              <div class="chart-actions">
+                <div class="chart-filter-dropdown" id="filter-prioritasChart">
+                  <div class="filter-list" data-filter-for="prioritasChart"></div>
+                  <button type="button" class="chart-btn-apply">Apply</button>
+                </div>
+                <button type="button" class="chart-btn chart-btn-filter">Filter</button>
+                <button type="button" class="chart-btn chart-btn-expand">Expand</button>
+              </div>
+            </div>
+            <div class="chart-canvas-wrap"><canvas id="prioritasChart"></canvas></div>
+          </div>
+          <div class="chart-container chart-donut" data-chart-id="statusChart" data-chart-title="[Abnormalitas] Chart Status">
+            <div class="chart-card-header">
+              <h3 class="chart-card-title">[Abnormalitas] Chart Status</h3>
+              <div class="chart-actions">
+                <div class="chart-filter-dropdown" id="filter-statusChart">
+                  <div class="filter-list" data-filter-for="statusChart"></div>
+                  <button type="button" class="chart-btn-apply">Apply</button>
+                </div>
+                <button type="button" class="chart-btn chart-btn-filter">Filter</button>
+                <button type="button" class="chart-btn chart-btn-expand">Expand</button>
+              </div>
+            </div>
+            <div class="chart-canvas-wrap"><canvas id="statusChart"></canvas></div>
+          </div>
+          <div class="chart-container chart-donut" data-chart-id="abnormalChart" data-chart-title="[Abnormalitas] Abnormal">
+            <div class="chart-card-header">
+              <h3 class="chart-card-title">[Abnormalitas] Abnormal</h3>
+              <div class="chart-actions">
+                <div class="chart-filter-dropdown" id="filter-abnormalChart">
+                  <div class="filter-list" data-filter-for="abnormalChart"></div>
+                  <button type="button" class="chart-btn-apply">Apply</button>
+                </div>
+                <button type="button" class="chart-btn chart-btn-filter">Filter</button>
+                <button type="button" class="chart-btn chart-btn-expand">Expand</button>
+              </div>
+            </div>
+            <div class="chart-canvas-wrap"><canvas id="abnormalChart"></canvas></div>
+          </div>
+          <div class="chart-container chart-bar" data-chart-id="nomenclatureChart" data-chart-title="[Abnormalitas] Chart Nomenclature">
+            <div class="chart-card-header">
+              <h3 class="chart-card-title">[Abnormalitas] Chart Nomenclature</h3>
+              <div class="chart-actions">
+                <div class="chart-filter-dropdown" id="filter-nomenclatureChart">
+                  <div class="filter-list" data-filter-for="nomenclatureChart"></div>
+                  <button type="button" class="chart-btn-apply">Apply</button>
+                </div>
+                <button type="button" class="chart-btn chart-btn-filter">Filter</button>
+                <button type="button" class="chart-btn chart-btn-expand">Expand</button>
+              </div>
+            </div>
+            <div class="chart-canvas-wrap"><canvas id="nomenclatureChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-expand-overlay" id="chartExpandOverlay">
+    <div class="chart-expand-modal">
+      <button type="button" class="chart-expand-close" id="chartExpandClose" aria-label="Tutup">&times;</button>
+      <h3 class="chart-expand-title" id="chartExpandTitle"></h3>
+      <div class="chart-expand-canvas-wrap"><canvas id="chartExpandCanvas"></canvas></div>
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const main = document.querySelector('.main');
+    if (menuToggle && sidebar && main) {
+      menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('closed');
+        main.classList.toggle('expanded');
+      });
+    }
+  </script>
+
+  <script type="application/json" id="chart-data-json">
+    <%- JSON.stringify({
+      areaChart: areaChart || [],
+      prioritasChart: prioritasChart || [],
+      statusChart: statusChart || [],
+      abnormalChart: abnormalChart || [],
+      nomenclatureChart: nomenclatureChart || []
+    }) %>
+  </script>
+
+  <script src="/js/chartAbnormalitas.js"></script>
+
+</body>
+</html>
