@@ -18,10 +18,13 @@
 }
 
 .about-container {
-  display: grid;
-  grid-template-columns: 1fr 1.3fr;
-  gap: 28px;
-  padding: 0 16px 32px 16px;
+  max-width: 720px;      /* 👉 ukuran card */
+  margin: 0 auto;        /* 👉 CENTER */
+  padding: 40px 16px 32px 16px;
+}
+
+.profile-card {
+  justify-self: center;   /* 👉 tengah horizontal di grid */
 }
 
 /* ================= PROFILE CARD SECTION ================= */

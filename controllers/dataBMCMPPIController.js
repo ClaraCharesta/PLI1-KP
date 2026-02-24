@@ -44,11 +44,30 @@ exports.page = async (req, res) => {
 /* =====================================================
    ADD PAGE
 ===================================================== */
-exports.addPage = (req, res) => {
-  res.render("formDataBMCMPPI", {
-    title: "Add Realisasi PK Harian PPI",
-    active: "dataBMCMPPI"
-  });
+exports.addPage = async (req, res) => {
+  try {
+    // ambil semua nomenclature lalu filter PPI
+    const allNomenclatures = await db.Nomenclature.findAll();
+
+    const nomenclatures = allNomenclatures.filter(n =>
+      n.name && n.name.includes("PPI")
+    );
+
+    res.render("formDataBMCMPPI", {
+      title: "Add Realisasi PK Harian PPI",
+      nomenclatures,
+      active: "dataBMCMPPI"
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    res.render("formDataBMCMPPI", {
+      title: "Add Realisasi PK Harian PPI",
+      nomenclatures: [],
+      active: "dataBMCMPPI"
+    });
+  }
 };
 
 /* =====================================================
@@ -117,24 +136,43 @@ exports.create = async (req, res) => {
 ===================================================== */
 exports.editPage = async (req, res) => {
   try {
-    const data = await DataBMCMPPI.findByPk(req.params.id);
+    const id = req.params.id;
 
-    if (!data) return res.redirect("/dataBMCMPPI");
+    const data = await DataBMCMPPI.findByPk(id);
+
+    if (!data) {
+      return res.redirect("/dataBMCMPPI");
+    }
+
+    // ⭐ ambil nomenclature lalu filter PPI
+    const allNomenclatures = await db.Nomenclature.findAll();
+
+    const nomenclatures = allNomenclatures.filter(n =>
+      n.name && n.name.includes("PPI")
+    );
 
     const tanggalFormatted = data.tanggal
       ? new Date(data.tanggal).toISOString().split("T")[0]
       : "";
 
-res.render('formUpdateDataBMCMPPI', {
-  data,
-  pk_id: data.pk_id, // optional
-  tanggalFormatted
-});
-
+    res.render("formUpdateDataBMCMPPI", {
+      data,
+      pk_id: data.pk_id, // optional
+      tanggalFormatted,
+      nomenclatures, // ⭐ WAJIB untuk dropdown
+      active: "dataBMCMPPI"
+    });
 
   } catch (err) {
     console.error(err);
-    res.redirect("/dataBMCMPPI");
+
+    res.render("formUpdateDataBMCMPPI", {
+      data: null,
+      pk_id: null,
+      tanggalFormatted: "",
+      nomenclatures: [],
+      active: "dataBMCMPPI"
+    });
   }
 };
 

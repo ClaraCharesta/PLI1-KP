@@ -1,76 +1,57 @@
-/* ================= DATA ================= */
+/* ================= DATA MASTER ================= */
 const personilData = [
-  "[NFJ] Nofriza Juanda",
-  "[HRT] Harto",
-  "[HMN] Harmen",
-  "[EDW] Edward",
-  "[WAP] Wahyu Arisal Putra, ST",
-  "[DRO] Desrianto",
-  "[AFZ] Afrizal",
-  "[JMB] Jumaidi Bakri",
-  "[AOP] Astoria Prima",
-  "[WSD] Willy Surya Dinata",
-  "[AGW] Angga Wahyudi",
-  "[SFL] Syafril",
-  "[RDP] Randi Pratama"
+  "[NFJ] Nofriza Juanda","[HRT] Harto","[HMN] Harmen","[EDW] Edward",
+  "[WAP] Wahyu Arisal Putra, ST","[DRO] Desrianto","[AFZ] Afrizal",
+  "[JMB] Jumaidi Bakri","[AOP] Astoria Prima","[WSD] Willy Surya Dinata",
+  "[AGW] Angga Wahyudi","[SFL] Syafril","[RDP] Randi Pratama"
 ];
-
-const shiftData = [
-  "01 (07:00-15:00)",
-  "02 (15:00-22:00)",
-  "03 (22:00-07:00)",
-  "A (07:00-19:00)",
-  "B (19:00-07:00)",
-  "LIBUR"
-];
-
+const shiftData = ["01 (07:00-15:00)","02 (15:00-22:00)","03 (22:00-07:00)","A (07:00-19:00)","B (19:00-07:00)","LIBUR"];
 let personilMaster = [...personilData];
 
-/* ================= INIT ELEMENTS ================= */
+/* ================= ELEMENT ================= */
 const shiftUtama = document.getElementById("shiftUtama");
 const noref = document.getElementById("noref");
 const tanggalInput = document.getElementById("tanggal");
 const cutiBox = document.getElementById("cutiBox");
 const cutiResult = document.getElementById("cutiResult");
 
-/* ================= GENERATE NO REF ================= */
-function generateNoRef() {
+/* ================= NO REF ================= */
+function generateNoRef(){
   const d = tanggalInput.value ? new Date(tanggalInput.value) : new Date();
-  const bulan = d.getMonth() + 1;
+  const bulan = d.getMonth()+1;
   const tahun = d.getFullYear();
-  const urut = "0001"; // bisa nanti ambil dari DB
+  const urut = "0001";
   return `${urut}/SHIFT.PLI1-RMFM5/${bulan}.${tahun}`;
 }
-noref.value = generateNoRef();
+if(!window.formData?.no_ref){ noref.value = generateNoRef(); }
 tanggalInput.addEventListener("change", () => {
-  noref.value = generateNoRef();
+  if(!window.formData?.no_ref){
+    noref.value = generateNoRef();
+  }
 });
 
-/* ================= INIT SHIFT UTAMA ================= */
+/* ================= SHIFT UTAMA ================= */
 shiftUtama.innerHTML = "<option value=''>-- Pilih Shift --</option>";
 shiftData.forEach(s => shiftUtama.add(new Option(s, s)));
-if(window.formData?.shiftUtama) shiftUtama.value = window.formData.shiftUtama;
+if(window.formData?.shift_kode) shiftUtama.value = window.formData.shift_kode;
 
-/* ================= PERSONIL SELECT DENGAN LAINNYA ================= */
+/* ================= PERSONIL SELECT ================= */
 document.querySelectorAll(".personil").forEach(select => {
   const key = select.dataset.key;
   select.innerHTML = "<option value=''>-- Pilih Personil --</option>";
 
   const existing = window.formData?.["personil_" + key.toLowerCase()];
 
-  // tambah ke master kalau belum ada dan bukan "LAINNYA"
   if(existing && !personilMaster.includes(existing) && existing !== "LAINNYA"){
     personilMaster.push(existing);
   }
 
-  // buat semua option
   personilMaster.forEach(p => select.add(new Option(p,p)));
   select.add(new Option("LAINNYA","LAINNYA"));
 
-  // === set value AFTER semua option ada ===
   if(existing) select.value = existing;
 
-  // ==== input text untuk LAINNYA ====
+  // input LAINNYA
   const lainnyaDiv = document.createElement("div");
   lainnyaDiv.className = "lainnya-input";
   lainnyaDiv.style.display = existing === "LAINNYA" ? "block" : "none";
@@ -124,13 +105,13 @@ function renderCuti(name, checked=false){
   cutiBox.appendChild(div);
 }
 
-// render semua personil + pre-fill edit
+// render semua personil
 personilMaster.forEach(name => {
   const checked = window.formData?.cuti?.split(", ").includes(name);
   renderCuti(name, checked);
 });
 
-// opsi LAINNYA cuti
+// cuti LAINNYA
 const cutiLainnyaDiv = document.createElement("div");
 cutiLainnyaDiv.className = "cuti-item";
 
@@ -154,15 +135,14 @@ cutiLainnyaInput.placeholder = "Nama personil cuti lainnya...";
 cutiLainnyaInputBox.appendChild(cutiLainnyaInput);
 cutiBox.appendChild(cutiLainnyaInputBox);
 
-// toggle input cuti lainnya
 cutiLainnyaCheckbox.addEventListener("change", () => {
   cutiLainnyaInputBox.style.display = cutiLainnyaCheckbox.checked ? "block" : "none";
   if(cutiLainnyaCheckbox.checked) cutiLainnyaInput.focus();
 });
 
-// input enter → tambah cuti baru
 cutiLainnyaInput.addEventListener("keydown", e => {
   if(e.key === "Enter"){
+    e.preventDefault();
     const nama = cutiLainnyaInput.value.trim();
     if(!nama) return;
     renderCuti(nama, true);
@@ -173,7 +153,6 @@ cutiLainnyaInput.addEventListener("keydown", e => {
   }
 });
 
-/* ================= UPDATE CUTI RESULT ================= */
 function updateCutiResult(){
   const selected = Array.from(
     cutiBox.querySelectorAll("input[type='checkbox']:checked")
@@ -184,6 +163,7 @@ function updateCutiResult(){
 /* ================= CLEAR ================= */
 document.querySelector(".clear").onclick = () => {
   document.querySelectorAll("select, input[type='text']").forEach(el => el.value = "");
+  document.querySelectorAll(".lainnya-input").forEach(div => div.style.display = "none");
   cutiResult.value = "";
   noref.value = generateNoRef();
   document.querySelectorAll("#cutiBox input[type='checkbox']").forEach(cb => cb.checked = false);
@@ -197,10 +177,11 @@ document.querySelector(".save").onclick = async () => {
   const data = {
     id,
     tanggal: tanggalInput.value,
-    shiftUtama: shiftUtama.value,
-    no_ref: noref.value,
+    shift_kode: shiftUtama.value,
     cuti: cutiResult.value
   };
+
+  if(!id) data.no_ref = noref.value;
 
   // personil
   document.querySelectorAll(".personil").forEach(select => {
@@ -216,7 +197,7 @@ document.querySelector(".save").onclick = async () => {
   // shift per personil
   document.querySelectorAll(".shift").forEach(select => {
     const key = select.dataset.key;
-    data["shift_"+key.toLowerCase()] = select.value;
+    data["shift_"+key.toLowerCase()] = select.value || "LIBUR";
   });
 
   const url = id ? `/laporan-shift/rmfm5/edit/${id}` : "/laporan-shift/rmfm5/add";

@@ -71,6 +71,8 @@ exports.listRMFM5JSON = async (req, res) => {
 
 //add edit :
 // FORM CONTROLLER
+// controllers/laporanShiftController.js
+
 exports.formRMFM5 = async (req, res) => {
   try {
     const { id } = req.params;
@@ -82,75 +84,78 @@ exports.formRMFM5 = async (req, res) => {
       if (!data) return res.status(404).send("Data tidak ditemukan");
 
       formData = data.toJSON();
+
+      // format tanggal untuk input date
       if (formData.tanggal) {
-        const tgl = moment(formData.tanggal, "YYYY-MM-DD", true);
-        formData.tanggal = tgl.isValid() ? tgl.format("YYYY-MM-DD") : '';
+        const d = new Date(formData.tanggal);
+        formData.tanggal = !isNaN(d) ? d.toISOString().split("T")[0] : '';
       }
 
       mode = "edit";
     }
+
+    // 💡 Tambahkan shifts seperti di KCM5
+    const shifts = ["01 (07:00-15:00)", "02 (15:00-22:00)", "03 (22:00-07:00)", "A (07:00-19:00)", "B (19:00-07:00)", "LIBUR"];
 
     res.render("laporanshiftRMFM5", {
       title: mode === "edit" ? "Edit Laporan Shift RMFM5" : "Tambah Laporan Shift RMFM5",
       user: req.session.user,
       active: "laporan",
       formData,
-      mode
+      mode,
+      shifts  // <-- ini bikin EJS bisa pakai shifts.forEach
     });
+
   } catch (err) {
     console.error("ERROR FORM RMFM5:", err);
     res.status(500).send("Terjadi kesalahan saat memuat form RMFM5");
   }
 };
 
+exports.updateLaporanRMFM5 = async (req, res) => {
+  const id = req.params.id;
+  const data = req.body;
+
+  try {
+    await LaporanShift.update(data, { where: { id } });  // <-- ganti LaporanRMFM5 jadi LaporanShift
+    res.json({ success: true, message: "Data berhasil diupdate" });
+  } catch (err) {
+    console.error(err);
+    res.json({ success: false, message: "Gagal update data" });
+  }
+};
+
 exports.storeRMFM5 = async (req, res) => {
   try {
-
     const {
-      id,
-      tanggal,
-      shift_kode,
-      personil_851a,
-      shift_851a,
-      personil_851b,
-      shift_851b,
-      personil_852a,
-      shift_852a,
-      personil_852b,
-      shift_852b
+      id, tanggal, shift_kode,
+      personil_851a, shift_851a,
+      personil_851b, shift_851b,
+      personil_852a, shift_852a,
+      personil_852b, shift_852b
     } = req.body;
 
-    const userLogin =
-      req.session.user?.email ||
-      req.session.user?.nama;
-
+    const userLogin = req.session.user?.email || req.session.user?.nama;
     const m = moment(tanggal, "YYYY-MM-DD", true);
     if (!m.isValid())
-      return res.status(400).send("Tanggal tidak valid");
+      return res.status(400).json({ success: false, message: "Tanggal tidak valid" });
 
     const tanggalISO = m.format("YYYY-MM-DD");
 
     if (id) {
-
       const data = await LaporanShift.findByPk(id);
       if (!data)
-        return res.status(404).send("Data tidak ditemukan");
+        return res.status(404).json({ success: false, message: "Data tidak ditemukan" });
 
       await data.update({
-        tanggal: tanggalISO,
-        shift_kode,
-        personil_851a,
-        shift_851a,
-        personil_851b,
-        shift_851b,
-        personil_852a,
-        shift_852a,
-        personil_852b,
-        shift_852b
+        tanggal: tanggalISO, shift_kode,
+        personil_851a, shift_851a,
+        personil_851b, shift_851b,
+        personil_852a, shift_852a,
+        personil_852b, shift_852b
       });
 
     } else {
-
       const no_ref = await generateNoRefRMFM5();
 
       await LaporanShift.create({
@@ -159,32 +164,56 @@ exports.storeRMFM5 = async (req, res) => {
         shift_kode,
         no_ref,
         dibuat_oleh: userLogin,
-        personil_851a,
-        shift_851a,
-        personil_851b,
-        shift_851b,
-        personil_852a,
-        shift_852a,
-        personil_852b,
-        shift_852b,
-        is_approved:false
+        personil_851a, shift_851a,
+        personil_851b, shift_851b,
+        personil_852a, shift_852a,
+        personil_852b, shift_852b,
+        is_approved: false
       });
-
     }
 
-    res.redirect("/laporan-shift/rmfm5");
+    // 🔹 KIRIM JSON BUAT JS
+    res.json({ success: true, message: "Data berhasil disimpan" });
 
   } catch (err) {
     console.error(err);
-    res.status(500).send("Gagal menyimpan data RMFM5");
+    res.status(500).json({ success: false, message: "Terjadi kesalahan saat menyimpan data" });
   }
 };
 
+exports.detailRMFM5 = async (req,res)=>{
+  try{
+    const noRef = (req.query.noref || "").trim();
+    if(!noRef) return res.send("No.Ref tidak diberikan");
 
+    const data = await LaporanShift.findOne({ where: { no_ref: noRef } });
+    if(!data) return res.send("Data tidak ditemukan");
 
-// =======================================================
-// DETAIL KCM5 ⭐⭐⭐ FIX MONITORING DISINI
-// =======================================================
+    const row = data.toJSON();
+
+    // data maintenance, monitoring, stt, catatan sama seperti detailKCM5
+    const maintenance = await Maintenance.findAll({ where:{no_ref:noRef}, raw:true, order:[["id","ASC"]]});
+    const monitoringData = await Monitoring.findAll({ where:{no_ref:noRef}, raw:true, order:[["id","ASC"]]});
+    const sttData = await STT.findAll({ where:{no_ref:noRef}, raw:true, order:[["id","ASC"]]});
+    const catatanData = await Catatan.findAll({ where:{no_ref:noRef}, raw:true, order:[["id","ASC"]]});
+    
+    res.render("laporanKCM5", {
+      title: "Laporan Shift RMFM5",
+      active: "laporan",
+      row,
+      maintenance,
+      monitoring: monitoringData,
+      stt: sttData,
+      catatan: catatanData,
+      ts: [] // RMFM5 mungkin tidak pakai TS?
+    });
+
+  } catch(err){
+    console.error("DETAIL RMFM5 ERROR:", err);
+    res.status(500).send("Server Error");
+  }
+}
+
 // =======================================================
 // DETAIL KCM5 ⭐⭐⭐ FULL FIX FINAL
 // =======================================================

@@ -184,10 +184,10 @@ document.getElementById('tanggal').onchange = function(){
 
 
 // ================= BACK BUTTON =================
-document.querySelector('.back').onclick = ()=>{
-  window.location.href = `/laporan-shift/kcm5/detail?noref=<%= no_ref %>`;
-}
-
+document.querySelector('.back').addEventListener('click', () => {
+  window.location.href =
+    `/laporan-shift/kcm5/detail?noref=<%= no_ref %>`;
+});
 </script>
 
 </body>

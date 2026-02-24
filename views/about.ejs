@@ -26,7 +26,11 @@
           <h2>Profil</h2>
 
           <div class="profile-picture-wrapper">
-            <img id="profileImg" class="profile-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='100' fill='%23FFD700'/%3E%3Ccircle cx='100' cy='80' r='40' fill='%23999'/%3E%3Cpath d='M 50 180 Q 50 140 100 140 Q 150 140 150 180' fill='%23999'/%3E%3C/svg%3E" alt="Profile Picture">
+          <img
+          id="profileImg"
+          class="profile-image"
+          src="<%= user.profile_picture ? user.profile_picture : 'default.svg' %>"
+          >
           </div>
 
           <div class="file-upload-section">
@@ -38,21 +42,9 @@
           <div class="profile-details">
             <div class="detail-group">
               <label>Username</label>
-              <div class="detail-value">MUHAMMAD AFIQ JAKHIEL</div>
+              <div class="detail-value"><%= user.nama %></div>
             </div>
-            <div class="detail-group">
-              <label>Email</label>
-              <div class="detail-value">ofiqjahiel23@gmail.com</div>
-            </div>
-            <div class="detail-group">
-              <label>No HP</label>
-              <div class="detail-value">08124457880</div>
-            </div>
-            <div class="detail-group">
-              <label>Role</label>
-              <div class="detail-value">ADMIN</div>
-            </div>
-          </div>
+            
 
           <div class="profile-actions">
             <button class="btn-action btn-password">Ubah Password</button>

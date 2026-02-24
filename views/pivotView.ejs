@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -8,285 +7,92 @@
 <link rel="stylesheet" href="/css/layout.css">
 <link rel="stylesheet" href="/css/sidebar.css">
 <link rel="stylesheet" href="/css/topbar.css">
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:20px;
-padding:20px;
-}
-
-.card{
-background:white;
-border-radius:12px;
-box-shadow:0 3px 12px rgba(0,0,0,.12);
-padding:15px;
-position:relative;
-}
-
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:10px;
-}
-
-.center{
-position:relative;
-height:240px;
-}
-
-.total{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-font-size:26px;
-font-weight:bold;
-pointer-events:none;
-}
-
-.filterBox{
-display:none;
-position:absolute;
-top:45px;
-right:10px;
-background:white;
-border:1px solid #ddd;
-padding:10px;
-border-radius:8px;
-box-shadow:0 4px 10px rgba(0,0,0,.15);
-z-index:5;
-max-height:220px;
-overflow:auto;
-}
-
-button{
-background:#8b0000;
-color:white;
-border:none;
-padding:6px 12px;
-border-radius:6px;
-cursor:pointer;
-margin-left:5px;
-}
-
-.modal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.6);
-z-index:999;
-justify-content:center;
-align-items:center;
-}
-
-.modalContent{
-background:white;
-padding:20px;
-border-radius:12px;
-width:70%;
-height:80%;
-position:relative;
-}
-
-.closeBtn{
-position:absolute;
-top:10px;
-right:10px;
-background:red;
-}
-
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:20px; padding:20px; }
+.card { background:white; border-radius:12px; box-shadow:0 3px 12px rgba(0,0,0,.12); padding:15px; position:relative; display:flex; flex-direction:column; }
+.header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.center { position:relative; height:240px; }
+.total { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:24px; font-weight:bold; pointer-events:none; }
+button { background:#8b0000; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; margin-left:5px; }
+.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999; justify-content:center; align-items:center; }
+.modalContent { background:white; padding:20px; border-radius:12px; width:80%; height:80%; position:relative; display:flex; justify-content:center; align-items:center; }
+.closeBtn { position:absolute; top:10px; right:10px; background:red; color:white; border:none; padding:5px 10px; cursor:pointer; }
 </style>
-
 </head>
 
 <body>
-
 <%- include('partials/sidebar') %>
-
 <div class="main">
-<%- include('partials/topbar',{title:"Pivot Dashboard"}) %>
-
-<div class="grid" id="grid"></div>
-
+  <%- include('partials/topbar',{title:"Pivot Dashboard"}) %>
+  <div class="grid" id="grid"></div>
 </div>
 
-<!-- EXPAND MODAL -->
-
+<!-- Expand Modal -->
 <div id="expandModal" class="modal">
-<div class="modalContent">
-<button class="closeBtn" onclick="closeExpand()">X</button>
-<canvas id="expandCanvas"></canvas>
-</div>
+  <div class="modalContent">
+    <button class="closeBtn" onclick="closeExpand()">X</button>
+    <canvas id="expandCanvas" style="height:90%; width:90%;"></canvas>
+    <div class="total" id="expandTotal"></div>
+  </div>
 </div>
 
 <script>
-
 const chartsData = <%- JSON.stringify(charts) %>;
-
 const keys = ["area","kepala","durasi","frek","status","stop"];
-const titles = [
-"Pivot BM Area",
-"Pivot BM Kepala Shift",
-"Pivot Durasi TS",
-"Pivot Frekuensi TS",
-"Pivot Status BM",
-"Pivot Stop Alat"
-];
+const titles = ["Pivot BM Area","Pivot BM Kepala Shift","Pivot Durasi TS","Pivot Frekuensi TS","Pivot Status BM","Pivot Stop Alat"];
+const colors = ["#FF6384","#36A2EB","#FFCE56","#4BC0C0","#9966FF","#FF9F40","#FF6F91","#6BCB77","#FFD93D","#FF6B6B","#845EC2","#00C9A7"];
 
-let chartObjs={};
-let expandChartObj=null;
-
+let chartObjs = {};
+let expandChartObj = null;
 
 // ================= BUILD CARDS =================
-
 const grid=document.getElementById("grid");
-
 keys.forEach((k,i)=>{
-
-grid.innerHTML += `
-<div class="card">
-
-<div class="header">
-<b>${titles[i]}</b>
-
-<div>
-<button onclick="toggleFilter('${k}')">Filter</button>
-<button onclick="expandChart('${k}')">Expand</button>
-</div>
-</div>
-
-<div class="filterBox" id="box_${k}">
-<div id="check_${k}"></div>
-<button onclick="applyFilter('${k}')">Apply</button>
-</div>
-
-<div class="center">
-<canvas id="c_${k}"></canvas>
-<div class="total" id="t_${k}">
-${chartsData[k].total}
-</div>
-</div>
-
-</div>`;
+  grid.innerHTML += `
+  <div class="card">
+    <div class="header">
+      <b class="card-title">${titles[i]}</b>
+      <button onclick="expandChart('${k}')">Expand</button>
+    </div>
+    <div class="center">
+      <canvas id="c_${k}"></canvas>
+      <div class="total" id="t_${k}">${chartsData[k].total}</div>
+    </div>
+  </div>
+  `;
 });
-
 
 // ================= INIT CHART =================
-
 function createChart(key,data){
-
-chartObjs[key]= new Chart(
-document.getElementById("c_"+key),
-{
-type:"doughnut",
-data:{
-labels:data.labels,
-datasets:[{data:data.values}]
-},
-options:{
-cutout:"75%",
-plugins:{legend:{position:"bottom"}}
-}
-});
+  chartObjs[key] = new Chart(document.getElementById("c_"+key), {
+    type:"doughnut",
+    data:{ labels:data.labels, datasets:[{ data:data.values, backgroundColor:colors }] },
+    options:{ cutout:"75%", plugins:{ legend:{position:"bottom"}, tooltip:{enabled:true} } }
+  });
 }
 
-keys.forEach(k=>{
+keys.forEach(k=>{ createChart(k,chartsData[k]); });
 
-createChart(k,chartsData[k]);
-
-let html="";
-chartsData[k].labels.forEach(v=>{
-html+=`
-<label>
-<input type="checkbox" value="${v}" checked>
-${v}
-</label><br>`;
-});
-
-document.getElementById("check_"+k).innerHTML=html;
-
-});
-
-
-// ================= FILTER =================
-
-function toggleFilter(key){
-
-let box=document.getElementById("box_"+key);
-box.style.display =
-box.style.display==="block" ? "none":"block";
-
-}
-
-
-async function applyFilter(key){
-
-const checks=[
-...document.querySelectorAll(`#check_${key} input:checked`)
-].map(c=>c.value);
-
-const res = await fetch("/chart/pivot/filter",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-chartKey:key,
-selected:checks
-})
-});
-
-const data= await res.json();
-
-chartObjs[key].data.labels=data.labels;
-chartObjs[key].data.datasets[0].data=data.values;
-chartObjs[key].update();
-
-document.getElementById("t_"+key).innerText=data.total;
-
-}
-
-
-
-// ================= EXPAND =================
-
+// ================= EXPAND CHART =================
 function expandChart(key){
-
-document.getElementById("expandModal").style.display="flex";
-
-const data = chartObjs[key].data;
-
-if(expandChartObj) expandChartObj.destroy();
-
-expandChartObj = new Chart(
-document.getElementById("expandCanvas"),
-{
-type:"doughnut",
-data:data,
-options:{
-cutout:"65%",
-plugins:{legend:{position:"right"}}
-}
-});
+  document.getElementById("expandModal").style.display="flex";
+  const data = chartObjs[key].data;
+  const total = document.getElementById("t_"+key).innerText;
+  document.getElementById("expandTotal").innerText = total;
+  if(expandChartObj) expandChartObj.destroy();
+  expandChartObj = new Chart(document.getElementById("expandCanvas"), {
+    type:"doughnut",
+    data:data,
+    options:{ cutout:"50%", plugins:{ legend:{position:"right"}, tooltip:{enabled:true} } }
+  });
 }
 
 function closeExpand(){
-
-document.getElementById("expandModal").style.display="none";
-
-if(expandChartObj)
-expandChartObj.destroy();
-
+  document.getElementById("expandModal").style.display="none";
+  if(expandChartObj) expandChartObj.destroy();
 }
-
 </script>
-
 </body>
 </html>

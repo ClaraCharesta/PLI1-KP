@@ -38,7 +38,6 @@
             <th>Personil (842B)</th>
             <th>Shift (842B)</th>
             <th>Cuti</th>
-            <th>Troubleshooting</th>
             <th>Verifikasi Kasi</th>
             <th>Aksi</th>
           </tr>
@@ -60,18 +59,7 @@
                 <td><%= row.shift_842b || "-" %></td>
                 <td><%= row.cuti || "-" %></td>
                 
-                <!-- Kolom Troubleshooting -->
-                <td>
-                  <% if (tsMap[row.no_ref] && tsMap[row.no_ref].length > 0) { %>
-                    <ul style="padding-left:15px; margin:0;">
-                      <% tsMap[row.no_ref].forEach(ts => { %>
-                        <li><%= ts.deskripsi || ts.keterangan || "-" %> - <%= ts.status || "-" %></li>
-                      <% }) %>
-                    </ul>
-                  <% } else { %>
-                    -
-                  <% } %>
-                </td>
+
 
                 <td>
                   <input type="checkbox" class="chk-approve" data-id="<%= row.id %>"

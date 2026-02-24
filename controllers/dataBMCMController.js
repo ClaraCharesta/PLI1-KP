@@ -141,12 +141,25 @@ exports.create = async (req, res) => {
 /* =====================================================
     ADD PAGE
 ===================================================== */
-exports.addPage = (req, res) => {
-  res.render("formDataBMCM", {
-    title: "Add Realisasi PK Harian",
-    active: "dataBMCM"
-  });
-  
+exports.addPage = async (req, res) => {
+  try {
+    const nomenclatures = await db.Nomenclature.findAll();
+
+    res.render("formDataBMCM", {
+      title: "Add Realisasi PK Harian",
+      nomenclatures,
+      active: "dataBMCM"
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    res.render("formDataBMCM", {
+      title: "Add Realisasi PK Harian",
+      nomenclatures: [],
+      active: "dataBMCM"
+    });
+  }
 };
 
 
@@ -209,6 +222,9 @@ exports.editPage = async (req, res) => {
       return res.redirect("/dataBMCM/page");
     }
 
+    // ⭐ TAMBAHAN (ambil dropdown area)
+    const nomenclatures = await db.Nomenclature.findAll();
+
     const tanggalFormatted = data.tanggal
       ? new Date(data.tanggal).toISOString().split("T")[0]
       : "";
@@ -216,6 +232,7 @@ exports.editPage = async (req, res) => {
     res.render("formUpdateDataBMCM", {
       data,
       tanggalFormatted,
+      nomenclatures, // ⭐ WAJIB
       active: "dataBMCM"
     });
 

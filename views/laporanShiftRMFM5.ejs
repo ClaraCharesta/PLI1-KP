@@ -2,161 +2,104 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title><%= mode === 'edit' ? 'Edit Laporan Shift RMFM5' : 'Tambah Laporan Shift RMFM5' %></title>
-
+  <title><%= mode==='edit' ? 'Edit Laporan Shift RMFM5' : 'Tambah Laporan Shift RMFM5' %></title>
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/sidebar.css">
   <link rel="stylesheet" href="/css/topbar.css">
   <link rel="stylesheet" href="/css/laporanShiftRMFM5.css">
 </head>
-
 <body>
 
-<form method="POST"
-action="<%= mode==='edit'
-? '/laporan-shift/rmfm5/edit/'+formData.id
-: '/laporan-shift/rmfm5/add' %>">
+<form id="rmfm5Form">
 
 <%- include('partials/sidebar', { active: 'laporan' }) %>
 
 <div class="main">
-
-<%- include('partials/topbar', {
-title: mode === 'edit' ? 'Edit Laporan Shift RMFM5' : 'Tambah Laporan Shift RMFM5'
-}) %>
+  <%- include('partials/topbar', { title: mode==='edit' ? 'Edit Laporan Shift RMFM5' : 'Tambah Laporan Shift RMFM5' }) %>
 
   <div class="content">
     <div class="form-card">
 
       <!-- TOP INFO -->
       <div class="form-grid top-info">
-
         <div class="form-group">
           <label>Tanggal</label>
-          <input 
-            type="date" 
-            id="tanggal" 
-            name="tanggal"
-            value="<%= formData?.tanggal || '' %>"
-            required>
+          <input type="date" id="tanggal" name="tanggal" value="<%= formData?.tanggal || '' %>" required>
         </div>
-
         <div class="form-group">
           <label>Shift Utama</label>
           <select id="shiftUtama" name="shift_kode" required>
             <option value="">-- pilih --</option>
-            <option value="01" <%= formData?.shift_kode==='01'?'selected':'' %>>01</option>
-            <option value="02" <%= formData?.shift_kode==='02'?'selected':'' %>>02</option>
-            <option value="03" <%= formData?.shift_kode==='03'?'selected':'' %>>03</option>
-            <option value="A"  <%= formData?.shift_kode==='A'?'selected':'' %>>A</option>
-            <option value="B"  <%= formData?.shift_kode==='B'?'selected':'' %>>B</option>
-            <option value="LIBUR" <%= formData?.shift_kode==='LIBUR'?'selected':'' %>>LIBUR</option>
+            <% shifts.forEach(s=>{ %>
+              <option value="<%= s %>" <%= formData?.shift_kode===s?'selected':'' %>><%= s %></option>
+            <% }) %>
           </select>
         </div>
-
+        <!-- NO REF -->
         <div class="form-group">
           <label>No. Ref</label>
           <input 
             type="text" 
             id="noref" 
             name="no_ref"
-            value="<%= formData?.no_ref || '' %>"
+            value="<%= formData?.no_ref || '' %>"  
             readonly>
         </div>
-
         <div class="form-group">
           <label>Dibuat Oleh</label>
-          <input 
-            type="text"
-            value="<%= user?.email || user?.nama || '' %>"
-            readonly>
+          <input type="text" value="<%= user?.email || user?.nama || '' %>" readonly>
         </div>
-
       </div>
 
-
-      <!-- PERSONIL BLOCK -->
+      <!-- PERSONIL -->
       <% ['851a','851b','852a','852b'].forEach(p => { %>
-
         <div class="form-grid">
-
           <div class="form-group">
             <label>Personil (<%= p %>)</label>
-            <select
-              class="personil"
-              name="personil_<%= p %>"
-              data-key="<%= p %>">
-            </select>
+            <select class="personil" name="personil_<%= p %>" data-key="<%= p %>"></select>
           </div>
-
           <div class="form-group">
             <label>Shift (<%= p %>)</label>
-            <select
-              class="shift"
-              name="shift_<%= p %>"
-              data-key="<%= p %>">
-            </select>
+            <select class="shift" name="shift_<%= p %>" data-key="<%= p %>"></select>
           </div>
-
         </div>
-
       <% }) %>
-
 
       <!-- CUTI -->
       <div class="form-group">
         <label>Personil Cuti</label>
-
         <div class="cuti-box" id="cutiBox"></div>
-
-        <input 
-          type="hidden"
-          id="cutiResult"
-          name="cuti"
-          value="<%= formData?.cuti || '' %>">
+        <input type="hidden" id="cutiResult" name="cuti" value="<%= formData?.cuti || '' %>">
       </div>
 
-
-      <!-- ID hidden -->
-      <% if (mode === 'edit') { %>
-        <input type="hidden" name="id" value="<%= formData.id %>">
+      <!-- ID hidden for edit -->
+      <% if(mode==='edit'){ %>
+        <input type="hidden" id="id" name="id" value="<%= formData.id %>">
       <% } %>
 
-
-      <!-- BUTTON -->
+      <!-- BUTTONS -->
       <div class="btn-wrapper">
         <button class="back" type="button">Back</button>
         <button class="clear" type="button">Clear</button>
-        <button class="save" type="submit">Save</button>
+        <button class="save" type="button">Save</button>
       </div>
 
     </div>
   </div>
 
 </div>
-
 </form>
 
 <script>
-  window.formData = <%- JSON.stringify(formData || {}) %>;
+window.formData = <%- JSON.stringify(formData || {}) %>;
 </script>
-
 <script src="/js/formShiftRMFM5.js"></script>
 <script src="/js/sidebar.js"></script>
-
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-
-  document.querySelector(".back").onclick = () => {
-    window.location.href = "/laporan-shift/rmfm5";
-  };
-
-  document.querySelector(".clear").onclick = () => {
-    document.querySelector("form").reset();
-  };
-
+  document.querySelector(".back").onclick = () => window.location.href = "/laporan-shift/rmfm5";
+  document.querySelector(".clear").onclick = () => document.querySelector("form").reset();
 });
 </script>
-
 </body>
 </html>

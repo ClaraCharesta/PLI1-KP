@@ -42,14 +42,13 @@
 
         <div class="form-group">
           <label for="area">Area</label>
-          <select id="area" name="area" required>
+          <select name="area" id="area" style="width:100%" required>
             <option value="">-- Pilih Area --</option>
-            <option value="RM5" <%= data.area==="RM5"?"selected":"" %>>RM5</option>
-            <option value="KCM5" <%= data.area==="KCM5"?"selected":"" %>>KCM5</option>
-            <option value="AUTO5" <%= data.area==="AUTO5"?"selected":"" %>>AUTO5</option>
-            <option value="FM5" <%= data.area==="FM5"?"selected":"" %>>FM5</option>
-            <option value="Shift KCM 5" <%= data.area==="Shift KCM 5"?"selected":"" %>>Shift KCM 5</option>
-            <option value="Shift RMFM 5" <%= data.area==="Shift RMFM 5"?"selected":"" %>>Shift RMFM 5</option>
+
+            <% (nomenclatures || []).forEach(n => { %>
+              <option value="<%= n.name %>"><%= n.name %></option>
+            <% }) %>
+
           </select>
         </div>
 

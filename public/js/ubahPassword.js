@@ -6,7 +6,9 @@ togglePasswordButtons.forEach(button => {
     e.preventDefault();
     const targetId = button.dataset.target;
     const inputField = document.getElementById(targetId);
-    
+
+    if (!inputField) return;
+
     if (inputField.type === "password") {
       inputField.type = "text";
       button.classList.add("visible");
@@ -17,132 +19,150 @@ togglePasswordButtons.forEach(button => {
   });
 });
 
-/* ================= MODAL HELPER FUNCTIONS ================= */
-function showModal(message) {
-  const modal = document.getElementById("confirmModal") || createModal();
-  const modalContent = modal.querySelector(".modal-content p");
-  modalContent.textContent = message;
+
+/* ================= MODAL ================= */
+function createModal() {
+  let modal = document.getElementById("confirmModal");
+  if (modal) return modal;
+
+  modal = document.createElement("div");
+  modal.id = "confirmModal";
+  modal.className = "modal";
+
+  modal.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-icon">✓</div>
+      <h2>Informasi</h2>
+      <p></p>
+      <div class="modal-buttons"></div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  return modal;
+}
+
+function showModal(message, options = {}) {
+  const modal = createModal();
+
+  const icon = modal.querySelector(".modal-icon");
+  const title = modal.querySelector("h2");
+  const text = modal.querySelector("p");
+  const buttons = modal.querySelector(".modal-buttons");
+
+  text.textContent = message;
+
+  icon.textContent = options.icon || "✓";
+  title.textContent = options.title || "Informasi";
+
+  buttons.innerHTML = "";
+
+  // default OK button
+  const okBtn = document.createElement("button");
+  okBtn.className = "modal-confirm-btn";
+  okBtn.textContent = options.okText || "OK";
+
+  okBtn.onclick = () => {
+    hideModal();
+    if (options.onOk) options.onOk();
+  };
+
+  buttons.appendChild(okBtn);
+
+  // optional cancel
+  if (options.showCancel) {
+    const cancelBtn = document.createElement("button");
+    cancelBtn.className = "modal-cancel-btn";
+    cancelBtn.textContent = options.cancelText || "Batal";
+
+    cancelBtn.onclick = () => {
+      hideModal();
+      if (options.onCancel) options.onCancel();
+    };
+
+    buttons.appendChild(cancelBtn);
+  }
+
   modal.classList.add("show");
   return modal;
 }
 
 function hideModal() {
   const modal = document.getElementById("confirmModal");
-  if (modal) {
-    modal.classList.remove("show");
-  }
+  if (modal) modal.classList.remove("show");
 }
 
-function createModal() {
-  const modal = document.createElement("div");
-  modal.id = "confirmModal";
-  modal.className = "modal";
-  modal.innerHTML = `
-    <div class="modal-content">
-      <div class="modal-icon">✓</div>
-      <h2>Konfirmasi</h2>
-      <p>Apakah anda yakin ingin membatalkan perubahan password?</p>
-      <div class="modal-buttons">
-        <button id="confirmBtn" class="modal-confirm-btn">Ya</button>
-        <button id="cancelModalBtn" class="modal-cancel-btn">Tidak</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(modal);
-  return modal;
-}
 
-/* ================= PASSWORD FORM HANDLER ================= */
+/* ================= PASSWORD FORM ================= */
 const passwordForm = document.getElementById("passwordForm");
 const cancelBtn = document.getElementById("cancelBtn");
 
-passwordForm.addEventListener("submit", (e) => {
+passwordForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const oldPassword = document.getElementById("oldPassword").value.trim();
   const newPassword = document.getElementById("newPassword").value.trim();
   const confirmPassword = document.getElementById("confirmPassword").value.trim();
 
-  // Validasi
-  if (!oldPassword) {
-    const modal = showModal("Password lama tidak boleh kosong");
-    const okBtn = modal.querySelector(".modal-confirm-btn") || document.createElement("button");
-    if (!okBtn.id) {
-      okBtn.id = "confirmBtn";
-      okBtn.className = "modal-confirm-btn";
-      okBtn.textContent = "OK";
-      modal.querySelector(".modal-buttons").innerHTML = '';
-      modal.querySelector(".modal-buttons").appendChild(okBtn);
-      okBtn.addEventListener("click", hideModal);
-    }
-    return;
-  }
+  /* ===== VALIDASI FRONTEND ===== */
+  if (!oldPassword) return showModal("Password lama tidak boleh kosong", { icon: "⚠️" });
+  if (!newPassword) return showModal("Password baru tidak boleh kosong", { icon: "⚠️" });
+  if (!confirmPassword) return showModal("Konfirmasi password tidak boleh kosong", { icon: "⚠️" });
 
-  if (!newPassword) {
-    const modal = showModal("Password baru tidak boleh kosong");
-    modal.querySelector(".modal-confirm-btn").addEventListener("click", hideModal);
-    return;
-  }
-
-  if (!confirmPassword) {
-    const modal = showModal("Konfirmasi password tidak boleh kosong");
-    modal.querySelector(".modal-confirm-btn").addEventListener("click", hideModal);
-    return;
-  }
-
-  // Cek jika password lama dan password baru sama
   if (oldPassword === newPassword) {
-    const modal = showModal("Password baru tidak boleh sama dengan password lama");
-    modal.querySelector(".modal-confirm-btn").addEventListener("click", hideModal);
-    return;
+    return showModal("Password baru tidak boleh sama dengan password lama", { icon: "⚠️" });
   }
 
-  // Cek jika password baru dan konfirmasi sama
   if (newPassword !== confirmPassword) {
-    const modal = showModal("Password baru dan konfirmasi password tidak sesuai");
-    modal.querySelector(".modal-confirm-btn").addEventListener("click", hideModal);
-    return;
+    return showModal("Password baru dan konfirmasi tidak sama", { icon: "⚠️" });
   }
 
-  // Cek panjang password minimal 6 karakter
   if (newPassword.length < 6) {
-    const modal = showModal("Password baru minimal 6 karakter");
-    modal.querySelector(".modal-confirm-btn").addEventListener("click", hideModal);
-    return;
+    return showModal("Password baru minimal 6 karakter", { icon: "⚠️" });
   }
 
-  // Jika semua validasi passed
-  const modal = showModal("Password berhasil diubah!");
-  modal.querySelector(".modal-confirm-btn").textContent = "OK";
-  modal.querySelector(".modal-confirm-btn").addEventListener("click", () => {
-    hideModal();
-    passwordForm.reset();
-  });
-  modal.querySelector(".modal-buttons").innerHTML = '<button class="modal-confirm-btn" style="flex: 1;">OK</button>';
-  modal.querySelector(".modal-confirm-btn").addEventListener("click", () => {
-    hideModal();
-    passwordForm.reset();
-  });
+  /* ===== CALL BACKEND ===== */
+  try {
+    const res = await fetch("/profile/ubah-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        oldPassword,
+        newPassword,
+        confirmPassword
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      return showModal(data.message || "Gagal ubah password", { icon: "⚠️" });
+    }
+
+    showModal("Password berhasil diubah", {
+      icon: "✅",
+      onOk: () => {
+        passwordForm.reset();
+      }
+    });
+
+  } catch (err) {
+    console.error(err);
+    showModal("Terjadi kesalahan server", { icon: "❌" });
+  }
 });
 
-// Cancel button
+
+/* ================= CANCEL BUTTON ================= */
 cancelBtn.addEventListener("click", () => {
-  const modal = showModal("Apakah anda yakin ingin membatalkan perubahan password?");
-  modal.querySelector(".modal-icon").textContent = "⚠️";
-  modal.querySelector("h2").textContent = "Konfirmasi";
-  
-  const confirmBtn = modal.querySelector(".modal-confirm-btn");
-  const cancelModalBtn = modal.querySelector(".modal-cancel-btn");
-  
-  confirmBtn.textContent = "Ya";
-  cancelModalBtn.textContent = "Tidak";
-  
-  confirmBtn.onclick = () => {
-    hideModal();
-    window.history.back();
-  };
-  
-  cancelModalBtn.onclick = () => {
-    hideModal();
-  };
+  showModal("Apakah anda yakin ingin membatalkan perubahan password?", {
+    icon: "⚠️",
+    title: "Konfirmasi",
+    okText: "Ya",
+    cancelText: "Tidak",
+    showCancel: true,
+    onOk: () => window.history.back()
+  });
 });

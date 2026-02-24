@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    profile_picture: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     email: {
       type: DataTypes.STRING,
       unique: true,
@@ -31,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false
   });
 
+  
   // ✅ RELASI HARUS DI DALAM SINI
   User.associate = (models) => {
     User.hasMany(models.DataBMCM, {
@@ -39,5 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
+
   return User;
 };
+

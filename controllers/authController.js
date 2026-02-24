@@ -31,13 +31,12 @@ exports.login = async (req, res) => {
     }
 
     // SIMPAN KE SESSION
-    req.session.user = {
-      id: user.user_id,
-      nama: user.nama,
-      email: user.email,   // ⬅️ TAMBAH INI
-      role: user.Role.role_name
-    };
-
+req.session.user = {
+  user_id: user.user_id, // ⭐ ini penting
+  nama: user.nama,
+  email: user.email,
+  role_id: user.role_id
+};
 
     req.session.permissions = user.Role.RolePermissions;
 

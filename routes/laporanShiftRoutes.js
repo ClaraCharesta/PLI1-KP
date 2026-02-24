@@ -21,6 +21,8 @@ router.get("/rmfm5/json", laporanShiftController.listRMFM5JSON);
 router.get("/kcm5/add", laporanShiftController.formKCM5);
 router.get("/kcm5/edit/:id", laporanShiftController.formKCM5);
 router.get("/kcm5/detail", laporanShiftController.detailKCM5);
+router.get("/rmfm5/detail", laporanShiftController.detailKCM5);
+
 
 // RMFM5 pakai laporanShiftController
 router.get("/rmfm5/add", laporanShiftController.formRMFM5);
@@ -35,7 +37,9 @@ router.post("/kcm5/edit/:id", laporanShiftController.saveKCM5);
 
 // RMFM5 pakai laporanShiftController
 router.post("/rmfm5/add", laporanShiftController.storeRMFM5);
-router.post("/rmfm5/edit/:id", laporanShiftController.storeRMFM5);
+//router.post("/rmfm5/edit/:id", laporanShiftController.storeRMFM5);
+// Tambahkan route untuk edit
+router.post("/rmfm5/edit/:id", laporanShiftController.updateLaporanRMFM5);
 
 // ===== TROUBLESHOOTING KCM5 =====
 router.get("/kcm5/troubleshooting", tsController.formTSKCM5);

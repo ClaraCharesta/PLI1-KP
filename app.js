@@ -23,7 +23,7 @@ const dataAbnormalitasRoutes = require("./routes/dataAbnormalitasRoutes");
 const chartBMCMRoutes = require("./routes/chartBMCMRoutes");
 const chartBMCMPPIRoutes = require("./routes/chartBMCMPPIRoutes");
 const chartAbnormalitasRoutes = require("./routes/chartAbnormalitasRoutes");
-
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -59,6 +59,7 @@ const auth = (req, res, next) => {
   next();
 };
 
+app.use("/", authRoutes);
 // ===============================
 // LOGIN PAGE
 // ===============================
@@ -112,7 +113,9 @@ app.post("/login", async (req, res) => {
 // LOGOUT
 // ===============================
 app.get("/logout", (req, res) => {
-  req.session.destroy(() => res.redirect("/"));
+  req.session.destroy(() => {
+    res.redirect("/login");
+  });
 });
 
 // ===============================
@@ -126,8 +129,8 @@ app.use("/ts", auth, tsKCM5Routes);
 
 
 
-app.use("/monitoring", auth, monitoringRoutes);
-app.use("/catatan", auth, catatanRoutes);
+app.use("/laporan-shift", auth, monitoringRoutes);
+app.use("/laporan-shift", auth, catatanRoutes);
 app.use("/stt", auth, sttRoutes);
 app.use("/maintenance", auth, basicMaintenanceRoutes);
 
@@ -143,6 +146,8 @@ app.use("/chart/abnormal", auth, chartAbnormalitasRoutes);
 // pivot chart kamu
 app.use("/chart/pivot", auth, require("./routes/pivotChartRoutes"));
 app.use("/dataBMCMPPI", auth, dataBMCMPPIRoutes);
+
+
 
 // ===============================
 // ALIAS MENU / REDIRECT
@@ -179,12 +184,11 @@ app.get("/ubahPassword", auth, (req, res) => {
   res.render("ubahPassword", {
     title: "Ganti Password",
     active: "about",
+    user: req.session.user
   });
 });
 
-app.get("/about", auth, (req, res) => {
-  res.render("about", { title: "About", active: "about" });
-});
+
 
 app.get("/feedback", auth, (req, res) => {
   res.render("feedback", { title: "Feedback", active: "feedback" });

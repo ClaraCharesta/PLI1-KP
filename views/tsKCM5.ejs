@@ -282,7 +282,10 @@ $(document).ready(function() {
   });
 
   // ===== BACK =====
-  $('.back').click(()=>window.location.href="/laporan-shift/kcm5");
+ document.querySelector('.back').addEventListener('click', () => {
+  window.location.href =
+    `/laporan-shift/kcm5/detail?noref=<%= no_ref %>`;
+});
 });
 </script>
 
