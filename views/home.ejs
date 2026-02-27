@@ -77,5 +77,19 @@
   </div>
 
   <script src="/js/home.js"></script>
+  <script>
+    // Fallback: ensure hamburger toggle works on Home
+    (function(){
+      const menuToggle = document.getElementById('menuToggle');
+      const sidebar = document.querySelector('.sidebar');
+      const main = document.querySelector('.main');
+      if (menuToggle && sidebar && main) {
+        menuToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('closed');
+          main.classList.toggle('expanded');
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

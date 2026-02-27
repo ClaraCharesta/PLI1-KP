@@ -60,4 +60,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  /* ================= HAMBURGER MENU ================= */
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.querySelector('.sidebar');
+  const main = document.querySelector('.main');
+
+  if (menuToggle && sidebar && main) {
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('closed');
+      main.classList.toggle('expanded');
+    });
+  }
+
 });

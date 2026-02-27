@@ -15,7 +15,7 @@
   <%- include('partials/sidebar') %>
 
   <div class="main">
-    <%- include('partials/topbar', { title: "Realisasi PK Harian" }) %>
+    <%- include('partials/topbar', { title: "Realisasi PK Harian", showBackButton: true }) %>
 
     <div class="content">
       <!-- HEADER -->
@@ -78,17 +78,6 @@
       </div>
     </div>
   </div>
-
-  <script>
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar = document.querySelector('.sidebar');
-    const main = document.querySelector('.main');
-
-    menuToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('closed');
-      main.classList.toggle('expanded');
-    });
-  </script>
 
   <script src="/js/dataBMCM.js"></script>
 

@@ -29,7 +29,16 @@ function toNumber(v) {
 
 
 exports.list = async (req, res) => {
-  const data = await DataBMCM.findAll();
+  const data = await DataBMCM.findAll({
+    include: [
+      {
+        model: db.User,
+        attributes: ['user_id', 'nama'],
+        as: 'creator',
+        required: false
+      }
+    ]
+  });
   res.json(data);
 };
 

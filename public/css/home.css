@@ -52,10 +52,11 @@
   display: flex;
   gap: 20px;
   padding: 0 40px 32px 40px;        
-  overflow-x: auto;
-  flex-wrap: nowrap;
-  justify-content: center;
+  overflow-x: visible; /* NO HORIZONTAL SCROLL */
+  flex-wrap: wrap; /* ALLOW WRAPPING */
+  justify-content: flex-start;
   box-sizing: border-box;
+  width: 100%;
 }
 
 /* ================= CARD STYLING ================= */
@@ -73,8 +74,9 @@
   gap: 12px;
   border: 1px solid #ddd;
   border-left: 4px solid #8b0000;
+  flex: 1 1 200px; /* responsive flex basis */
+  max-width: 280px;
   min-width: 160px;
-  flex-shrink: 0;
 }
 
 .card:hover {

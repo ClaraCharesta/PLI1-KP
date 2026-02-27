@@ -3,6 +3,7 @@ const router = express.Router();
 const controller = require("../controllers/dataAbnormalitasController");
 const multer = require("multer");
 const path = require("path");
+const authMiddleware = require("../middlewares/authMiddleware");
 
 // ================= UPLOAD CONFIG =================
 const storage = multer.diskStorage({
@@ -30,6 +31,7 @@ router.get("/add", controller.formAdd);
 // STORE
 router.post(
   "/add",
+  authMiddleware,
   upload.fields([
     { name: "foto_sebelum", maxCount: 1 },
     { name: "foto_sesudah", maxCount: 1 }
@@ -43,6 +45,7 @@ router.get("/edit/:id", controller.formEdit);
 // UPDATE
 router.post(
   "/update/:id",
+  authMiddleware,
   upload.fields([
     { name: "foto_sebelum", maxCount: 1 },
     { name: "foto_sesudah", maxCount: 1 }
@@ -51,6 +54,6 @@ router.post(
 );
 
 // DELETE
-router.delete("/:id", controller.delete);
+router.delete("/:id", authMiddleware, controller.delete);
 
 module.exports = router;

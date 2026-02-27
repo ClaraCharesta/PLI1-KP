@@ -1,12 +1,19 @@
 body {
   margin:0;
   font-family: "Segoe UI", sans-serif;
+  padding-top: 52px;
 }
 
 .main {
   margin-left: 260px;
+  transition: margin-left 0.3s ease;
+}
+
+.main.expanded {
+  margin-left: 0;
 }
 
 @media(max-width:768px){
   .main { margin-left:0; }
 }
+

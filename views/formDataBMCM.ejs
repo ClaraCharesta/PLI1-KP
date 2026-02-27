@@ -38,11 +38,12 @@
           <label for="area">Area</label>
           <select name="area" id="area" style="width:100%" required>
             <option value="">-- Pilih Area --</option>
-
-            <% (nomenclatures || []).forEach(n => { %>
-              <option value="<%= n.name %>"><%= n.name %></option>
-            <% }) %>
-
+            <option value="RM5">RM5</option>
+              <option value="KCM5">KCM5</option>
+              <option value="AUTO5">AUTO5</option>
+              <option value="FM5">FM5</option>
+              <option value="Shift KCM 5">Shift KCM 5</option>
+              <option value="Shift RMFM 5">Shift RMFM 5</option>
           </select>
           </div>
 

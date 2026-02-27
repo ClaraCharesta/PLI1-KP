@@ -29,7 +29,7 @@
           <img
           id="profileImg"
           class="profile-image"
-          src="<%= user.profile_picture ? user.profile_picture : 'default.svg' %>"
+          src="<%= user.profile_picture ? user.profile_picture : '/img/default.svg' %>"
           >
           </div>
 
@@ -37,6 +37,12 @@
             <label for="profilePictureInput" class="btn-upload">Pilih Foto Profil</label>
             <input type="file" id="profilePictureInput" accept="image/*" hidden>
             <p id="fileStatus">Tidak ada file yang dipilih</p>
+          </div>
+
+          <!-- Buttons for Save and Delete -->
+          <div class="profile-action-buttons" style="margin-top: 10px; display: flex; gap: 10px; justify-content: center;">
+            <button id="btnSavePhoto" class="btn-action btn-save" style="display: none;">Simpan Foto</button>
+            <button id="btnDeletePhoto" class="btn-action btn-delete" style="display: <%= user.profile_picture ? 'block' : 'none' %>;">Hapus Foto</button>
           </div>
 
           <div class="profile-details">
@@ -72,5 +78,19 @@
   </div>
 
   <script src="/js/about.js"></script>
+  <script>
+    // Fallback: ensure hamburger toggle works on About
+    (function(){
+      const menuToggle = document.getElementById('menuToggle');
+      const sidebar = document.querySelector('.sidebar');
+      const main = document.querySelector('.main');
+      if (menuToggle && sidebar && main) {
+        menuToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('closed');
+          main.classList.toggle('expanded');
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

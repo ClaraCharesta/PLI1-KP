@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
       tbody.innerHTML = "";
 
       if (!data.length) {
-        tbody.innerHTML = `<tr><td colspan="18">Data kosong</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="19">Data kosong</td></tr>`;
         return;
       }
 
@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 : "-"}
             </td>
             <td>${row.keterangan || "-"}</td>
+            <td>${row.creator?.nama || "-"}</td>
             <td>
               <button class="edit" data-id="${row.id}">Edit</button>
               <button class="delete" data-id="${row.id}">Hapus</button>

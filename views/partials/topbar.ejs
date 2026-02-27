@@ -5,4 +5,29 @@
     </button>
     <span class="page-title"><%= title %></span>
   </div>
+  <% if (typeof showBackButton !== 'undefined' && showBackButton) { %>
+    <div class="topbar-right">
+      <button id="btnBack" class="btn-back" aria-label="Back">← Back</button>
+    </div>
+  <% } %>
 </div>
+
+<script>
+  // Handle button back
+  const btnBack = document.getElementById('btnBack');
+  if (btnBack) {
+    btnBack.addEventListener('click', () => {
+      window.history.back();
+    });
+  }
+  // Handle hamburger toggle globally
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.querySelector('.sidebar');
+  const main = document.querySelector('.main');
+  if (menuToggle && sidebar && main) {
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('closed');
+      main.classList.toggle('expanded');
+    });
+  }
+</script>

@@ -37,5 +37,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
+  DataBMCMPPI.associate = (models) => {
+    DataBMCMPPI.belongsTo(models.User, {
+      foreignKey: "created_by",
+      as: "creator_ppi",
+      targetKey: "user_id"
+    });
+  };
+
   return DataBMCMPPI;
 };

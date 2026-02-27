@@ -46,6 +46,7 @@ async function loadData() {
                 <td>
                     ${item.foto_sesudah ? `<img src="/uploads/${item.foto_sesudah}" class="img-thumb">` : "-"}
                 </td>
+                <td>${item.creator?.nama || "-"}</td>
                 <td class="aksi">
                     <button class="edit" data-id="${item.abnormal_id}">Edit</button>
                     <button class="delete" data-id="${item.abnormal_id}">Hapus</button>

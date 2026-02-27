@@ -15,7 +15,7 @@
   <%- include('partials/sidebar') %>
 
   <div class="main">
-    <%- include('partials/topbar', { title: "Data Abnormalitas" }) %>
+    <%- include('partials/topbar', { title: "Data Abnormalitas", showBackButton: true }) %>
 
     <div class="content">
       <!-- HEADER -->
@@ -51,6 +51,7 @@
               <th>ID MSO</th>
               <th>Foto Sebelum</th>
               <th>Foto Sesudah</th>
+              <th>Created By</th>
               <th>Aksi</th>
             </tr>
           </thead>
@@ -94,6 +95,10 @@
                     <% } %>
                   </td>
 
+                  <td>
+                    <%= item.creator ? item.creator.nama : '-' %>
+                  </td>
+
                   <td class="aksi">
                     <button class="edit" data-id="<%= item.abnormal_id %>">Edit</button>
                     <button class="delete" data-id="<%= item.abnormal_id %>">Hapus</button>
@@ -127,17 +132,6 @@
       </div>
     </div>
   </div>
-
-  <script>
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar = document.querySelector('.sidebar');
-    const main = document.querySelector('.main');
-
-    menuToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('closed');
-      main.classList.toggle('expanded');
-    });
-  </script>
 
   <script src="/js/dataAbnormalitas.js"></script>
 

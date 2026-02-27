@@ -15,7 +15,17 @@ function getWeekNumber(dateStr) {
 // LIST DATA (API JSON)
 exports.listApi = async (req, res) => {
     try {
-        const data = await Abnormalitas.findAll({ order: [["createdAt", "DESC"]] });
+        const data = await Abnormalitas.findAll({ 
+            order: [["createdAt", "DESC"]],
+            include: [
+                {
+                    model: db.User,
+                    attributes: ['user_id', 'nama'],
+                    as: 'creator',
+                    required: false
+                }
+            ]
+        });
         res.json(data);
     } catch (err) {
         res.status(500).json({ message: "Gagal ambil data" });
@@ -24,10 +34,31 @@ exports.listApi = async (req, res) => {
 
 // PAGE INDEX
 exports.index = async (req, res) => {
-    res.render("dataAbnormalitas", {
-        title: "Data Abnormalitas",
-        active: "dataAbnormalitas"
-    });
+    try {
+        const data = await Abnormalitas.findAll({ 
+            order: [["createdAt", "DESC"]],
+            include: [
+                {
+                    model: db.User,
+                    attributes: ['user_id', 'nama'],
+                    as: 'creator',
+                    required: false
+                }
+            ]
+        });
+        res.render("dataAbnormalitas", {
+            title: "Data Abnormalitas",
+            active: "dataAbnormalitas",
+            data: data
+        });
+    } catch (err) {
+        console.error(err);
+        res.render("dataAbnormalitas", {
+            title: "Data Abnormalitas",
+            active: "dataAbnormalitas",
+            data: []
+        });
+    }
 };
 
 // FORM ADD
@@ -45,6 +76,8 @@ exports.store = async (req, res) => {
         await Abnormalitas.create({
             ...req.body,
             week_number: weekNumber,
+            // Use session `id` (or fallback to user_id) so created_by is set correctly
+            created_by: req.session?.user?.id ?? req.session?.user?.user_id ?? null,
             foto_sebelum: req.files?.foto_sebelum?.[0]?.filename || null,
             foto_sesudah: req.files?.foto_sesudah?.[0]?.filename || null
         });

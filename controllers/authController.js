@@ -31,14 +31,19 @@ exports.login = async (req, res) => {
     }
 
     // SIMPAN KE SESSION
-req.session.user = {
-  user_id: user.user_id, // ⭐ ini penting
-  nama: user.nama,
-  email: user.email,
-  role_id: user.role_id
-};
+    // Simpan both `id` and `user_id` and include profile_picture to keep session consistent
+    req.session.user = {
+      id: user.user_id,
+      user_id: user.user_id, // backward compatibility
+      nama: user.nama,
+      email: user.email,
+      role_id: user.role_id,
+      profile_picture: user.profile_picture || null
+    };
 
     req.session.permissions = user.Role.RolePermissions;
+
+    console.log("Login session created:", req.session.user);
 
     res.redirect("/dashboard");
 

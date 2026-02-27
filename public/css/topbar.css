@@ -6,17 +6,19 @@
 
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 14px;
-  padding: 0 18px;
+  padding: 0 28px;
+  box-sizing: border-box;
 
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 260px;
+  right: 0;
   z-index: 1000;
 
-  /* ===== KUNCI MASALAH ===== */
-  width: 100%;            /* SELALU 100% layar */
-  max-width: 100vw;       /* TIDAK BOLEH IKUT KONTEN */
-  overflow: hidden;       /* AMANKAN DARI TABLE PANJANG */
+  /* ===== FIXED POSITIONING (hanya di area putih, full stretch) ===== */
+  overflow: visible;
 
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
@@ -41,6 +43,7 @@
   padding: 6px 8px;
   border-radius: 6px;
   transition: background 0.2s ease, transform 0.15s ease;
+  z-index: 1101;
 }
 
 .menu-btn:hover {
@@ -63,13 +66,62 @@
   max-width: 100%;
 }
 
+/* ================= TOPBAR RIGHT ================= */
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* ensure right-side controls aren't flush to the edge */
+  margin-right: 6px;
+}
+
+/* ================= BACK BUTTON ================= */
+.btn-back {
+  background: #ffffff;              /* putih */
+  border: 1px solid #8b0000;        /* border merah tua */
+  color: #8b0000;                   /* teks merah tua */
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;                   /* prevent shrinking */
+  margin-left: auto;                /* push to right */
+  margin-right: 0;                  /* no extra margin */
+}
+
+.btn-back:hover {
+  background: #8b0000;              /* hover jadi merah tua */
+  color: #ffffff;                   /* teks jadi putih */
+  transform: translateX(-2px);
+}
+
+.btn-back:active {
+  transform: scale(0.95);
+}
+
+/* ================= TOPBAR WHEN SIDEBAR CLOSED ================= */
+.main.expanded .topbar {
+  left: 0;
+  width: 100%;
+}
+
 /* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
   .topbar {
     padding: 0 14px;
+    left: 0;
+    width: 100%;
   }
 
   .page-title {
     font-size: 15px;
+  }
+
+  .btn-back {
+    padding: 6px 10px;
+    font-size: 13px;
   }
 }

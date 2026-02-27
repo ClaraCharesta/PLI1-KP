@@ -1,6 +1,10 @@
 /* ================= CHART BMCM PPI PAGE ================= */
 .chart-page {
   padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .chart-page h2 {
@@ -11,17 +15,21 @@
 
 .chart-wrapper {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 20px;
   align-items: flex-start;
   justify-content: flex-start;
-  overflow-x: auto;
+  width: 100%;
+  overflow-x: visible; /* NO HORIZONTAL SCROLL */
+  /* keep wrapper bounded to viewport so charts don't cause horizontal scroll */
+  max-width: calc(100% - 40px);
 }
 
 /* ================= CHART CONTAINER ================= */
 .chart-container {
-  flex: 0 0 auto;
-  width: 380px;
+  flex: 1 1 320px;
+  max-width: 420px;
+  min-width: 280px;
   min-height: 340px;
   position: relative;
   background: #ffffff;
@@ -30,7 +38,6 @@
   border: 1px solid #e3e6f0;
   padding: 12px;
 
-  /* 🔥 WAJIB */
   overflow: visible;
   z-index: 1;
 }
@@ -50,17 +57,33 @@
 
 @media (max-width: 768px) {
   .chart-page {
-    padding: 16px;
+    padding: 12px;
   }
 
   .chart-wrapper {
-    flex-wrap: wrap;
-    gap: 16px;
-    justify-content: center;
+    gap: 12px;
   }
 
   .chart-container {
-    width: 380px;
+    flex: 1 1 calc(50% - 6px);
+    max-width: calc(50% - 6px);
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-page {
+    padding: 8px;
+  }
+
+  .chart-wrapper {
+    gap: 8px;
+  }
+
+  .chart-container {
+    flex: 1 1 100%;
+    max-width: 100%;
+    min-width: auto;
   }
 }
 
@@ -175,15 +198,85 @@
 /* ================= CHART CANVAS ================= */
 .chart-canvas-wrap {
   position: relative;
-  width: 336px;
-  height: 280px;
-  min-height: 280px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 6 / 5;
+  min-height: 220px;
   box-sizing: border-box;
-  z-index: 1;                  /* 🔥 SELALU DI BAWAH DROPDOWN */
+  z-index: 1;
 }
 
 .chart-canvas-wrap canvas {
   display: block;
   position: relative;
   z-index: 1;
+}
+
+/* ================= EXPAND MODAL ================= */
+
+.chart-expand-overlay {
+  position: fixed;             /* 🔥 WAJIB */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+
+  display: none;               /* default hidden */
+  align-items: center;
+  justify-content: center;
+
+  z-index: 999999;             /* 🔥 paling atas */
+}
+
+.chart-expand-overlay.is-open {
+  display: flex;
+}
+
+.chart-expand-modal {
+  background: #ffffff;
+  width: 85%;
+  max-width: 1100px;
+  height: 80%;
+  border-radius: 16px;
+  padding: 24px;
+  position: relative;
+
+  box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-expand-title {
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.chart-expand-canvas-wrap {
+  flex: 1;
+  position: relative;
+}
+
+.chart-expand-canvas-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-expand-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+
+  background: #ff0000;
+  color: #ffffff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
 }

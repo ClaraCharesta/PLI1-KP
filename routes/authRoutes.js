@@ -4,6 +4,8 @@ const router = express.Router();
 const authController = require("../controllers/authController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const profileController = require("../controllers/profileController");
+const db = require("../models");
+const User = db.User;
 const multer = require("multer");
 const path = require("path");
 
@@ -33,21 +35,46 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post("/uploadProfile", upload.single("profile"), async (req, res) => {
+router.post("/uploadProfile", authMiddleware, upload.single("profile"), async (req, res) => {
   try {
-    const userId = req.session.user.user_id;
+    console.log("=== UPLOAD PROFILE DEBUG ===");
+    console.log("Session User:", req.session.user);
 
-    await User.update(
-      { profile_picture: "/uploads/" + req.file.filename },
-      { where: { user_id: userId } }
-    );
+    const userId = req.session.user?.id;
 
-    res.json({ success: true, path: "/uploads/" + req.file.filename });
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "User ID tidak ditemukan di session" });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "Tidak ada file" });
+    }
+
+    console.log("Uploading file for userId:", userId);
+
+    // fetch instance rather than static update so we can inspect and guarantee save
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User tidak ditemukan" });
+    }
+
+    const newPath = "/uploads/" + req.file.filename;
+    user.profile_picture = newPath;
+    await user.save();
+
+    console.log("User after update:", user.profile_picture);
+
+    // Update session juga – double check after save
+    req.session.user.profile_picture = user.profile_picture;
+
+    res.json({ success: true, path: user.profile_picture });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false });
+    console.error("Upload Profile Error:", err);
+    res.status(500).json({ success: false, message: "Gagal upload foto: " + err.message });
   }
 });
+
+router.post("/deleteProfile", authMiddleware, profileController.deletePhoto);
 
 router.post("/profile/ubah-password", authMiddleware, profileController.ubahPassword);
 

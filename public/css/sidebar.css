@@ -61,3 +61,7 @@
     left: 0;
   }
 }
+/* ===== SIDEBAR CLOSED STATE ===== */
+.sidebar.closed {
+  left: -260px;
+}

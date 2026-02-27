@@ -17,7 +17,7 @@
   <%- include('partials/sidebar') %>
 
   <div class="main">
-    <%- include('partials/topbar', { title: "Chart Data BM & CM IND 5" }) %>
+    <%- include('partials/topbar', { title: "Chart Data BM & CM IND 5", showBackButton: true }) %>
 
     <div class="content">
       <div class="chart-page">
@@ -85,18 +85,6 @@
       </div>
     </div>
   </div>
-
-  <script>
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar = document.querySelector('.sidebar');
-    const main = document.querySelector('.main');
-    if (menuToggle && sidebar && main) {
-      menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('closed');
-        main.classList.toggle('expanded');
-      });
-    }
-  </script>
 
   <script type="application/json" id="chart-data-json">
     <%- JSON.stringify({

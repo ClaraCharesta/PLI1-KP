@@ -15,7 +15,7 @@
   <%- include('partials/sidebar', { active: 'dataBMCMPPI' }) %>
 
   <div class="main">
-    <%- include('partials/topbar', { title: "Data BM & CM PPI" }) %>
+    <%- include('partials/topbar', { title: "Data BM & CM PPI", showBackButton: true }) %>
 
     <div class="content">
       <!-- HEADER -->
@@ -50,6 +50,7 @@
       <th>Foto Safety Talk</th>
       <th>Foto Check Sheet</th>
       <th>Keterangan</th>
+      <th>Created By</th>
       <th>Aksi</th>
     </tr>
   </thead>
@@ -77,17 +78,6 @@
       </div>
     </div>
   </div>
-
-  <script>
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar = document.querySelector('.sidebar');
-    const main = document.querySelector('.main');
-
-    menuToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('closed');
-      main.classList.toggle('expanded');
-    });
-  </script>
 
   <script src="/js/dataBMCMPPI.js"></script>
 

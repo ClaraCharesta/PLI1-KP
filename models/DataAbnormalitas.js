@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true
     },
+    created_by: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
 
     status: DataTypes.STRING,
     week_number: DataTypes.STRING,
@@ -33,6 +37,13 @@ module.exports = (sequelize, DataTypes) => {
     tableName: "abnormalitas",
     timestamps: true
   });
+
+  Abnormalitas.associate = (models) => {
+    Abnormalitas.belongsTo(models.User, {
+      foreignKey: "created_by",
+      as: "creator"
+    });
+  };
 
   return Abnormalitas;
 };

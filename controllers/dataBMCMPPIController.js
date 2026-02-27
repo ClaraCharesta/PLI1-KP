@@ -75,7 +75,15 @@ exports.addPage = async (req, res) => {
 ===================================================== */
 exports.list = async (req, res) => {
   const data = await DataBMCMPPI.findAll({
-    order: [["tanggal", "ASC"]]
+    order: [["tanggal", "ASC"]],
+    include: [
+      {
+        model: db.User,
+        attributes: ['user_id', 'nama'],
+        as: 'creator',
+        required: false
+      }
+    ]
   });
 
   res.json(data);

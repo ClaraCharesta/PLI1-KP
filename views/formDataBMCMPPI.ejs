@@ -32,15 +32,9 @@
           <label for="area">Area</label>
           <select name="area" id="area" style="width:100%" required>
             <option value="">-- Pilih Area --</option>
-
-            <% (nomenclatures || [])
-                .filter(n => n.name && n.name.includes("PPI"))
-                .forEach(n => { %>
-
-                <option value="<%= n.name %>"><%= n.name %></option>
-
-            <% }) %>
-
+              <option value="PPI 02">PPI 02</option>
+              <option value="PPI 03">PPI 03</option>
+              <option value="PPI 04">PPI 04</option>
           </select>
           </div>
 

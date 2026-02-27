@@ -10,10 +10,8 @@ const db = require("./models");
 // ROUTES
 // ===============================
 const laporanShiftRoutes = require("./routes/laporanShiftRoutes");
-
 const dataBMCMRoutes = require("./routes/dataBMCMRoutes");
 const dataBMCMPPIRoutes = require("./routes/dataBMCMPPIRoutes");
-
 const tsKCM5Routes = require("./routes/tsKCM5Routes");
 const monitoringRoutes = require("./routes/monitoringRoutes");
 const sttRoutes = require("./routes/sttRoutes");
@@ -94,13 +92,19 @@ app.post("/login", async (req, res) => {
       return res.render("login", { error: "Password salah" });
     }
 
+    // save profile_picture as well so it survives logout/login
     req.session.user = {
       id: user.user_id,
+      user_id: user.user_id, // keep for compatibility
       nama: user.nama,
+      email: user.email,
       role: user.Role.role_name,
+      profile_picture: user.profile_picture || null
     };
 
     req.session.permissions = user.Role.RolePermissions;
+
+    console.log("Login session created:", req.session.user);
 
     res.redirect("/home");
   } catch (err) {
@@ -123,17 +127,10 @@ app.get("/logout", (req, res) => {
 // ===============================
 app.use("/laporan-shift", auth, laporanShiftRoutes);
 app.use("/ts", auth, tsKCM5Routes);
-
-
-
-
-
-
 app.use("/laporan-shift", auth, monitoringRoutes);
 app.use("/laporan-shift", auth, catatanRoutes);
 app.use("/stt", auth, sttRoutes);
 app.use("/maintenance", auth, basicMaintenanceRoutes);
-
 app.use("/dataBMCM", auth, dataBMCMRoutes);
 app.use("/dataAbnormalitas", auth, dataAbnormalitasRoutes);
 app.use("/uploads", express.static("public/uploads"));
@@ -147,8 +144,6 @@ app.use("/chart/abnormal", auth, chartAbnormalitasRoutes);
 app.use("/chart/pivot", auth, require("./routes/pivotChartRoutes"));
 app.use("/dataBMCMPPI", auth, dataBMCMPPIRoutes);
 
-
-
 // ===============================
 // ALIAS MENU / REDIRECT
 // ===============================
@@ -159,8 +154,6 @@ app.get("/KCM5", auth, (req, res) => {
 app.get("/RMFM5", auth, (req, res) => {
   res.redirect("/laporan-shift/rmfm5");
 });
-
-
 
 // ===============================
 // ROUTE NON LAPORAN
@@ -174,8 +167,6 @@ app.get("/chart", auth, (req, res) => {
   res.render("chartMenu");
 });
 
-
-
 app.get("/kelola-user", auth, (req, res) => {
   res.render("kelolaUser", { title: "Kelola User", active: "user" });
 });
@@ -187,8 +178,6 @@ app.get("/ubahPassword", auth, (req, res) => {
     user: req.session.user
   });
 });
-
-
 
 app.get("/feedback", auth, (req, res) => {
   res.render("feedback", { title: "Feedback", active: "feedback" });
