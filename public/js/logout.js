@@ -3,11 +3,9 @@ const modal = document.getElementById("logoutModal");
 const logoutBtn = document.getElementById("logoutBtn");
 const stayBtn = document.getElementById("stayBtn");
 
-// Logout button
+// Logout button - redirect to /logout route to destroy session
 logoutBtn.addEventListener("click", () => {
-  alert("Anda telah berhasil logout!");
-  // Redirect ke halaman login
-  window.location.href = "/";
+  window.location.href = "/logout";
 });
 
 // Stay button

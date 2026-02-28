@@ -66,6 +66,11 @@ app.get("/", (req, res) => {
   res.render("login");
 });
 
+app.get("/login", (req, res) => {
+  if (req.session.user) return res.redirect("/home");
+  res.render("login");
+});
+
 // ===============================
 // POST LOGIN
 // ===============================

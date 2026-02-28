@@ -123,6 +123,7 @@ passwordForm.addEventListener("submit", async (e) => {
 
   /* ===== CALL BACKEND ===== */
   try {
+    console.log("📤 Mengirim ubah password request...");
     const res = await fetch("/profile/ubah-password", {
       method: "POST",
       headers: {
@@ -136,21 +137,25 @@ passwordForm.addEventListener("submit", async (e) => {
     });
 
     const data = await res.json();
+    console.log("📥 Response dari server:", { status: res.status, data });
 
     if (!res.ok) {
+      console.error("❌ Error:", data.message);
       return showModal(data.message || "Gagal ubah password", { icon: "⚠️" });
     }
 
+    console.log("✅ Password berhasil diubah");
     showModal("Password berhasil diubah", {
       icon: "✅",
       onOk: () => {
-        passwordForm.reset();
+        // Redirect to about page
+        window.location.href = "/about";
       }
     });
 
   } catch (err) {
-    console.error(err);
-    showModal("Terjadi kesalahan server", { icon: "❌" });
+    console.error("❌ Network error:", err);
+    showModal("Terjadi kesalahan saat menghubungi server: " + err.message, { icon: "❌" });
   }
 });
 
