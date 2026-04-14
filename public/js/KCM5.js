@@ -1,5 +1,4 @@
-const searchInput = document.getElementById("searchInput");
-const btnSearch = document.getElementById("btnSearch");
+
 const btnAdd = document.getElementById("btnAdd");
 const tbody = document.getElementById("tbodyData");
 
@@ -50,11 +49,7 @@ async function loadData(keyword="") {
 // ================= INIT =================
 loadData();
 
-// ================= SEARCH =================
-btnSearch.addEventListener("click", ()=> loadData(searchInput.value));
-searchInput.addEventListener("keyup", (e)=>{
-  if(e.key === "Enter") loadData(searchInput.value);
-});
+
 
 // ================= ADD =================
 btnAdd.addEventListener("click", ()=> window.location.href="/laporan-shift/kcm5/add");
@@ -72,7 +67,7 @@ tbody.addEventListener("click", async (e)=>{
       if(!confirm("Hapus data?")) return;
       try{
         await fetch(`/laporan-shift/kcm5/${id}`, { method:"DELETE" });
-        loadData(searchInput.value);
+        loadData();
       }catch(err){
         alert("Gagal menghapus data");
       }
@@ -87,7 +82,7 @@ tbody.addEventListener("click", async (e)=>{
     if(e.target.classList.contains("chk-approve")){
       try{
         await fetch(`/laporan-shift/kcm5/approve/${id}`, { method:"POST" });
-        loadData(searchInput.value);
+        loadData();
       }catch(err){
         alert("Gagal approve data");
       }

@@ -80,6 +80,7 @@
                 <td>
                   <button class="btn-edit">Edit</button>
                   <button class="btn-del">Hapus</button>
+                  <button class="save" type="submit" disabled>Save</button>
                 </td>
               </tr>
             <% }) %>
@@ -101,6 +102,66 @@
   });
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const saveBtn = document.querySelector(".save");
+  
+
+  const tanggal = document.querySelector("#tanggal");
+  const shiftUtama = document.querySelector("#shiftUtama");
+  const noref = document.querySelector("#noref");
+
+  const personilSelect = document.querySelectorAll(".personil");
+  const shiftSelect = document.querySelectorAll(".shift");
+
+  function checkForm() {
+
+    let lengkap = true;
+
+    // cek field utama
+    if (!tanggal.value) lengkap = false;
+    if (!shiftUtama.value) lengkap = false;
+    if (!noref.value) lengkap = false;
+
+    // cek semua personil
+    personilSelect.forEach(el => {
+      if (!el.value) lengkap = false;
+    });
+
+    // cek semua shift
+    shiftSelect.forEach(el => {
+      if (!el.value) lengkap = false;
+    });
+
+    // toggle button
+    saveBtn.disabled = !lengkap;
+
+    // warna langsung dari script
+    saveBtn.style.backgroundColor = lengkap ? "maroon" : "#6c757d";
+    saveBtn.style.cursor = lengkap ? "pointer" : "not-allowed";
+    saveBtn.style.opacity = lengkap ? "1" : "0.6";
+  }
+
+  // 🔥 INI KUNCI: semua perubahan langsung trigger check
+  const allInputs = [
+    tanggal,
+    shiftUtama,
+    noref,
+    ...personilSelect,
+    ...shiftSelect
+  ];
+
+  allInputs.forEach(el => {
+    el.addEventListener("input", checkForm);
+    el.addEventListener("change", checkForm);
+  });
+
+  // cek awal saat load
+  checkForm();
+
+});
+</script>
 
 </body>
 </html>

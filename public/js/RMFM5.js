@@ -1,6 +1,5 @@
 // RMFM5.js
-const searchInput = document.getElementById("searchInput");
-const btnSearch = document.getElementById("btnSearch");
+
 const btnAdd = document.getElementById("btnAdd");
 const tbody = document.getElementById("tbodyData");
 
@@ -54,11 +53,6 @@ data.forEach((row, index) => {
 // ================= INIT =================
 loadData();
 
-// ================= SEARCH =================
-btnSearch.addEventListener("click", ()=> loadData(searchInput.value));
-searchInput.addEventListener("keyup", (e)=>{
-  if(e.key === "Enter") loadData(searchInput.value);
-});
 
 // ================= ADD =================
 btnAdd.addEventListener("click", () => {
@@ -77,7 +71,7 @@ tbody.addEventListener("click", async (e) => {
     if (!confirm("Hapus data?")) return;
     try {
       await fetch(`/laporan-shift/rmfm5/${id}`, { method: "DELETE" });
-      loadData(searchInput.value);
+      loadData();
     } catch (err) {
       alert("Gagal menghapus data");
       console.error(err);
@@ -95,7 +89,7 @@ tbody.addEventListener("click", async (e) => {
   if (e.target.classList.contains("chk-approve")) {
     try {
       await fetch(`/laporan-shift/rmfm5/approve/${id}`, { method: "POST" });
-      loadData(searchInput.value);
+      loadData();
     } catch (err) {
       alert("Gagal approve data");
       console.error(err);
