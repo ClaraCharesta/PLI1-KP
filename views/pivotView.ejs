@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Pivot Dashboard</title>
+<title>Pivot Dashboard Legend Toggle</title>
 
 <link rel="stylesheet" href="/css/layout.css">
 <link rel="stylesheet" href="/css/sidebar.css">
@@ -10,102 +10,315 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:20px; padding:20px; }
-.card { background:white; border-radius:12px; box-shadow:0 3px 12px rgba(0,0,0,.12); padding:15px; position:relative; display:flex; flex-direction:column; }
-.header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
-.center { position:relative; height:240px; }
-.total { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:24px; font-weight:bold; pointer-events:none; }
-button { background:#8b0000; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; margin-left:5px; }
-.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999; justify-content:center; align-items:center; }
-.modalContent { background:white; padding:20px; border-radius:12px; width:80%; height:80%; position:relative; display:flex; justify-content:center; align-items:center; }
-.closeBtn { position:absolute; top:10px; right:10px; background:red; color:white; border:none; padding:5px 10px; cursor:pointer; }
+body {
+  background:#f4f6f9;
+}
+
+/* GRID */
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:20px;
+  padding:20px;
+}
+
+/* CARD */
+.card {
+  background:#fff;
+  border-radius:16px;
+  padding:15px;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+
+/* HEADER */
+.header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+/* CHART AREA */
+.center {
+  position:relative;
+  height:260px;
+}
+
+/* CANVAS */
+.center canvas,
+#expandCanvas {
+  position:absolute;
+  width:100% !important;
+  height:100% !important;
+}
+
+/* CENTER TEXT */
+.total {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:28px;
+  font-weight:900;
+  color:#111827;
+  pointer-events:none;
+  z-index:2;
+}
+
+/* BUTTON */
+button {
+  background:#111827;
+  color:#fff;
+  border:none;
+  padding:7px 12px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+button:hover {
+  background:#374151;
+}
+
+/* MODAL */
+.modal {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.modalContent {
+  background:#fff;
+  width:85%;
+  height:85%;
+  border-radius:16px;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* WRAP */
+.expandWrap {
+  position:relative;
+  width:100%;
+  height:100%;
+}
+
+/* TOTAL MODAL */
+#expandTotal {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:34px;
+  font-weight:900;
+  color:#111827;
+  pointer-events:none;
+}
+
+/* CLOSE */
+.closeBtn {
+  position:absolute;
+  top:12px;
+  right:12px;
+  background:#ef4444;
+  border:none;
+  padding:8px 12px;
+  border-radius:10px;
+  color:white;
+  cursor:pointer;
+  z-index:10;
+}
 </style>
 </head>
 
 <body>
 <%- include('partials/sidebar') %>
+
 <div class="main">
-  <%- include('partials/topbar',{title:"Pivot Dashboard"}) %>
+<%- include('partials/topbar',{title:"Pivot Dashboard"}) %>
 
-  <div style="padding:20px; display:flex; justify-content:flex-end;">
-    <button id="btnBack" style="background:#6c757d;">
-      Back
-    </button>
-  </div>
-
-  <div class="grid" id="grid"></div>
+<div style="padding:20px 20px 0 20px;">
+  <button onclick="goBack()" style="margin-bottom:10px;">
+    ← Back
+  </button>
 </div>
 
-<!-- Expand Modal -->
+<div class="grid" id="grid"></div>
+
+<!-- MODAL -->
 <div id="expandModal" class="modal">
   <div class="modalContent">
     <button class="closeBtn" onclick="closeExpand()">X</button>
-    <canvas id="expandCanvas" style="height:90%; width:90%;"></canvas>
-    <div class="total" id="expandTotal"></div>
+
+    <div class="expandWrap">
+      <canvas id="expandCanvas"></canvas>
+      <div id="expandTotal"></div>
+    </div>
+
   </div>
 </div>
 
 <script>
 const chartsData = <%- JSON.stringify(charts) %>;
+
 const keys = ["area","kepala","durasi","frek","status","stop"];
-const titles = ["Pivot BM Area","Pivot BM Kepala Shift","Pivot Durasi TS","Pivot Frekuensi TS","Pivot Status BM","Pivot Stop Alat"];
-const colors = ["#FF6384","#36A2EB","#FFCE56","#4BC0C0","#9966FF","#FF9F40","#FF6F91","#6BCB77","#FFD93D","#FF6B6B","#845EC2","#00C9A7"];
+
+const titles = [
+  "Pivot BM Area",
+  "Pivot BM Kepala Shift",
+  "Pivot Durasi TS",
+  "Pivot Frekuensi TS",
+  "Pivot Status BM",
+  "Pivot Stop Alat"
+];
+
+/* warna pekat */
+const colors = ["#1E3A8A","#0F766E","#B91C1C","#92400E","#6D28D9","#047857","#DC2626"];
 
 let chartObjs = {};
 let expandChartObj = null;
+let currentKey = null;
 
-// ================= BUILD CARDS =================
-const grid=document.getElementById("grid");
+/* HITUNG TOTAL VISIBEL */
+function getVisibleTotal(chart){
+  let sum = 0;
+  chart.data.datasets[0].data.forEach((val,i)=>{
+    if(chart.getDataVisibility(i)) sum += val;
+  });
+  return sum;
+}
+
+/* UPDATE CENTER TEXT */
+function updateCenter(chart, elId){
+  document.getElementById(elId).innerText = getVisibleTotal(chart);
+}
+
+/* INIT CARD */
+const grid = document.getElementById("grid");
+
 keys.forEach((k,i)=>{
   grid.innerHTML += `
-  <div class="card">
-    <div class="header">
-      <b class="card-title">${titles[i]}</b>
-      <button onclick="expandChart('${k}')">Expand</button>
+    <div class="card">
+      <div class="header">
+        <b>${titles[i]}</b>
+        <button onclick="openExpand('${k}')">Expand</button>
+      </div>
+
+      <div class="center">
+        <canvas id="c_${k}"></canvas>
+        <div class="total" id="t_${k}">${chartsData[k].total}</div>
+      </div>
     </div>
-    <div class="center">
-      <canvas id="c_${k}"></canvas>
-      <div class="total" id="t_${k}">${chartsData[k].total}</div>
-    </div>
-  </div>
   `;
 });
 
-// ================= INIT CHART =================
-function createChart(key,data){
-  chartObjs[key] = new Chart(document.getElementById("c_"+key), {
+/* CREATE CHART (CARD) */
+function createChart(key){
+  const ctx = document.getElementById("c_"+key);
+
+  chartObjs[key] = new Chart(ctx,{
     type:"doughnut",
-    data:{ labels:data.labels, datasets:[{ data:data.values, backgroundColor:colors }] },
-    options:{ cutout:"75%", plugins:{ legend:{position:"bottom"}, tooltip:{enabled:true} } }
+    data:{
+      labels:chartsData[key].labels,
+      datasets:[{
+        data:chartsData[key].values,
+        backgroundColor:colors
+      }]
+    },
+    options:{
+      cutout:"70%",
+      responsive:true,
+      maintainAspectRatio:false,
+
+      plugins:{
+        legend:{
+          position:"bottom",
+
+          /* 🔥 INI KUNCI CLICK LEGEND */
+          onClick:(e,legendItem,legend)=>{
+            const index = legendItem.index;
+            const chart = legend.chart;
+
+            chart.toggleDataVisibility(index);
+            chart.update();
+
+            updateCenter(chart, "t_"+key);
+          }
+        }
+      },
+
+      /* update after animation */
+      onUpdate:(chart)=>{
+        updateCenter(chart, "t_"+key);
+      }
+    }
   });
 }
 
-keys.forEach(k=>{ createChart(k,chartsData[k]); });
-
-// ================= EXPAND CHART =================
-function expandChart(key){
+/* OPEN MODAL */
+function openExpand(key){
+  currentKey = key;
   document.getElementById("expandModal").style.display="flex";
-  const data = chartObjs[key].data;
-  const total = document.getElementById("t_"+key).innerText;
-  document.getElementById("expandTotal").innerText = total;
+
+  const data = chartsData[key];
+
   if(expandChartObj) expandChartObj.destroy();
-  expandChartObj = new Chart(document.getElementById("expandCanvas"), {
+
+  expandChartObj = new Chart(document.getElementById("expandCanvas"),{
     type:"doughnut",
-    data:data,
-    options:{ cutout:"50%", plugins:{ legend:{position:"right"}, tooltip:{enabled:true} } }
+    data:{
+      labels:data.labels,
+      datasets:[{
+        data:data.values,
+        backgroundColor:colors
+      }]
+    },
+    options:{
+      cutout:"65%",
+      responsive:true,
+      maintainAspectRatio:false,
+
+      plugins:{
+        legend:{
+          position:"right",
+
+          onClick:(e,legendItem)=>{
+            const i = legendItem.index;
+
+            expandChartObj.toggleDataVisibility(i);
+            expandChartObj.update();
+
+            document.getElementById("expandTotal").innerText =
+              getVisibleTotal(expandChartObj);
+          }
+        }
+      }
+    }
   });
+
+  document.getElementById("expandTotal").innerText =
+    getVisibleTotal(expandChartObj);
 }
 
+/* CLOSE */
 function closeExpand(){
   document.getElementById("expandModal").style.display="none";
   if(expandChartObj) expandChartObj.destroy();
 }
+
+/* INIT ALL */
+keys.forEach(k=>createChart(k));
+
+function goBack(){
+  window.location.href = "/chart";
+}
+
 </script>
 
-<script>
-  document.getElementById("btnBack").addEventListener("click", function () {
-    window.location.href = "/chart";
-  });
-</script>
 </body>
 </html>
