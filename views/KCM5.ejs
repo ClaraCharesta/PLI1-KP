@@ -14,13 +14,24 @@
   <%- include('partials/topbar', { title: "Laporan Shift KCM5" }) %>
   <div class="content">
 
-    <div class="header-box">
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Cari No.Ref / Nama / Tanggal...">
-        <button id="btnSearch">Search</button>
-      </div>
-      <button id="btnAdd" class="btn-add">+ Add</button>
-    </div>
+<div class="header-box">
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Cari No.Ref / Nama / Tanggal...">
+    <button id="btnSearch">Search</button>
+  </div>
+
+  <div style="display:flex; gap:10px;">
+    <button id="btnBack" class="btn-add" style="background:#6c757d;">
+      Back
+    </button>
+
+    <button id="btnAdd" class="btn-add">
+      + Add
+    </button>
+  </div>
+
+</div>
 
     <div class="table-wrapper">
       <table class="table">
@@ -82,5 +93,11 @@
   </div>
 </div>
 <script src="/js/KCM5.js"></script>
+
+<script>
+  document.getElementById("btnBack").addEventListener("click", function () {
+    window.location.href = "/home";
+  });
+</script>
 </body>
 </html>

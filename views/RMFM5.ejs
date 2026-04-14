@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/sidebar.css">
   <link rel="stylesheet" href="/css/topbar.css">
-  <link rel="stylesheet" href="/css/KCM5.css"> <!-- bisa pake style sama -->
+  <link rel="stylesheet" href="/css/RMFM5.css"> <!-- bisa pake style sama -->
 </head>
 <body>
 <%- include('partials/sidebar') %>
@@ -16,13 +16,24 @@
 
   <div class="content">
 
-    <div class="header-box">
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Cari No.Ref / Nama / Tanggal...">
-        <button id="btnSearch">Search</button>
-      </div>
-      <button id="btnAdd" class="btn-add">+ Add</button>
-    </div>
+<div class="header-box">
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Cari No.Ref / Nama / Tanggal...">
+    <button id="btnSearch">Search</button>
+  </div>
+
+  <div style="display:flex; gap:10px;">
+    <button id="btnBack" class="btn-add" style="background:#6c757d;">
+      Back
+    </button>
+
+    <button id="btnAdd" class="btn-add">
+      + Add
+    </button>
+  </div>
+
+</div>
 
     <div class="table-wrapper">
       <table class="table">
@@ -86,5 +97,13 @@
 </div>
 
 <script src="/js/RMFM5.js"></script>
+
+<script>
+  document.getElementById("btnBack").addEventListener("click", function () {
+    window.location.href = "/home";
+  });
+</script>
+
+
 </body>
 </html>

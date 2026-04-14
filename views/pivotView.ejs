@@ -26,6 +26,13 @@ button { background:#8b0000; color:white; border:none; padding:6px 12px; border-
 <%- include('partials/sidebar') %>
 <div class="main">
   <%- include('partials/topbar',{title:"Pivot Dashboard"}) %>
+
+  <div style="padding:20px; display:flex; justify-content:flex-end;">
+    <button id="btnBack" style="background:#6c757d;">
+      Back
+    </button>
+  </div>
+
   <div class="grid" id="grid"></div>
 </div>
 
@@ -93,6 +100,12 @@ function closeExpand(){
   document.getElementById("expandModal").style.display="none";
   if(expandChartObj) expandChartObj.destroy();
 }
+</script>
+
+<script>
+  document.getElementById("btnBack").addEventListener("click", function () {
+    window.location.href = "/chart";
+  });
 </script>
 </body>
 </html>

@@ -18,12 +18,21 @@
 
   <div class="content">
 
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <div class="noref-box">
-        No.Ref : <span id="noRefText"><%= row.no_ref %></span>
-      </div>
-      <button id="btnPdf" class="btn-add">Generate PDF</button>
-    </div>
+   <div style="display:flex; justify-content:space-between; align-items:center;">
+  
+  <div class="noref-box">
+    No.Ref : <span id="noRefText"><%= row.no_ref %></span>
+  </div>
+
+  <div style="display:flex; gap:10px;">
+    <button id="btnBack" class="btn-add" style="background:#6c757d;">
+      Back
+    </button>
+
+
+  </div>
+
+</div>
 
     <!-- ================= LAPORAN SHIFT ================= -->
     <h3>Laporan Shift</h3>
@@ -316,5 +325,25 @@
 
 <script src="/js/laporanKCM5.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+
+<script>
+  document.getElementById("btnBack").addEventListener("click", function () {
+    const noRef = "<%= row.no_ref %>";
+
+    let baseUrl = "";
+
+    if (noRef.includes("KCM")) {
+      baseUrl = "/laporan-shift/kcm5";
+    } else if (noRef.includes("RMFM")) {
+      baseUrl = "/laporan-shift/rmfm5";
+    } else {
+      baseUrl = "/laporan-shift"; // fallback
+    }
+
+    window.location.href = `${baseUrl}?noref=${noRef}`;
+  });
+</script>
+
 </body>
 </html>
