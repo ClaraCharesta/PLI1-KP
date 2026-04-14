@@ -113,18 +113,35 @@ exports.formRMFM5 = async (req, res) => {
 };
 
 exports.updateLaporanRMFM5 = async (req, res) => {
-  const id = req.params.id;
-  const data = req.body;
-
   try {
-    await LaporanShift.update(data, { where: { id } });  // <-- ganti LaporanRMFM5 jadi LaporanShift
+    const { id } = req.params;
+
+    const data = await LaporanShift.findByPk(id);
+    if (!data) {
+      return res.status(404).json({ success: false, message: "Data tidak ditemukan" });
+    }
+
+    await data.update({
+      tanggal: req.body.tanggal,
+      shift_kode: req.body.shift_kode,
+      personil_851a: req.body.personil_851a,
+      shift_851a: req.body.shift_851a,
+      personil_851b: req.body.personil_851b,
+      shift_851b: req.body.shift_851b,
+      personil_852a: req.body.personil_852a,
+      shift_852a: req.body.shift_852a,
+      personil_852b: req.body.personil_852b,
+      shift_852b: req.body.shift_852b,
+      cuti: req.body.cuti // 🔥 TAMBAH INI kalau ada
+    });
+
     res.json({ success: true, message: "Data berhasil diupdate" });
+
   } catch (err) {
     console.error(err);
-    res.json({ success: false, message: "Gagal update data" });
+    res.status(500).json({ success: false, message: "Gagal update data" });
   }
 };
-
 exports.storeRMFM5 = async (req, res) => {
   try {
     const {
@@ -132,7 +149,7 @@ exports.storeRMFM5 = async (req, res) => {
       personil_851a, shift_851a,
       personil_851b, shift_851b,
       personil_852a, shift_852a,
-      personil_852b, shift_852b
+      personil_852b, shift_852b, cuti
     } = req.body;
 
     const userLogin = req.session.user?.email || req.session.user?.nama;
@@ -152,24 +169,25 @@ exports.storeRMFM5 = async (req, res) => {
         personil_851a, shift_851a,
         personil_851b, shift_851b,
         personil_852a, shift_852a,
-        personil_852b, shift_852b
+        personil_852b, shift_852b, cuti
       });
 
     } else {
       const no_ref = await generateNoRefRMFM5();
 
-      await LaporanShift.create({
-        area: "RMFM5",
-        tanggal: tanggalISO,
-        shift_kode,
-        no_ref,
-        dibuat_oleh: userLogin,
-        personil_851a, shift_851a,
-        personil_851b, shift_851b,
-        personil_852a, shift_852a,
-        personil_852b, shift_852b,
-        is_approved: false
-      });
+await LaporanShift.create({
+  area: "RMFM5",
+  tanggal: tanggalISO,
+  shift_kode,
+  no_ref,
+  dibuat_oleh: userLogin,
+  personil_851a, shift_851a,
+  personil_851b, shift_851b,
+  personil_852a, shift_852a,
+  personil_852b, shift_852b,
+  cuti, // 🔥 ini WAJIB
+  is_approved: false
+});
     }
 
     // 🔹 KIRIM JSON BUAT JS
@@ -467,20 +485,20 @@ exports.saveKCM5 = async (req, res) => {
 
       const no_ref = await generateNoRefKCM5();
 
-      await LaporanShift.create({
-      area: "KCM5",
-      tanggal: tanggalISO,
-      shift_kode,
-      no_ref,
-      dibuat_oleh: userEmail,
-      personil_841a,
-      shift_841a,
-      personil_842a,
-      shift_842a,
-      personil_842b,
-      shift_842b,
-      cuti
-    });
+await LaporanShift.create({
+  area: "KCM5",
+  tanggal: tanggalISO,
+  shift_kode,
+  no_ref,
+  dibuat_oleh: userEmail,
+  personil_841a,
+  shift_841a,
+  personil_842a,
+  shift_842a,
+  personil_842b,
+  shift_842b,
+  cuti: cuti || ""   
+});
 
 
     }

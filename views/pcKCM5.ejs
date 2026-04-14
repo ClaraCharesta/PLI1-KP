@@ -64,17 +64,21 @@
     });
   }
 
-  // BACK → kembali ke detail
-document.querySelector('.back').addEventListener('click', () => {
-  window.location.href =
-    `/laporan-shift/kcm5/detail?noref=<%= no_ref %>`;
-});
 
   // CLEAR
   document.querySelector(".clear").onclick = () => {
     document.getElementById("monitoring").value = "";
   };
 </script>
+
+<script>
+  const noRef = "<%= no_ref %>";
+
+  document.querySelector('.back').addEventListener('click', () => {
+    window.location.href = `/laporan-shift/kcm5/detail?noref=${noRef}`;
+  });
+</script>
+
 
 <script src="/js/sidebar.js"></script>
 </body>

@@ -228,15 +228,26 @@ $(document).ready(function() {
   kp.on('change', () => $('#kpLainnya').prop('hidden', kp.val()!=='Lainnya'));
 
   // ===== DURASI =====
-  function hitungDurasi(){
-    const mulai = $('#mulai').val();
-    const selesai = $('#selesai').val();
-    if(!mulai || !selesai) return;
-    const t1 = new Date(`1970-01-01T${mulai}`);
-    const t2 = new Date(`1970-01-01T${selesai}`);
-    $('#durasi').val(((t2-t1)/3600000).toFixed(2));
+function hitungDurasi(){
+  const mulai = $('#mulai').val();
+  const selesai = $('#selesai').val();
+  if(!mulai || !selesai) return;
+
+  const t1 = new Date(`1970-01-01T${mulai}`);
+  const t2 = new Date(`1970-01-01T${selesai}`);
+
+  let diff = (t2 - t1) / 3600000;
+
+  // kalau lewat tengah malam
+  if(diff < 0){
+    diff += 24;
   }
-  $('#mulai, #selesai').on('change', hitungDurasi);
+
+  $('#durasi').val(diff.toFixed(2));
+}
+
+// ✅ pakai input biar langsung update
+$('#mulai, #selesai').on('input', hitungDurasi);
 
   // ===== PIC =====
   const picEnum = [

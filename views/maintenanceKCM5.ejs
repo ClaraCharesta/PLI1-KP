@@ -158,7 +158,14 @@ function hitungDurasi(){
   const t1 = new Date(`1970-01-01T${m}`);
   const t2 = new Date(`1970-01-01T${s}`);
 
-  document.getElementById('durasi').value = ((t2 - t1)/3600000).toFixed(2);
+  let diff = (t2 - t1) / 3600000;
+
+  // kalau lewat tengah malam
+  if(diff < 0){
+    diff += 24;
+  }
+
+  document.getElementById('durasi').value = diff.toFixed(2);
 }
 
 document.getElementById('mulai').onchange = hitungDurasi;

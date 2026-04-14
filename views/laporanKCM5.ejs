@@ -207,9 +207,7 @@
 
 <% if (monitoring.length === 0) { %>
 <tr>
-  <td colspan="3" style="text-align:center;">
-    Tidak ada data monitoring
-  </td>
+  
 </tr>
 <% } %>
 
@@ -290,11 +288,7 @@
   </thead>
   <tbody>
     <% if (catatan.length === 0) { %>
-      <tr>
-        <td colspan="3" style="text-align:center;">
-          Tidak ada data catatan
-        </td>
-      </tr>
+    
     <% } else { %>
       <% catatan.forEach(ct => { %>
         <tr>

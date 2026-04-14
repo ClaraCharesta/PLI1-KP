@@ -55,9 +55,9 @@ data.forEach((row, index) => {
 loadData();
 
 // ================= SEARCH =================
-btnSearch.addEventListener("click", () => loadData(searchInput.value));
-searchInput.addEventListener("keyup", (e) => {
-  if (e.key === "Enter") loadData(searchInput.value);
+btnSearch.addEventListener("click", ()=> loadData(searchInput.value));
+searchInput.addEventListener("keyup", (e)=>{
+  if(e.key === "Enter") loadData(searchInput.value);
 });
 
 // ================= ADD =================

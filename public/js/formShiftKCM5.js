@@ -104,7 +104,20 @@ document.querySelectorAll(".shift").forEach(select => {
 /* ================= CUTI ================= */
 cutiBox.innerHTML = "";
 
-function renderCuti(name, checked=false){
+/* 🔥 FIX 1: amanin parsing cuti lama (null / undefined / spasi / format beda) */
+const cutiList = (window.formData?.cuti ?? "")
+  .split(",")
+  .map(v => v.trim())
+  .filter(v => v.length > 0);
+
+/* pastikan semua nama lama tetap masuk master */
+cutiList.forEach(nama => {
+  if (!personilMaster.includes(nama)) {
+    personilMaster.push(nama);
+  }
+});
+
+function renderCuti(name, checked = false) {
   const div = document.createElement("div");
   div.className = "cuti-item";
 
@@ -112,6 +125,8 @@ function renderCuti(name, checked=false){
   checkbox.type = "checkbox";
   checkbox.value = name;
   checkbox.checked = checked;
+
+  /* 🔥 FIX 2: jangan hanya on change, tapi juga sync saat render */
   checkbox.addEventListener("change", updateCutiResult);
 
   const label = document.createElement("label");
@@ -122,20 +137,25 @@ function renderCuti(name, checked=false){
   cutiBox.appendChild(div);
 }
 
-/* render list */
+/* render semua personil */
 personilMaster.forEach(name => {
-  const checked = window.formData?.cuti?.split(", ").includes(name);
+  const checked = cutiList.includes(name);
   renderCuti(name, checked);
 });
 
-/* update hasil */
-function updateCutiResult(){
+/* 🔥 FIX 3: fungsi harus aman + selalu sync */
+function updateCutiResult() {
   const selected = Array.from(
     cutiBox.querySelectorAll("input[type='checkbox']:checked")
   ).map(cb => cb.value);
 
   cutiResult.value = selected.join(", ");
 }
+
+/* 🔥 FIX 4: WAJIB sync saat pertama kali load (INI YANG KAMU LUPA) */
+setTimeout(() => {
+  updateCutiResult();
+}, 0);
 
 /* ================= CLEAR ================= */
 document.querySelector(".clear").onclick = () => {
