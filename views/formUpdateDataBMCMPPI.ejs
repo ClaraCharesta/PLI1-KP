@@ -15,11 +15,11 @@
   <%- include('partials/sidebar', { active: 'dataBMCMPPI' }) %>
 
   <div class="main">
-    <%- include('partials/topbar', { title: "Update Realisasi PK Harian" }) %>
+    <%- include('partials/topbar', { title: "Update Data BM & CM PPI" }) %>
 
     <div class="content">
       <div class="form-card">
-        <h2>Update Realisasi PK Harian</h2>
+        <h2>Update BM & CM PPI</h2>
 
 <form
   id="formDataBMCMPPI"
@@ -39,9 +39,9 @@
           <label for="area">Area</label>
           <select name="area" id="area" style="width:100%" required>
             <option value="">-- Pilih Area --</option>
-              <option value="PPI 02">PPI 02</option>
-              <option value="PPI 03">PPI 03</option>
-              <option value="PPI 04">PPI 04</option>
+              <option value="PPI 02" <%= data.area==="PPI 02"?"selected":"" %>>PPI 02</option>
+              <option value="PPI 03" <%= data.area==="PPI 03"?"selected":"" %>>PPI 03</option>
+              <option value="PPI 04" <%= data.area==="PPI 04"?"selected":"" %>>PPI 04</option>
           </select>
           </div>
 

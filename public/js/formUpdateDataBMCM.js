@@ -161,7 +161,7 @@ previewImage('fotoCheckSheet');
     if (confirmCancelBtn) {
       confirmCancelBtn.addEventListener('click', () => {
         cancelModal.classList.remove('show');
-        window.location.href = '/data-bmcm/page';
+        window.location.href = '/dataBMCM/page';
       });
     }
 

@@ -200,11 +200,8 @@
 .chart-canvas-wrap {
   position: relative;
   width: 100%;
-  height: auto;
-  aspect-ratio: 6 / 5; /* keeps reasonable chart height */
-  min-height: 220px;
+  height: 300px;
   box-sizing: border-box;
-
   z-index: 1;
 }
 

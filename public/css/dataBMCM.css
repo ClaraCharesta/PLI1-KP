@@ -191,20 +191,6 @@
   width: 220px;
 }
 
-#btnSearch {
-  background: white;
-  color: #8b0000;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-#btnSearch:hover {
-  background: #f0f0f0;
-}
-
 .header-box, .search-box, .btn-add, #btnSearch, #searchInput {
   pointer-events: auto;
   z-index: 5;
