@@ -33,19 +33,7 @@
   flex: 1;
 }
 
-#btnSearch {
-  background: white;
-  color: #8b0000;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-weight: 600;
-  cursor: pointer;
-}
 
-#btnSearch:hover {
-  background: #f0f0f0;
-}
 
 /* ================= CARD GRID ================= */
 .cards-grid {

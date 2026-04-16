@@ -103,20 +103,6 @@
   margin-bottom: 20px;
 }
 
-/* ================= FORGOT PASSWORD ================= */
-.forgot {
-  display: block;
-  text-align: right;
-  color: white;
-  text-decoration: none;
-  margin-bottom: 30px;
-  font-size: 14px;
-}
-
-.forgot:hover {
-  text-decoration: underline;
-}
-
 /* ================= BUTTON ================= */
 .right button {
   display: block;

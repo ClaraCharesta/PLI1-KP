@@ -18,11 +18,11 @@
 
 <div class="main">
 
-  <%- include('partials/topbar', { title: "Update Realisasi PK Harian" }) %>
+  <%- include('partials/topbar', { title: "Update Data BM & CM IND 5" }) %>
 
   <div class="content">
     <div class="form-card">
-      <h2>Update Realisasi PK Harian</h2>
+      <h2>Update Data BM & CM IND 5</h2>
 
       <form
         id="formDataBMCM"
@@ -44,12 +44,12 @@
           <label for="area">Area</label>
           <select name="area" id="area" style="width:100%" required>
             <option value="">-- Pilih Area --</option>
-              <option value="RM5">RM5</option>
-              <option value="KCM5">KCM5</option>
-              <option value="AUTO5">AUTO5</option>
-              <option value="FM5">FM5</option>
-              <option value="Shift KCM 5">Shift KCM 5</option>
-              <option value="Shift RMFM 5">Shift RMFM 5</option>
+              <option value="RM5" <%= data.area==="RM5"?"selected":"" %>>RM5</option>
+              <option value="KCM5" <%= data.area==="KCM5"?"selected":"" %>>KCM5</option>
+              <option value="AUTO5" <%= data.area==="AUTO5"?"selected":"" %>>AUTO5</option>
+              <option value="FM5" <%= data.area==="FM5"?"selected":"" %>>FM5</option>
+              <option value="Shift KCM 5" <%= data.area==="Shift KCM 5"?"selected":"" %>>Shift KCM 5</option>
+              <option value="Shift RMFM 5" <%= data.area==="Shift RMFM 5"?"selected":"" %>>Shift RMFM 5</option>
           </select>
         </div>
 
