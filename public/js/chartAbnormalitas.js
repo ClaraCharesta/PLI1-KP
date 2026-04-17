@@ -22,6 +22,27 @@ document.addEventListener("DOMContentLoaded", () => {
     '#fd7e14', '#6f42c1', '#20c9a6', '#eaecf4'
   ];
 
+  const noDataPlugin = {
+    id: 'noDataPlugin',
+    beforeDraw(chart) {
+      const datasets = chart.data.datasets || [];
+      const hasData = datasets.some(ds => Array.isArray(ds.data) && ds.data.some(value => value !== null && value !== undefined && value !== 0));
+      if (hasData) return;
+
+      const ctx = chart.ctx;
+      const { width, height } = chart;
+      ctx.save();
+      ctx.fillStyle = '#6c757d';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = '16px sans-serif';
+      ctx.fillText('Tidak ada data', width / 2, height / 2);
+      ctx.restore();
+    }
+  };
+
+  Chart.register(noDataPlugin);
+
   const chartConfigs = [
     { id: 'areaChart', title: '[Abnormalitas] Chart Area', data: areaChart, type: 'doughnut' },
     { id: 'prioritasChart', title: '[Abnormalitas] Chart Prioritas', data: prioritasChart, type: 'doughnut' },
@@ -73,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
           tooltip: {
             callbacks: {
               label: (ctx) => {
-                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                const total = Array.isArray(ctx.dataset.data) ? ctx.dataset.data.reduce((a, b) => a + b, 0) : 0;
                 const pct = total ? ((ctx.raw / total) * 100).toFixed(1) : 0;
                 return ` ${ctx.label}: ${ctx.raw} (${pct}%)`;
               }
@@ -142,8 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const listEl = document.querySelector(`.filter-list[data-filter-for="${chartId}"]`);
     if (!listEl) return;
 
-    const checked = Array.from(listEl.querySelectorAll('input:checked')).map(cb => meta.fullData[parseInt(cb.value, 10)]);
-    const data = checked.length ? checked : meta.fullData;
+    const data = Array.from(listEl.querySelectorAll('input:checked')).map(cb => meta.fullData[parseInt(cb.value, 10)]);
     meta.currentData = data;
 
     if (meta.chart.config.type === 'doughnut') {
@@ -205,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
             tooltip: {
               callbacks: {
                 label: (ctx) => {
-                  const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                  const total = Array.isArray(ctx.dataset.data) ? ctx.dataset.data.reduce((a, b) => a + b, 0) : 0;
                   const pct = total ? ((ctx.raw / total) * 100).toFixed(1) : 0;
                   return ` ${ctx.label}: ${ctx.raw} (${pct}%)`;
                 }

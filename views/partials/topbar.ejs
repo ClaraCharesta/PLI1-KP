@@ -17,7 +17,12 @@
   const btnBack = document.getElementById('btnBack');
   if (btnBack) {
     btnBack.addEventListener('click', () => {
-      window.history.back();
+      const currentPath = window.location.pathname;
+      if (currentPath.includes('/chart')) {
+        window.location.href = '/chart';
+      } else {
+        window.location.href = '/home';
+      }
     });
   }
   // Handle hamburger toggle globally
